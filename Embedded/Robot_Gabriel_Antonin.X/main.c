@@ -4,12 +4,18 @@
 #include "ChipConfig.h"
 #include "IO.h"
 #include"timer.h"
+#include "PWM.h"
 
 int main (void){
 /********Initialisation oscillateur*******************************/
 InitOscillator();
 /*****************Configuration des input et output (IO)************************************/
 InitIO();           
+
+InitPWM();
+
+PWMSetSpeed(10,MOTEUR_DROIT);
+PWMSetSpeed(10,MOTEUR_GAUCHE);
 
 InitTimer23();
 InitTimer1();
