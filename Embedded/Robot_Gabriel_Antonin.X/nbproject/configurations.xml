@@ -11,6 +11,11 @@
       <itemPath>ToolBox.h</itemPath>
       <itemPath>PWM.h</itemPath>
     </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="true">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
@@ -26,11 +31,6 @@
       <itemPath>ToolBox.c</itemPath>
       <itemPath>PWM.c</itemPath>
     </logicalFolder>
-    <logicalFolder name="ExternalFiles"
-                   displayName="Important Files"
-                   projectFiles="false">
-      <itemPath>Makefile</itemPath>
-    </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -42,7 +42,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>ICD4Tool</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion>2.00</languageToolchainVersion>
+        <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
@@ -205,6 +205,11 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
       </C30Global>
+      <ICD4Tool>
+        <property key="memories.programmemory.ranges" value="0-7fffff"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/GitHub/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/debug/default/Robot_Gabriel_Antonin_ptg"/>
+      </ICD4Tool>
     </conf>
   </confs>
 </configurationDescriptor>

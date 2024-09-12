@@ -12,26 +12,25 @@ InitOscillator();
 /*****************Configuration des input et output (IO)************************************/
 InitIO();           
 
+InitTimer1();
 InitPWM();
 
-PWMSetSpeed(10,MOTEUR_DROIT);
-PWMSetSpeed(10,MOTEUR_GAUCHE);
-
-InitTimer23();
-InitTimer1();
-
-LED_BLANCHE_1 = 1;
-LED_BLEUE_1 = 1;
-LED_ORANGE_1 = 1;
-LED_ROUGE_1 = 1;
-LED_VERTE_1 = 1;
+PWMSetSpeedConsigne(10,MOTEUR_GAUCHE);
+PWMSetSpeedConsigne(10,MOTEUR_DROIT);
 
 
-LED_BLANCHE_2 = 1;
-LED_BLEUE_2 = 1;
-LED_ORANGE_2 = 1;
-LED_ROUGE_2 = 1;
-LED_VERTE_2 = 1;
+LED_BLANCHE_1 = 0;
+LED_BLEUE_1 = 0;
+LED_ORANGE_1 = 0;
+LED_ROUGE_1 = 0;
+LED_VERTE_1 = 0;
+
+
+LED_BLANCHE_2 = 0;
+LED_BLEUE_2 = 0;
+LED_ORANGE_2 = 0;
+LED_ROUGE_2 = 0;
+LED_VERTE_2 = 0;
 
 /***********************************************************************************************
         Boucle Principale
