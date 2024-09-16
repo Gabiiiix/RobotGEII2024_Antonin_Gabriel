@@ -22,7 +22,7 @@ void InitPWM(void) {
 }
 double talon = 20;
 
-float acceleration = 0.01;
+float acceleration = 0.1;
 
 void PWMSetSpeedConsigne(float vitesseEnPourcents, char moteur) {
     if (moteur == MOTEUR_GAUCHE) {
@@ -51,7 +51,7 @@ void PWMUpdateSpeed() {
         robotState.vitesseGaucheCommandeCourante = Min( robotState.vitesseGaucheCommandeCourante + acceleration, robotState.vitesseGaucheConsigne);
     if (robotState.vitesseGaucheCommandeCourante > robotState.vitesseGaucheConsigne)
         robotState.vitesseGaucheCommandeCourante = Max( robotState.vitesseGaucheCommandeCourante - acceleration, robotState.vitesseGaucheConsigne);
-    if (robotState.vitesseGaucheCommandeCourante > 0) {
+    if (robotState.vitesseGaucheCommandeCourante >= 0) {
         PDC2 = robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
         SDC2 = talon;
     } else {

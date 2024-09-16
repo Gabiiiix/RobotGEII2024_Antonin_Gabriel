@@ -3,21 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/main.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ChipConfig.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ChipConfig.h</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.h</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.h</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.h</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ToolBox.c</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ToolBox.h</file>
-            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/PWM.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/nbproject/Makefile-impl.mk</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ADC.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ADC.h</file>
-            <file>file:/C:/Users/TABLE%206/.mchp_packs/Microchip/dsPIC33E-GM-GP-MC-GU-MU_DFP/1.4.139/xc16/support/dsPIC33E/h/p33EP512MU814.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ChipConfig.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/nbproject/Makefile-default.mk</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ChipConfig.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ToolBox.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/main.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/PWM.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ToolBox.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/main.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.c</file>
         </group>
     </open-files>
 </project-private>
