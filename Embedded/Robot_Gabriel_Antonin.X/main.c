@@ -12,6 +12,7 @@
 
 
 unsigned char stateRobot;
+unsigned char timerstarted = 0;
 
 int main(void) {
 
@@ -51,6 +52,14 @@ int main(void) {
             Boucle Principale
      ***********************************************************************************************/
     while (1) {
+        if (PORTHbits.RH1 == 1 && timerstarted == 0) {
+            timestop = 0;
+            timerstarted = 1;
+            LED_BLANCHE_2 = 1;
+            LED_ORANGE_2 = 1;
+            LED_VERTE_2 = 1;
+        }
+
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
@@ -64,8 +73,6 @@ int main(void) {
             robotState.distanceTelemetreDroit = 34 / volts - 5;
             volts = ((float) result [4])* 3.3 / 4096;
             robotState.distanceTelemetreExtremeDroit = 34 / volts - 5;
-
-
         }
 
     }
@@ -88,6 +95,7 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_AVANCE_EN_COURS;
             break;
         case STATE_AVANCE_EN_COURS:
+
             SetNextRobotStateInAutomaticMode();
             break;
         case STATE_TOURNE_LENTEMENT_GAUCHE:
@@ -96,7 +104,7 @@ void OperatingSystemLoop(void) {
             stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
             break;
         case STATE_TOURNE_GAUCHE:
-            PWMSetSpeedConsigne(6, MOTEUR_DROIT);
+            PWMSetSpeedConsigne(10, MOTEUR_DROIT);
             PWMSetSpeedConsigne(24, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
             break;
@@ -111,7 +119,7 @@ void OperatingSystemLoop(void) {
             break;
         case STATE_TOURNE_DROITE:
             PWMSetSpeedConsigne(24, MOTEUR_DROIT);
-            PWMSetSpeedConsigne(6, MOTEUR_GAUCHE);
+            PWMSetSpeedConsigne(10, MOTEUR_GAUCHE);
             stateRobot = STATE_TOURNE_DROITE_EN_COURS;
             break;
 
@@ -164,17 +172,14 @@ void SetNextRobotStateInAutomaticMode() {
     else if (!EtatDroite && !EtatCentre && EtatGauche) //Obstacle àgauche
         positionObstacle = OBSTACLE_A_GAUCHE;
 
-    else if (EtatCentre) {
+    else if (EtatCentre || (EtatDroite && EtatGauche)) {
         if (robotState.distanceTelemetreDroit > robotState.distanceTelemetreGauche) {
             positionObstacle = OBSTACLE_CENTRE_GAUCHE;
         } else {
             positionObstacle = OBSTACLE_EN_FACE;
         }
-    }
-    else if (!EtatDroite && !EtatCentre && !EtatGauche) //pas d?obstacle
+    } else if (!EtatDroite && !EtatCentre && !EtatGauche) //pas d?obstacle
         positionObstacle = PAS_D_OBSTACLE;
-
-
 
     //éDtermination de lé?tat àvenir du robot
     if (positionObstacle == PAS_D_OBSTACLE)
@@ -191,14 +196,22 @@ void SetNextRobotStateInAutomaticMode() {
         nextStateRobot = STATE_TOURNE_SUR_PLACE_GAUCHE;
     else if (positionObstacle == OBSTACLE_CENTRE_GAUCHE)
         nextStateRobot = STATE_TOURNE_SUR_PLACE_DROITE;
+    else if (timestamp > 5000) {
+        LED_BLEUE_2 = 1;
+        LED_ROUGE_2 = 1;
+        LED_BLANCHE_2 = 0;
+        LED_VERTE_2 = 0;
+        LED_ORANGE_2 = 0;
+        nextStateRobot = STATE_ATTENTE;
+    }
 
     //Si l?on n?est pas dans la transition de lé?tape en cours
     if (nextStateRobot != stateRobot - 1)
         stateRobot = nextStateRobot;
+
 }
 
 void DetectionCapteur(void) {
-
 
     if (robotState.distanceTelemetreExtremeGauche < 30) {
         LED_BLANCHE_1 = 1;
@@ -214,7 +227,7 @@ void DetectionCapteur(void) {
         LED_BLEUE_1 = 0;
         EtatGauche = 0;
     }
-    if (robotState.distanceTelemetreCentre < 25) {
+    if (robotState.distanceTelemetreCentre < 26) {
         LED_ORANGE_1 = 1;
         EtatCentre = 1;
     } else {

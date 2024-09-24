@@ -17,6 +17,8 @@ void InitIO()
     ANSELE=0;             //Desactivation de toutes entree analogique
     ANSELG=0;             //Desactivation de toutes entree analogique
 
+    _TRISH1 = 1;  //inter1
+    
     // Configuration des sorties
 
     //******* LED ***************************

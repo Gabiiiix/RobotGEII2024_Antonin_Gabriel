@@ -6,6 +6,7 @@
 #include "main.h"
 
 unsigned long timestamp=0;
+unsigned long timestop=0;
 //Initialisation d?un timer 16 bits
 
 void InitTimer1(void) {
@@ -24,7 +25,7 @@ void InitTimer1(void) {
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
-    SetFreqTimer1(50);
+    SetFreqTimer1(100);
 }
 //Interruption du timer 1
 
@@ -82,7 +83,8 @@ void InitTimer4(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     IFS1bits.T4IF = 0;
-    timestamp=timestamp+1;
+    timestamp = timestamp + 1;
+    timestop = timestop + 1;
     OperatingSystemLoop();
 }
 

@@ -2,6 +2,7 @@
 #define TIMER_H
 
 extern unsigned long timestamp;
+extern unsigned long timestop;
 
 void InitTimer23(void);
 void InitTimer1(void);
