@@ -24,7 +24,7 @@ void InitTimer1(void) {
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
-    SetFreqTimer1(1000);
+    SetFreqTimer1(50);
 }
 //Interruption du timer 1
 
@@ -32,7 +32,7 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
-    LED_BLANCHE_2 = !LED_BLANCHE_2;
+    DetectionCapteur();
 }
 //Initialisation d?un timer 32 bits
 
@@ -83,7 +83,7 @@ void InitTimer4(void) {
 void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     IFS1bits.T4IF = 0;
     timestamp=timestamp+1;
-    LED_BLEUE_2 =!LED_BLEUE_2;
+    OperatingSystemLoop();
 }
 
 void SetFreqTimer4(float freq) {
