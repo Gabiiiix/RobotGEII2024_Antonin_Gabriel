@@ -14,7 +14,7 @@
 #define LED_ROUGE_2 _LATA10
 #define LED_VERTE_2 _LATH3
 
-#define INTER1 _LATH1
+#define INTER1 _RH1
 
 
 // Prototypes fonctions
