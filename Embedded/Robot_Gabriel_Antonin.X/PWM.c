@@ -27,6 +27,19 @@ float acceleration = 5;
 void PWMSetSpeedConsigne(float vitesseEnPourcents, char moteur) {
     if (moteur == MOTEUR_GAUCHE) {
         robotState.vitesseGaucheConsigne = vitesseEnPourcents;
+        if (vitesseEnPourcents == 24) {
+            LED_BLANCHE_2 = 1;
+            LED_BLEUE_2 = 1;
+            LED_ORANGE_2 = 1;
+            LED_ROUGE_2 = 1;
+            LED_VERTE_2 = 1;
+        } else {
+            LED_BLANCHE_2 = 0;
+            LED_BLEUE_2 = 0;
+            LED_ORANGE_2 = 0;
+            LED_ROUGE_2 = 0;
+            LED_VERTE_2 = 0;
+        }
     }
     if (moteur == MOTEUR_DROIT) {
         robotState.vitesseDroiteConsigne = vitesseEnPourcents;
@@ -36,27 +49,27 @@ void PWMSetSpeedConsigne(float vitesseEnPourcents, char moteur) {
 void PWMUpdateSpeed() {
     // Cette fonction est appelee sur timer et permet de suivre des rampes d acceleration
     if (robotState.vitesseDroiteCommandeCourante < robotState.vitesseDroiteConsigne)
-        robotState.vitesseDroiteCommandeCourante = Min( robotState.vitesseDroiteCommandeCourante + acceleration, robotState.vitesseDroiteConsigne);
+        robotState.vitesseDroiteCommandeCourante = Min(robotState.vitesseDroiteCommandeCourante + acceleration, robotState.vitesseDroiteConsigne);
     if (robotState.vitesseDroiteCommandeCourante > robotState.vitesseDroiteConsigne)
-        robotState.vitesseDroiteCommandeCourante = Max( robotState.vitesseDroiteCommandeCourante - acceleration, robotState.vitesseDroiteConsigne);
+        robotState.vitesseDroiteCommandeCourante = Max(robotState.vitesseDroiteCommandeCourante - acceleration, robotState.vitesseDroiteConsigne);
     if (robotState.vitesseDroiteCommandeCourante >= 0) {
-        SDC2 = robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
-        PDC2 = talon;
+        PDC1 = robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
+        SDC1 = talon;
 
     } else {
-        SDC2 = talon;
-        PDC2 = -robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
+        PDC1 = talon;
+        SDC1 = -robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
     }
     if (robotState.vitesseGaucheCommandeCourante < robotState.vitesseGaucheConsigne)
-        robotState.vitesseGaucheCommandeCourante = Min( robotState.vitesseGaucheCommandeCourante + acceleration, robotState.vitesseGaucheConsigne);
+        robotState.vitesseGaucheCommandeCourante = Min(robotState.vitesseGaucheCommandeCourante + acceleration, robotState.vitesseGaucheConsigne);
     if (robotState.vitesseGaucheCommandeCourante > robotState.vitesseGaucheConsigne)
-        robotState.vitesseGaucheCommandeCourante = Max( robotState.vitesseGaucheCommandeCourante - acceleration, robotState.vitesseGaucheConsigne);
+        robotState.vitesseGaucheCommandeCourante = Max(robotState.vitesseGaucheCommandeCourante - acceleration, robotState.vitesseGaucheConsigne);
     if (robotState.vitesseGaucheCommandeCourante >= 0) {
-        PDC1 = robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
-        SDC1 = talon;
+        SDC2 = robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
+        PDC2 = talon;
     } else {
-        PDC1 = talon;
-        SDC1 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
+        SDC2 = talon;
+        PDC2 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
     }
 }
 
