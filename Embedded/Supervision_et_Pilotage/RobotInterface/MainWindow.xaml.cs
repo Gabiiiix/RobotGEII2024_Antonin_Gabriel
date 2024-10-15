@@ -31,6 +31,7 @@ namespace RobotInterface
         ExtendedSerialPort serialPort1;
         string recievedText;
         DispatcherTimer timerAffichage;
+        Robot robot = new Robot();
 
 
         public MainWindow()
