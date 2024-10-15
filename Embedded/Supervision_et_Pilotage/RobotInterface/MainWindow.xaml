@@ -1,0 +1,32 @@
+﻿<Window x:Class="RobotInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RobotInterface"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox x:Name="Emission" Header="Emission" BorderBrush="Black" Grid.Column="0" Grid.Row="0"  >
+            <TextBox x:Name="TextBoxEmission" Grid.Column="1" Margin="0" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
+        </GroupBox>
+        <GroupBox x:Name="Reception" Header="Reception" Grid.Column="1" Grid.Row="0" BorderBrush="Black">
+            <TextBox x:Name="TextBoxReception" Grid.Column="1" Margin="0" Grid.Row="0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"  />
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="boutonEnvoyer"  Content="Envoyer"  VerticalAlignment="Center" Height="30" Width="100" Background="AquaMarine"  Click="boutonEnvoyer_Click" Margin="10"/>
+            <Button x:Name="boutonClear"  Content="Clear"   VerticalAlignment="Center" Height="30" Width="100" Background="Chartreuse"  Click="boutonClear_Click" Margin="10"/>
+        </StackPanel>
+    </Grid>
+</Window>
