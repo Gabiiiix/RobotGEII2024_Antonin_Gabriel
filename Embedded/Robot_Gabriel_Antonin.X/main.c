@@ -9,6 +9,7 @@
 #include "ADC.h"
 #include "Robot.h"
 #include "main.h"
+#include "UART.h"
 
 
 unsigned char stateRobot;
@@ -28,6 +29,7 @@ int main(void) {
 
     InitPWM();
     InitADC1();
+    InitUART2();
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -75,6 +77,9 @@ int main(void) {
         }
 
     }
+    SendMessageDirect((unsigned char*) "Bonjour", 7);
+__delay32(40000000);
+
 }
 
 void OperatingSystemLoop(void) {

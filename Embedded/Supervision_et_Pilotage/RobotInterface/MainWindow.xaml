@@ -27,6 +27,7 @@
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="boutonEnvoyer"  Content="Envoyer"  VerticalAlignment="Center" Height="30" Width="100" Background="AquaMarine"  Click="boutonEnvoyer_Click" Margin="10"/>
             <Button x:Name="boutonClear"  Content="Clear"   VerticalAlignment="Center" Height="30" Width="100" Background="Chartreuse"  Click="boutonClear_Click" Margin="10"/>
+            <Button x:Name="boutonTest"  Content="test"   VerticalAlignment="Center" Height="30" Width="100" Background="CornflowerBlue"  Click="boutonTest_Click" Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>
