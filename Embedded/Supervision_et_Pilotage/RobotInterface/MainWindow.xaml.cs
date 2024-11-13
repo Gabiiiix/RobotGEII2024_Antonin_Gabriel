@@ -17,8 +17,6 @@ using System.Windows.Threading;
 using System.IO.Ports;
 namespace RobotInterface
 
-
-
 {
 
     /// <summary>
@@ -38,7 +36,7 @@ namespace RobotInterface
         {
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM19", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM23", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -51,7 +49,7 @@ namespace RobotInterface
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-            if (robot.byteListReceived.Count != 0)
+            while(robot.byteListReceived.Count != 0)
             {
                 TextBoxReception.Text += robot.byteListReceived.Dequeue().ToString("X2") + " ";
             }
@@ -95,7 +93,6 @@ namespace RobotInterface
         {
             byte[] byteList = new byte [20];
             
-
             for (int i = 0; i < 20; i++)
             {
                 byteList[i] = (byte)(2 * i);

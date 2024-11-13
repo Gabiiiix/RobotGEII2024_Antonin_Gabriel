@@ -29,7 +29,7 @@ int main(void) {
 
     InitPWM();
     InitADC1();
-    InitUART2();
+    InitUART1();
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -59,7 +59,8 @@ int main(void) {
             timestop = 0;
         }
 
-
+//        SendMessageDirect((unsigned char*) "Bonjour", 7);;;
+//        __delay32(40000000);
 
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
@@ -77,8 +78,6 @@ int main(void) {
         }
 
     }
-    SendMessageDirect((unsigned char*) "Bonjour", 7);
-__delay32(40000000);
 
 }
 
