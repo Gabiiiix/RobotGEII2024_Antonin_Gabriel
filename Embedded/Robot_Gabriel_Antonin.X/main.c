@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <xc.h>
 #include <math.h>
+#include <libpic30.h>
 #include "ChipConfig.h"
 #include "IO.h"
 #include"timer.h"
@@ -10,6 +11,8 @@
 #include "Robot.h"
 #include "main.h"
 #include "UART.h"
+#include "CB_TX1.h"
+
 
 
 unsigned char stateRobot;
@@ -24,6 +27,7 @@ int main(void) {
     InitIO();
     InitTimer4();
     InitTimer1();
+
 
     SetFreqTimer4(1000);
 
@@ -53,14 +57,20 @@ int main(void) {
             Boucle Principale
      ***********************************************************************************************/
     while (1) {
+        
+        int i;
+        for(i=0; i< CB_RX1_GetDataSize(); i++)
+            {
+                unsigned char c = CB_RX1_Get();
+                SendMessage(&c,1);
+            }
+__delay32(1000);
 
         if (INTER1 == 1) {
             timerstarted = 1;
             timestop = 0;
         }
 
-//        SendMessageDirect((unsigned char*) "Bonjour", 7);;;
-//        __delay32(40000000);
 
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();

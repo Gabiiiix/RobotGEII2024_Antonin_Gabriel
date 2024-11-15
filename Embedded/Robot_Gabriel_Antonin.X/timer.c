@@ -4,6 +4,7 @@
 #include "PWM.h"
 #include "ADC.h"
 #include "main.h"
+#include "CB_TX1.h"
 
 unsigned long timestamp=0;
 unsigned long timestop=0;
@@ -34,6 +35,7 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
     DetectionCapteur();
+//    SendMessage((unsigned char*) "Bonjour", 7);
 }
 //Initialisation d?un timer 32 bits
 
@@ -52,6 +54,27 @@ void InitTimer23(void) {
     IEC0bits.T3IE = 1; // Enable Timer3 interrupt
     T2CONbits.TON = 1; // Start 32-bit Timer
 }
+
+
+//Interruption du timer 32 bits sur 2-3     
+//unsigned char toggle = 0;
+
+//void __attribute__((interrupt, no_auto_psv)) _T23Interrupt(void) {
+//
+//    IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
+//    LED_ORANGE_2 = !LED_ORANGE_2;
+////    if (toggle == 0) {
+////        PWMSetSpeed(10, MOTEUR_DROIT);
+////        PWMSetSpeed(10, MOTEUR_GAUCHE);
+////        toggle = 1;
+////    } else {
+////        PWMSetSpeed(-10, MOTEUR_DROIT);
+////        PWMSetSpeed(-10, MOTEUR_GAUCHE);
+////        toggle = 0;
+////    }
+//SendMessage((unsigned char*) "Bonjour", 7);
+//
+//}
 
 void SetFreqTimer1(float freq) {
     T1CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
@@ -86,6 +109,7 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     timestamp = timestamp + 1;
     timestop = timestop + 1;
     OperatingSystemLoop();
+
 }
 
 void SetFreqTimer4(float freq) {
@@ -104,20 +128,3 @@ void SetFreqTimer4(float freq) {
     } else
         PR4 = (int) (FCY / freq);
 }
-//Interruption du timer 32 bits sur 2-3     
-//unsigned char toggle = 0;
-
-//void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
-//
-//    IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
-//    LED_ORANGE_1 = !LED_ORANGE_1;
-//    if (toggle == 0) {
-//        PWMSetSpeed(10, MOTEUR_DROIT);
-//        PWMSetSpeed(10, MOTEUR_GAUCHE);
-//        toggle = 1;
-//    } else {
-//        PWMSetSpeed(-10, MOTEUR_DROIT);
-//        PWMSetSpeed(-10, MOTEUR_GAUCHE);
-//        toggle = 0;
-//    }
-//}
