@@ -36,7 +36,7 @@ namespace RobotInterface
         {
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM23", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -49,11 +49,11 @@ namespace RobotInterface
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-            while(robot.byteListReceived.Count != 0)
+            while (robot.byteListReceived.Count != 0)
             {
                 TextBoxReception.Text += robot.byteListReceived.Dequeue().ToString("X2") + " ";
             }
-            
+
         }
 
         private void boutonEnvoyer_Click(object sender, RoutedEventArgs e)
@@ -63,7 +63,7 @@ namespace RobotInterface
 
         private void TextBoxEmission_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 SendMessage();
             }
@@ -75,6 +75,7 @@ namespace RobotInterface
             TextBoxEmission.Text = "";
         }
 
+
         private void boutonClear_Click(object sender, RoutedEventArgs e)
         {
             TextBoxReception.Text = "";
@@ -85,8 +86,10 @@ namespace RobotInterface
         {
             //TextBoxReception.Text = Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
             //robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
-            for(int i = 0; i < e.Data.Length; i++)
-                robot.byteListReceived.Enqueue(e.Data[i]);
+            for (int i = 0; i < e.Data.Length; i++)
+                // robot.byteListReceived.Enqueue(e.Data[i]);
+                DecodeMessage(e.Data[i]);
+
         }
 
         private void boutonTest_Click(object sender, RoutedEventArgs e)
@@ -118,20 +121,26 @@ namespace RobotInterface
             msg[2] = (byte)(msgFunction & 0x00FF);
             msg[3] = (byte)(msgPayloadLength >> 8);
             msg[4] = (byte)(msgPayloadLength & 0x00FF);
-            for (int i = 0;i < msgPayloadLength; i++)
+            for (int i = 0; i < msgPayloadLength; i++)
             {
-                msg[i+5] = msgPayload[i];
+                msg[i + 5] = msgPayload[i];
             }
-            msg[msgLength - 1] = CalculateChecksum(msgFunction, msgLength, msg);
+            msg[msgLength - 1] = CalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
 
+            serialPort1.Write(msg,0,msg.Length);
         }
 
         private byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)
         {
             byte checksum = 0xFE;
-            for (int i = 0; i < msgPayloadLength-1; i++)
+            checksum = (byte)(checksum ^ (byte)(msgFunction) >> 8);
+            checksum = (byte)(checksum ^ (byte)(msgFunction) & 0x00FF);
+            checksum = (byte)(checksum ^ (byte)(msgPayloadLength) >> 8);
+            checksum = (byte)(checksum ^ (byte)(msgPayloadLength) & 0x00FF);
+
+            for (int i = 0; i < msgPayloadLength; i++)
             {
-                checksum = (byte)(checksum ^ msgPayload[i+1]);
+                checksum = (byte)(checksum ^ msgPayload[i]);
             }
 
             return checksum;
@@ -147,26 +156,30 @@ namespace RobotInterface
             Payload,
             CheckSum
         }
+
+
         StateReception rcvState = StateReception.Waiting;
         int msgDecodedFunction = 0;
         int msgDecodedPayloadLength = 0;
-        byte[] msgDecodedPayload;
+        byte[] msgDecodedPayload = new byte[256];
         int msgDecodedPayloadIndex = 0;
+
+
         private void DecodeMessage(byte c)
         {
             switch (rcvState)
             {
                 case StateReception.Waiting:
-                    if(c == 0xFE)
+                    if (c == 0xFE)
                     {
                         rcvState = StateReception.FunctionMSB;
                     }
-                break;
+                    break;
 
                 case StateReception.FunctionMSB:
                     msgDecodedFunction = c << 8;
                     rcvState = StateReception.FunctionLSB;
-                break;
+                    break;
 
                 case StateReception.FunctionLSB:
                     msgDecodedFunction = msgDecodedFunction | c;
@@ -184,17 +197,15 @@ namespace RobotInterface
                     break;
 
                 case StateReception.Payload:
-                    if (msgDecodedPayloadIndex < msgDecodedPayloadLength)
-                    {
                         msgDecodedPayload[msgDecodedPayloadIndex] = c;
                         msgDecodedPayloadIndex++;
 
-                        if(msgDecodedPayloadIndex < msgDecodedPayloadLength) 
+                        if (msgDecodedPayloadIndex > msgDecodedPayloadLength-1)
                         {
                             rcvState = StateReception.CheckSum;
+                            msgDecodedPayloadIndex = 0;
                         }
-                    }
-                break;
+                    break;
 
                 case StateReception.CheckSum:
                     byte receivedChecksum = c;
@@ -202,19 +213,9 @@ namespace RobotInterface
 
                     if (calculatedChecksum == receivedChecksum)
                     {
-                        if(msgDecodedFunction == 0x0080)
-                        {
-                            for(int i = 0; i < msgDecodedPayloadLength; i++)
-                            {
-                                TextBoxReception.Text = TextBoxReception.Text + //RAJOUTER AFFICHAGE TEXT BOX RECEPTION OUAIP
-                            }
-                        }
+                        ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
-                    else
-                    {
-                        TextBoxReception.Text = TextBoxReception.Text + "\nConnard, il y a une erreur";
-                    }
-                break;
+                    break;
 
                 default:
                     rcvState = StateReception.Waiting;
@@ -222,5 +223,43 @@ namespace RobotInterface
             }
         }
 
+        private void ProcessDecodedMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
+        {
+
+            switch (msgFunction)
+            {
+                case 0x0080:
+                    string payloadString = Encoding.ASCII.GetString(msgPayload);
+                    for (int i = 0; i < msgPayloadLength; i++)
+                        robot.byteListReceived.Enqueue(msgPayload[i]);
+                    break;
+
+                case 0x0020:
+
+                    // Code de deux octets, de manière:
+                    //  E000 00XX XXXX XXXX,
+                    // Si X = 1, alors la LED désigné (selon ça position) passe à l'état E
+                    // Si X = 0, La LED n'est pas affecté
+                break;
+
+                case 0x0030:
+                    if (msgPayloadLength == 5)
+                    {
+                        int DistanceTelemetreGaucheExtreme = (int)(msgPayload[0]);
+                        int DistanceTelemetreGauche = (int)(msgPayload[1]);
+                        int DistanceTelemetreCentre = (int)(msgPayload[2]);
+                        int DistanceTelemetreDroit = (int)(msgPayload[3]);
+                        int DistanceTelemetreDroitExtreme = (int)(msgPayload[4]);
+                    }
+                    break;
+
+                case 0x0040:
+
+                    break;
+            }
+        }
+        
+
+       
     }
 }

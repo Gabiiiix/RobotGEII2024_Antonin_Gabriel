@@ -12,11 +12,16 @@
 #include "main.h"
 #include "UART.h"
 #include "CB_TX1.h"
-
+#include "CB_RX1.h"
 
 
 unsigned char stateRobot;
 unsigned int timerstarted = 0;
+static unsigned int EtatGaucheExtreme;
+static unsigned int EtatGauche;
+static unsigned int EtatCentre;
+static unsigned int EtatDroite;
+static unsigned int EtatDroiteExtreme;
 
 int main(void) {
 
@@ -33,7 +38,7 @@ int main(void) {
 
     InitPWM();
     InitADC1();
-    InitUART1();
+    InitUART2();
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);

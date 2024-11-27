@@ -29,15 +29,8 @@
 #define OBSTACLE_TRES_A_DROITE 5
 #define OBSTACLE_CENTRE_GAUCHE 6
 
-
-
 void SetNextRobotStateInAutomaticMode(void);
 void OperatingSystemLoop(void);
 void DetectionCapteur(void);
 
-    static unsigned int EtatGaucheExtreme;
-    static unsigned int EtatGauche;
-    static unsigned int EtatCentre;
-    static unsigned int EtatDroite;
-    static unsigned int EtatDroiteExtreme;
 #endif /* MAIN_H */
