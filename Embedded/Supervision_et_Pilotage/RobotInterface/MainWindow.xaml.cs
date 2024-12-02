@@ -54,6 +54,17 @@ namespace RobotInterface
                 TextBoxReception.Text += robot.byteListReceived.Dequeue().ToString("X2") + " ";
             }
 
+            textboxCapteurDroite.Text = "IR Droit: " + Convert.ToString(distanceIRDroite) + "cm";
+            textboxCapteurGauche.Text = "IR Gauche: " + Convert.ToString(distanceIRGauche) + "cm";
+            textboxCapteurMilieu.Text = "IR Centre: " + Convert.ToString(distanceIRMilieu) + "cm";
+            textboxCapteurDroiteExtreme.Text = "IR Droite Extreme: " + Convert.ToString(distanceIRExtremeDroite) + "cm";
+            textboxCapteurGaucheExtreme.Text = "IR Gauche Extreme: " + Convert.ToString(distanceIRExtremeGauche) + "cm" ;
+
+            checkBoxLEDRouge.IsChecked = EtatLEDRouge;
+            checkBoxLEDVerte.IsChecked = EtatLEDVerte;
+            checkBoxLEDBlanche.IsChecked = EtatLEDBlanche;
+            checkBoxLEDBleue.IsChecked = EtatLEDBleue;
+            checkBoxLEDOrange.IsChecked = EtatLEDOrange;
         }
 
         private void boutonEnvoyer_Click(object sender, RoutedEventArgs e)
@@ -108,7 +119,19 @@ namespace RobotInterface
             string s = "Bonjour";
             byte[] array = Encoding.ASCII.GetBytes(s);
             int msgLength = array.Length;
+            //UartEncodeAndSendMessage(msgFunction, msgLength, array);
+
+            msgFunction = 0x0030;
+            for (int i = 0;i < msgLength; i++)
+            {
+                array[i] = (byte)((i + 1) * 3 - 2);
+            }
+            msgLength = 5;
+
+
             UartEncodeAndSendMessage(msgFunction, msgLength, array);
+
+
         }
 
         private void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, byte[] msgPayload)
@@ -163,6 +186,18 @@ namespace RobotInterface
         int msgDecodedPayloadLength = 0;
         byte[] msgDecodedPayload = new byte[256];
         int msgDecodedPayloadIndex = 0;
+
+        int distanceIRExtremeDroite = 0;
+        int distanceIRExtremeGauche = 0;
+        int distanceIRGauche = 0;
+        int distanceIRMilieu = 0;
+        int distanceIRDroite = 0;
+
+        bool EtatLEDVerte = false;
+        bool EtatLEDRouge = false;
+        bool EtatLEDOrange = false;
+        bool EtatLEDBleue = false;
+        bool EtatLEDBlanche = false;
 
 
         private void DecodeMessage(byte c)
@@ -235,21 +270,41 @@ namespace RobotInterface
                     break;
 
                 case 0x0020:
+                    int Numled = (int)(msgPayload[0]);
 
-                    // Code de deux octets, de manière:
-                    //  E000 00XX XXXX XXXX,
-                    // Si X = 1, alors la LED désigné (selon ça position) passe à l'état E
-                    // Si X = 0, La LED n'est pas affecté
+                    if (Numled == 0)
+                    {   
+                        EtatLEDVerte = Convert.ToBoolean(msgPayload[1]);
+                    }
+                    else if(Numled == 1)
+                    {
+                        EtatLEDRouge = Convert.ToBoolean(msgPayload[1]);
+                    }
+                    else if(Numled == 2)
+                    {
+                        EtatLEDOrange = Convert.ToBoolean(msgPayload[1]);
+                    }
+                    else if(Numled == 3)
+                    {
+                        EtatLEDBleue = Convert.ToBoolean(msgPayload[1]);
+                    }
+                    else if(Numled == 4)
+                    {
+                        EtatLEDBlanche = Convert.ToBoolean(msgPayload[1]);
+                    }
+                    
+
+
                 break;
 
                 case 0x0030:
                     if (msgPayloadLength == 5)
                     {
-                        int DistanceTelemetreGaucheExtreme = (int)(msgPayload[0]);
-                        int DistanceTelemetreGauche = (int)(msgPayload[1]);
-                        int DistanceTelemetreCentre = (int)(msgPayload[2]);
-                        int DistanceTelemetreDroit = (int)(msgPayload[3]);
-                        int DistanceTelemetreDroitExtreme = (int)(msgPayload[4]);
+                         distanceIRExtremeDroite = (int)(msgPayload[0]);
+                         distanceIRExtremeGauche = (int)(msgPayload[4]);
+                         distanceIRGauche = (int)(msgPayload[3]);
+                         distanceIRMilieu = (int)(msgPayload[2]);
+                         distanceIRDroite = (int)(msgPayload[1]);
                     }
                     break;
 
@@ -258,8 +313,50 @@ namespace RobotInterface
                     break;
             }
         }
-        
 
-       
+        private void checkBoxLEDVerte_Checked(object sender, RoutedEventArgs e)
+        {
+            EtatLEDVerte = !EtatLEDVerte;
+            byte[] array = new byte[2];
+            array[0] = 0;
+            array[1] = Convert.ToByte(EtatLEDVerte);
+            UartEncodeAndSendMessage(0x0020, 2, array);
+        }
+
+        private void checkBoxLEDRouge_Checked(object sender, RoutedEventArgs e)
+        {
+            EtatLEDRouge = !EtatLEDRouge;
+            byte[] array = new byte[2];
+            array[0] = 1;
+            array[1] = Convert.ToByte(EtatLEDRouge);
+            UartEncodeAndSendMessage(0x0020, 2, array);
+        }
+
+        private void checkBoxLEDOrange_Checked(object sender, RoutedEventArgs e)
+        {
+            EtatLEDOrange = !EtatLEDOrange;
+            byte[] array = new byte[2];
+            array[0] = 2;
+            array[1] = Convert.ToByte(EtatLEDOrange);
+            UartEncodeAndSendMessage(0x0020, 2, array);
+        }
+
+        private void checkBoxLEDBleue_Checked(object sender, RoutedEventArgs e)
+        {
+            EtatLEDBleue = !EtatLEDBleue;
+            byte[] array = new byte[2];
+            array[0] = 3;
+            array[1] = Convert.ToByte(EtatLEDBleue);
+            UartEncodeAndSendMessage(0x0020, 2, array);
+        }
+
+        private void checkBoxLEDBlanche_Checked(object sender, RoutedEventArgs e)
+        {
+            EtatLEDBlanche = !EtatLEDBlanche;
+            byte[] array = new byte[2];
+            array[0] = 4;
+            array[1] = Convert.ToByte(EtatLEDBlanche);
+            UartEncodeAndSendMessage(0x0020, 2, array);
+        }
     }
 }

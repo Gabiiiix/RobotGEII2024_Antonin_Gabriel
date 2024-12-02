@@ -13,7 +13,7 @@
 #include "UART.h"
 #include "CB_TX1.h"
 #include "CB_RX1.h"
-
+#include "UART_Protocol.h"
 
 unsigned char stateRobot;
 unsigned int timerstarted = 0;
@@ -62,20 +62,30 @@ int main(void) {
             Boucle Principale
      ***********************************************************************************************/
     while (1) {
-        
-        int i;
-        for(i=0; i< CB_RX1_GetDataSize(); i++)
-            {
-                unsigned char c = CB_RX1_Get();
-                SendMessage(&c,1);
-            }
-__delay32(1000);
+
+        //        int i;
+        //        for(i=0; i< CB_RX1_GetDataSize(); i++)
+        //            {
+        //                unsigned char c = CB_RX1_Get();
+        //                SendMessage(&c,1);
+        //            }
+        //        __delay32(1000);
 
         if (INTER1 == 1) {
             timerstarted = 1;
             timestop = 0;
         }
+        if (triggerCapteur > 500) {
+            unsigned char msg[5];
+            msg[4] = floor(robotState.distanceTelemetreExtremeGauche);
+            msg[3] = floor(robotState.distanceTelemetreGauche);
+            msg[2] = floor(robotState.distanceTelemetreCentre);
+            msg[1] = floor(robotState.distanceTelemetreDroit);
+            msg[0] = floor(robotState.distanceTelemetreExtremeDroit);
 
+            UartEncodeAndSendMessage(0x0030, 5, msg);
+            triggerCapteur = 0;
+        }
 
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
@@ -270,4 +280,5 @@ void DetectionCapteur(void) {
         LED_VERTE_1 = 0;
         EtatDroiteExtreme = 0;
     }
+
 }

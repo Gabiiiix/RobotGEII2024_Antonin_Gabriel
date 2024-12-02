@@ -42,7 +42,7 @@ void InitUART1(void) {
 void SendMessageDirect(unsigned char* message, int length) {
     unsigned char i = 0;
     for (i = 0; i < length; i++) {
-        while (U1STAbits.UTXBF); // wait while Tx buffer full
+        //while (U1STAbits.UTXBF); // wait while Tx buffer full
         U1TXREG = *(message)++; // Transmit one character
     }
 }
