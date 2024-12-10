@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CB_RX1.h"
+#include "UART_Protocol.h"
 
 #define CBRX1_BUFFER_SIZE 128
 
@@ -23,6 +24,7 @@ void CB_RX1_Add(unsigned char value) {
 unsigned char CB_RX1_Get(void) {
     unsigned char value = cbRx1Buffer[cbRx1Tail];
     cbRx1Tail=(cbRx1Tail+1);
+    UartDecodeMessage(value);
      if (cbRx1Tail==CBRX1_BUFFER_SIZE){
             cbRx1Tail=0;
             }

@@ -2,6 +2,8 @@
 #include "UART_Protocol.h"
 #include "main.h"
 #include "IO.h"
+#include "CB_TX1.h"
+#include "CB_TX2.h"
 
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
     //Fonction prenant entree la trame et sa longueur pour calculer le checksum
@@ -22,7 +24,7 @@ void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, unsigned ch
     int msgLength = msgPayloadLength + 6;
     unsigned char msg[msgLength];
 
-    msg[0] = 0xFE;
+    msg[0] = 0b11111110;
     msg[1] = msgFunction >> 8;
     msg[2] = msgFunction & 0x00FF;
     msg[3] = msgPayloadLength >> 8;

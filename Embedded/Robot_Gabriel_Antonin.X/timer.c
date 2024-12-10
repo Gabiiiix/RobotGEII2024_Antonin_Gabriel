@@ -8,7 +8,6 @@
 
 unsigned long timestamp=0;
 unsigned long timestop=0;
-unsigned long triggerCapteur=0;
 //Initialisation d?un timer 16 bits
 
 void InitTimer1(void) {
@@ -110,7 +109,9 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     timestamp = timestamp + 1;
     timestop = timestop + 1;
     OperatingSystemLoop();
-    triggerCapteur++;
+    if(CB_RX2_GetRemainingSize() > 0){
+        CB_RX2_Get();
+    }
 }
 
 void SetFreqTimer4(float freq) {

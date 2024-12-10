@@ -75,17 +75,7 @@ int main(void) {
             timerstarted = 1;
             timestop = 0;
         }
-        if (triggerCapteur > 500) {
-            unsigned char msg[5];
-            msg[4] = floor(robotState.distanceTelemetreExtremeGauche);
-            msg[3] = floor(robotState.distanceTelemetreGauche);
-            msg[2] = floor(robotState.distanceTelemetreCentre);
-            msg[1] = floor(robotState.distanceTelemetreDroit);
-            msg[0] = floor(robotState.distanceTelemetreExtremeDroit);
-
-            UartEncodeAndSendMessage(0x0030, 5, msg);
-            triggerCapteur = 0;
-        }
+        
 
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
@@ -100,6 +90,15 @@ int main(void) {
             robotState.distanceTelemetreDroit = 34 / volts - 5;
             volts = ((float) result [4])* 3.3 / 4096;
             robotState.distanceTelemetreExtremeDroit = 34 / volts - 5;
+            
+            unsigned char msg[5];
+            msg[4] = floor(robotState.distanceTelemetreExtremeGauche);
+            msg[3] = floor(robotState.distanceTelemetreGauche);
+            msg[2] = floor(robotState.distanceTelemetreCentre);
+            msg[1] = floor(robotState.distanceTelemetreDroit);
+            msg[0] = floor(robotState.distanceTelemetreExtremeDroit);
+
+            UartEncodeAndSendMessage(0x0030, 5, msg);
         }
 
     }
