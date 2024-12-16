@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "CB_RX1.h"
 #include "UART_Protocol.h"
+#include "UART.h"
 
 #define CBRX1_BUFFER_SIZE 128
 

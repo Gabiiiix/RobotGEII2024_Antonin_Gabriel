@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "UART_Protocol.h"
+#include "UART.h"
 #include "main.h"
 #include "IO.h"
 #include "CB_TX1.h"
@@ -104,7 +105,6 @@ void UartDecodeMessage(unsigned char c) {
 void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* payload) {
     int Numled;
     switch (function) {
-        
         case 0x0020:
             Numled = payload[0];
 
@@ -121,9 +121,9 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
             }
             break;
 
-        case 0x0040:
-
-            break;
+//        case 0x0040:
+//
+//            break;
     }
 }
 //*************************************************************************/

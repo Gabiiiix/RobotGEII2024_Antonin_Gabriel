@@ -5,7 +5,7 @@
 #include <libpic30.h>
 #include "ChipConfig.h"
 #include "IO.h"
-#include"timer.h"
+#include "timer.h"
 #include "PWM.h"
 #include "ADC.h"
 #include "Robot.h"
@@ -75,9 +75,10 @@ int main(void) {
             timerstarted = 1;
             timestop = 0;
         }
-        
+        static int f=0;
 
         if (ADCIsConversionFinished() == 1) {
+            f++;
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
             float volts = ((float) result [0])* 3.3 / 4096;
@@ -90,15 +91,17 @@ int main(void) {
             robotState.distanceTelemetreDroit = 34 / volts - 5;
             volts = ((float) result [4])* 3.3 / 4096;
             robotState.distanceTelemetreExtremeDroit = 34 / volts - 5;
-            
+            if(f==2){
             unsigned char msg[5];
-            msg[4] = floor(robotState.distanceTelemetreExtremeGauche);
-            msg[3] = floor(robotState.distanceTelemetreGauche);
-            msg[2] = floor(robotState.distanceTelemetreCentre);
-            msg[1] = floor(robotState.distanceTelemetreDroit);
-            msg[0] = floor(robotState.distanceTelemetreExtremeDroit);
+            msg[4] = (unsigned char)(robotState.distanceTelemetreExtremeGauche);
+            msg[3] = (unsigned char)(robotState.distanceTelemetreGauche);
+            msg[2] = (unsigned char)(robotState.distanceTelemetreCentre);
+            msg[1] = (unsigned char)(robotState.distanceTelemetreDroit);
+            msg[0] = (unsigned char)(robotState.distanceTelemetreExtremeDroit);
 
             UartEncodeAndSendMessage(0x0030, 5, msg);
+            f=0;
+            }
         }
 
     }
@@ -114,6 +117,7 @@ void OperatingSystemLoop(void) {
                 PWMSetSpeedConsigne(0, MOTEUR_DROIT);
                 PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
                 stateRobot = STATE_ATTENTE_EN_COURS;
+                
             case STATE_ATTENTE_EN_COURS:
                 if (timestamp > 1000)
                     stateRobot = STATE_AVANCE;
@@ -236,8 +240,17 @@ void SetNextRobotStateInAutomaticMode() {
 
 
     //Si l?on n?est pas dans la transition de lé?tape en cours
-    if (nextStateRobot != stateRobot - 1)
+    if (nextStateRobot != stateRobot - 1){
         stateRobot = nextStateRobot;
+        unsigned char msg[5];
+        msg[0] = (char)(stateRobot);
+        msg[1] = (char)(time >> 24);
+        msg[2] = (char)((time >> 16) & 0x00FF);
+        msg[3] = (char)((time >> 8) & 0x0000FF);
+        msg[4] = (char)(time & 0x000000FF);
+        UartEncodeAndSendMessage(0x0050, 5, msg);
+    
+    }
 
 
 }

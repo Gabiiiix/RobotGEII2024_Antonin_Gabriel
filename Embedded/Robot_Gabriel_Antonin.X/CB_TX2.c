@@ -17,7 +17,7 @@ void SendMessage2(unsigned char* message, int length) {
         //On peut écrire le message
         for (i = 0; i < length; i++)
             CB_TX2_Add(message[i]);
-        if (!CB_TX2_IsTranmitting())
+        if (!isTransmitting2)
             SendOne2();
     }
 }

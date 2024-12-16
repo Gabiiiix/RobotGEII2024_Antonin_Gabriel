@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using ExtendedSerialPort_NS;
 using System.Windows.Threading;
 using System.IO.Ports;
+using System.Reflection.Metadata;
+using System.Security.RightsManagement;
 namespace RobotInterface
 
 {
@@ -59,6 +61,9 @@ namespace RobotInterface
             textboxCapteurMilieu.Text = "IR Centre: " + Convert.ToString(distanceIRMilieu) + "cm";
             textboxCapteurDroiteExtreme.Text = "IR Droite Extreme: " + Convert.ToString(distanceIRExtremeDroite) + "cm";
             textboxCapteurGaucheExtreme.Text = "IR Gauche Extreme: " + Convert.ToString(distanceIRExtremeGauche) + "cm" ;
+
+            textboxRobotState.Text = "Robot␣State :\n" + ((StateRobot)(robotState)).ToString();
+            textboxRobotStateTimer.Text = "Time:\n" + instant.ToString() + " ms";
 
             checkBoxLEDRouge.IsChecked = EtatLEDRouge;
             checkBoxLEDVerte.IsChecked = EtatLEDVerte;
@@ -187,6 +192,9 @@ namespace RobotInterface
         byte[] msgDecodedPayload = new byte[256];
         int msgDecodedPayloadIndex = 0;
 
+        int robotState = 0;
+        long instant = 0 ;
+
         int distanceIRExtremeDroite = 0;
         int distanceIRExtremeGauche = 0;
         int distanceIRGauche = 0;
@@ -198,6 +206,28 @@ namespace RobotInterface
         bool EtatLEDOrange = false;
         bool EtatLEDBleue = false;
         bool EtatLEDBlanche = false;
+
+        public enum StateRobot
+        {
+            STATE_ATTENTE = 0,
+            STATE_ATTENTE_EN_COURS = 1,
+            STATE_AVANCE = 2,
+            STATE_AVANCE_EN_COURS = 3,
+            STATE_TOURNE_GAUCHE = 4,
+            STATE_TOURNE_GAUCHE_EN_COURS = 5,
+            STATE_TOURNE_DROITE = 6,
+            STATE_TOURNE_DROITE_EN_COURS = 7,
+            STATE_TOURNE_SUR_PLACE_GAUCHE = 8,
+            STATE_TOURNE_SUR_PLACE_GAUCHE_EN_COURS = 9,
+            STATE_TOURNE_SUR_PLACE_DROITE = 10,
+            STATE_TOURNE_SUR_PLACE_DROITE_EN_COURS = 11,
+            STATE_ARRET = 12,
+            STATE_ARRET_EN_COURS = 13,
+            STATE_RECULE = 14,
+            STATE_RECULE_EN_COURS = 15,
+            STATE_TOURNE_LENTEMENT_DROITE = 16,
+            STATE_TOURNE_LENTEMENT_GAUCHE = 17
+        }
 
 
         private void DecodeMessage(byte c)
@@ -250,6 +280,7 @@ namespace RobotInterface
                     {
                         ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
+                    rcvState = StateReception.Waiting;
                     break;
 
                 default:
@@ -310,6 +341,12 @@ namespace RobotInterface
 
                 case 0x0040:
 
+                    break;
+
+
+                case 0x0050:
+                    instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16) + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
+                    robotState = (int)msgPayload[0];   
                     break;
             }
         }

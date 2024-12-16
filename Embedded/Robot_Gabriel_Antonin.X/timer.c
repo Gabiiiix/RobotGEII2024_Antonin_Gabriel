@@ -5,9 +5,13 @@
 #include "ADC.h"
 #include "main.h"
 #include "CB_TX1.h"
+#include "CB_TX2.h"
+#include "CB_RX2.h"
 
 unsigned long timestamp=0;
 unsigned long timestop=0;
+unsigned long time = 0;
+
 //Initialisation d?un timer 16 bits
 
 void InitTimer1(void) {
@@ -108,6 +112,7 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     IFS1bits.T4IF = 0;
     timestamp = timestamp + 1;
     timestop = timestop + 1;
+    time = time + 1;
     OperatingSystemLoop();
     if(CB_RX2_GetRemainingSize() > 0){
         CB_RX2_Get();

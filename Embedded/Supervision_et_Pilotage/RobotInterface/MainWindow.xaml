@@ -29,20 +29,23 @@
             <Button x:Name="boutonClear"  Content="Clear"   VerticalAlignment="Center" Height="30" Width="100" Background="Chartreuse"  Click="boutonClear_Click" Margin="10"/>
             <Button x:Name="boutonTest"  Content="test"   VerticalAlignment="Center" Height="30" Width="100" Background="CornflowerBlue"  Click="boutonTest_Click" Margin="10"/>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Vertical" Margin="0,0,200,0" Grid.RowSpan="2">
-            <TextBox x:Name="textboxCapteurGaucheExtreme" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche Extreme: " Width="190" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurGauche" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche: " VerticalAlignment="Top" Width="190" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurMilieu" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Centre: " VerticalAlignment="Top" Width="190" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurDroite" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite: " VerticalAlignment="Center" Width="190" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurDroiteExtreme" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite Extreme: " VerticalAlignment="Center" Width="190" Margin="0,5,0,5" IsReadOnly="True"/>
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="150,0,0,0" Grid.Row="1">
+            <TextBox x:Name="textboxCapteurGaucheExtreme" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche Extreme: " Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
+            <TextBox x:Name="textboxCapteurGauche" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche: " VerticalAlignment="Top" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
+            <TextBox x:Name="textboxCapteurMilieu" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Centre: " VerticalAlignment="Top" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
+            <TextBox x:Name="textboxCapteurDroite" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite: " VerticalAlignment="Center" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
+            <TextBox x:Name="textboxCapteurDroiteExtreme" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite Extreme: " VerticalAlignment="Center" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Vertical" Margin="200,0,0,0" Grid.RowSpan="2">
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="314,0,0,0" Grid.Row="1">
             <CheckBox x:Name="checkBoxLEDVerte" Content="LEDVerte" Margin="0,5,0,5" Click="checkBoxLEDVerte_Checked"/>
             <CheckBox x:Name="checkBoxLEDRouge" Content="LEDRouge" Margin="0,5,0,5" Click="checkBoxLEDRouge_Checked"/>
             <CheckBox x:Name="checkBoxLEDOrange" Content="LEDOrange" Margin="0,5,0,5" Click="checkBoxLEDOrange_Checked"/>
             <CheckBox x:Name="checkBoxLEDBleue" Content="LEDBleue" Margin="0,5,0,5" Click="checkBoxLEDBleue_Checked"/>
             <CheckBox x:Name="checkBoxLEDBlanche" Content="LEDBlanche" Margin="0,5,0,5" Click="checkBoxLEDBlanche_Checked"/>
-
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,0,0,0" Grid.Row="1">
+            <TextBox x:Name="textboxRobotState" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="STATE ROBOT: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
+            <TextBox x:Name="textboxRobotStateTimer" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="TIME: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
         </StackPanel>
 
 

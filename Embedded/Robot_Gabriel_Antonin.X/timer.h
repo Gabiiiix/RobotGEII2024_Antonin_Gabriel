@@ -4,6 +4,7 @@
 extern unsigned long timestamp;
 extern unsigned long timestop;
 extern unsigned long triggerCapteur;
+extern unsigned long time;
 
 void InitTimer23(void);
 void InitTimer1(void);
