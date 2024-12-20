@@ -38,7 +38,7 @@ namespace RobotInterface
         {
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -154,8 +154,8 @@ namespace RobotInterface
                 msg[i + 5] = msgPayload[i];
             }
             msg[msgLength - 1] = CalculateChecksum(msgFunction, msgPayloadLength, msgPayload);
-
-            serialPort1.Write(msg,0,msg.Length);
+            
+            serialPort1.Write(msg, 0, msgLength); 
         }
 
         private byte CalculateChecksum(int msgFunction, int msgPayloadLength, byte[] msgPayload)
@@ -262,6 +262,7 @@ namespace RobotInterface
                     break;
 
                 case StateReception.Payload:
+                    if(msgDecodedPayloadLength < 256) { 
                         msgDecodedPayload[msgDecodedPayloadIndex] = c;
                         msgDecodedPayloadIndex++;
 
@@ -270,6 +271,11 @@ namespace RobotInterface
                             rcvState = StateReception.CheckSum;
                             msgDecodedPayloadIndex = 0;
                         }
+                    }
+                    else
+                    {
+                        rcvState = StateReception.Waiting;
+                    }
                     break;
 
                 case StateReception.CheckSum:

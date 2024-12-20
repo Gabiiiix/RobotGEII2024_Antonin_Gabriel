@@ -6,8 +6,8 @@
 
 #define CBRX2_BUFFER_SIZE 128
 
-int cbRx2Head;
-int cbRx2Tail;
+static unsigned int cbRx2Head = 0;
+static unsigned int cbRx2Tail = 0;
 
 unsigned char cbRx2Buffer[CBRX2_BUFFER_SIZE];
 
@@ -29,6 +29,22 @@ unsigned char CB_RX2_Get(void) {
             cbRx2Tail=0;
             }
     return value;
+}
+
+void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt(void) {
+    IFS1bits.U2RXIF = 0; // clear RX interrupt flag
+    /* check for receive errors */
+    if (U2STAbits.FERR == 1) {
+        U2STAbits.FERR = 0;
+    }
+    /* must clear the overrun error to keep uart receiving */
+    if (U2STAbits.OERR == 1) {
+        U2STAbits.OERR = 0;
+    }
+    /* get the data */
+    while (U2STAbits.URXDA == 1) {
+        CB_RX2_Add(U2RXREG);
+    }
 }
 
 unsigned char CB_RX2_IsDataAvailable(void) {

@@ -27,19 +27,19 @@ float acceleration = 5;
 void PWMSetSpeedConsigne(float vitesseEnPourcents, char moteur) {
     if (moteur == MOTEUR_GAUCHE) {
         robotState.vitesseGaucheConsigne = vitesseEnPourcents;
-        if (vitesseEnPourcents == 24) {
-            LED_BLANCHE_2 = 1;
-            LED_BLEUE_2 = 1;
-            LED_ORANGE_2 = 1;
-            LED_ROUGE_2 = 1;
-            LED_VERTE_2 = 1;
-        } else {
-            LED_BLANCHE_2 = 0;
-            LED_BLEUE_2 = 0;
-            LED_ORANGE_2 = 0;
-            LED_ROUGE_2 = 0;
-            LED_VERTE_2 = 0;
-        }
+//        if (vitesseEnPourcents == 24) {
+//            LED_BLANCHE_2 = 1;
+//            LED_BLEUE_2 = 1;
+//            LED_ORANGE_2 = 1;
+//            LED_ROUGE_2 = 1;
+//            LED_VERTE_2 = 1;
+//        } else {
+//            LED_BLANCHE_2 = 0;
+//            LED_BLEUE_2 = 0;
+//            LED_ORANGE_2 = 0;
+//            LED_ROUGE_2 = 0;
+//            LED_VERTE_2 = 0;
+//        }
     }
     if (moteur == MOTEUR_DROIT) {
         robotState.vitesseDroiteConsigne = vitesseEnPourcents;

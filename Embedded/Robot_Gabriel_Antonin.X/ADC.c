@@ -81,7 +81,7 @@ unsigned int * ADCGetResult(void) {
     return ADCResult;
 }
 
-unsigned char ADCIsConversionFinished(void) {
+ unsigned char ADCIsConversionFinished(void) {
     return ADCConversionFinishedFlag;
 }
 

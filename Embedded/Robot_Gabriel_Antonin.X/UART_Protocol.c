@@ -94,6 +94,7 @@ void UartDecodeMessage(unsigned char c) {
             if (calculatedChecksum == receivedChecksum) {
                 UartProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
             }
+            rcvState = Waiting;
             break;
 
         default:

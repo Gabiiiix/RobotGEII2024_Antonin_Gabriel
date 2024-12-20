@@ -114,7 +114,7 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     timestop = timestop + 1;
     time = time + 1;
     OperatingSystemLoop();
-    if(CB_RX2_GetRemainingSize() > 0){
+    if(CB_RX2_IsDataAvailable()){
         CB_RX2_Get();
     }
 }

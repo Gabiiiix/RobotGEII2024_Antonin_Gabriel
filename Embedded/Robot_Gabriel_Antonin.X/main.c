@@ -78,7 +78,6 @@ int main(void) {
         static int f=0;
 
         if (ADCIsConversionFinished() == 1) {
-            f++;
             ADCClearConversionFinishedFlag();
             unsigned int * result = ADCGetResult();
             float volts = ((float) result [0])* 3.3 / 4096;
@@ -91,7 +90,7 @@ int main(void) {
             robotState.distanceTelemetreDroit = 34 / volts - 5;
             volts = ((float) result [4])* 3.3 / 4096;
             robotState.distanceTelemetreExtremeDroit = 34 / volts - 5;
-            if(f==2){
+            
             unsigned char msg[5];
             msg[4] = (unsigned char)(robotState.distanceTelemetreExtremeGauche);
             msg[3] = (unsigned char)(robotState.distanceTelemetreGauche);
@@ -100,8 +99,7 @@ int main(void) {
             msg[0] = (unsigned char)(robotState.distanceTelemetreExtremeDroit);
 
             UartEncodeAndSendMessage(0x0030, 5, msg);
-            f=0;
-            }
+            
         }
 
     }

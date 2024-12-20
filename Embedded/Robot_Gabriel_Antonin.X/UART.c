@@ -51,21 +51,6 @@ void SendMessageDirect(unsigned char* message, int length) {
 
 //Interruption en mode loopback UART2
 
-void __attribute__((interrupt, no_auto_psv)) _U2RXInterrupt(void) {
-    IFS1bits.U2RXIF = 0; // clear RX interrupt flag
-    /* check for receive errors */
-    if (U2STAbits.FERR == 1) {
-        U2STAbits.FERR = 0;
-    }
-    /* must clear the overrun error to keep uart receiving */
-    if (U2STAbits.OERR == 1) {
-        U2STAbits.OERR = 0;
-    }
-    /* get the data */
-    while (U2STAbits.URXDA == 1) {
-        U2TXREG = U2RXREG;
-    }
-}
 
 //Interruption en mode loopback UART1
 
