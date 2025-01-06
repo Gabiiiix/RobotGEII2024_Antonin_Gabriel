@@ -14,6 +14,7 @@
 #include "CB_TX1.h"
 #include "CB_RX1.h"
 #include "UART_Protocol.h"
+#include "QEI.h"
 
 unsigned char stateRobot;
 unsigned int timerstarted = 0;
@@ -39,6 +40,8 @@ int main(void) {
     InitPWM();
     InitADC1();
     InitUART2();
+    InitQEI1();
+    InitQEI2();
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -98,7 +101,7 @@ int main(void) {
             msg[1] = (unsigned char)(robotState.distanceTelemetreDroit);
             msg[0] = (unsigned char)(robotState.distanceTelemetreExtremeDroit);
 
-            UartEncodeAndSendMessage(0x0030, 5, msg);
+            //UartEncodeAndSendMessage(0x0030, 5, msg);
             
         }
 
@@ -246,7 +249,7 @@ void SetNextRobotStateInAutomaticMode() {
         msg[2] = (char)((time >> 16) & 0x00FF);
         msg[3] = (char)((time >> 8) & 0x0000FF);
         msg[4] = (char)(time & 0x000000FF);
-        UartEncodeAndSendMessage(0x0050, 5, msg);
+        //UartEncodeAndSendMessage(0x0050, 5, msg);
     
     }
 

@@ -39,6 +39,7 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
     DetectionCapteur();
+    SendPositionData();
 //    SendMessage((unsigned char*) "Bonjour", 7);
 }
 //Initialisation d?un timer 32 bits
