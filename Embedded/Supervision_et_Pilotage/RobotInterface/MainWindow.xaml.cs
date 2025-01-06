@@ -354,6 +354,9 @@ namespace RobotInterface
                     instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16) + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
                     robotState = (int)msgPayload[0];   
                     break;
+
+                case 0x0061:
+                    
             }
         }
 
