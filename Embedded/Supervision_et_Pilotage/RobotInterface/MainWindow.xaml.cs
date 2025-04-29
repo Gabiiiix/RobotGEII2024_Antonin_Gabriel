@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.IO.Ports;
 using System.Reflection.Metadata;
 using System.Security.RightsManagement;
+using static SciChart.Drawing.Utility.PointUtil;
 namespace RobotInterface
 
 {
@@ -356,7 +357,15 @@ namespace RobotInterface
                     break;
 
                 case 0x0061:
-                    
+                    robot.positionXOdo = BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionYOdo = BitConverter.ToSingle(msgPayload, 8);
+                    robot.angleRadian = BitConverter.ToSingle(msgPayload, 12);
+                    robot.vitesseLineaire = BitConverter.ToSingle(msgPayload, 16);
+                    robot.vitesseAngulaire = BitConverter.ToSingle(msgPayload, 20);
+                    break;
+
+
+
             }
         }
 
@@ -404,5 +413,6 @@ namespace RobotInterface
             array[1] = Convert.ToByte(EtatLEDBlanche);
             UartEncodeAndSendMessage(0x0020, 2, array);
         }
+
     }
 }

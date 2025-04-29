@@ -1,4 +1,4 @@
-#define DISTROUES 0.2812
+#define DISTROUES 0.2175
 #define POSITION_DATA 0x0061
 
 #include <xc.h>
@@ -48,7 +48,7 @@ void QEIUpdateData() {
     robotState.vitesseDroitFromOdometry = delta_d * FREQ_ECH_QEI;
     robotState.vitesseGaucheFromOdometry = delta_g * FREQ_ECH_QEI;
     robotState.vitesseLineaireFromOdometry = (robotState.vitesseGaucheFromOdometry + robotState.vitesseDroitFromOdometry) / 2;
-    robotState.vitesseAngulaireFromOdometry = (robotState.vitesseGaucheFromOdometry - robotState.vitesseDroitFromOdometry) / DISTROUES;
+    robotState.vitesseAngulaireFromOdometry = (robotState.vitesseDroitFromOdometry - robotState.vitesseGaucheFromOdometry) / DISTROUES;
 
     //Mise a jour du positionnement terrain a t-1
     robotState.xPosFromOdometry_1 = robotState.xPosFromOdometry;

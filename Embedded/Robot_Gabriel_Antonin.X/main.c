@@ -101,7 +101,7 @@ int main(void) {
             msg[1] = (unsigned char)(robotState.distanceTelemetreDroit);
             msg[0] = (unsigned char)(robotState.distanceTelemetreExtremeDroit);
 
-            //UartEncodeAndSendMessage(0x0030, 5, msg);
+               UartEncodeAndSendMessage(0x0030, 5, msg);
             
         }
 

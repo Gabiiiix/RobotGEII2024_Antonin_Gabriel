@@ -4,12 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotInterface"
+        xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -17,14 +20,15 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+
         <GroupBox x:Name="Emission" Header="Emission" BorderBrush="Black" Grid.Column="0" Grid.Row="0"  >
-            <TextBox x:Name="TextBoxEmission" Grid.Column="1" Margin="0" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
+            <TextBox x:Name="TextBoxEmission" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
         </GroupBox>
         <GroupBox x:Name="Reception" Header="Reception" Grid.Column="1" Grid.Row="0" BorderBrush="Black">
             <TextBox x:Name="TextBoxReception" Grid.Column="1" Margin="0" Grid.Row="0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"  />
         </GroupBox>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,289,0,0" Grid.RowSpan="2">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1">
             <Button x:Name="boutonEnvoyer"  Content="Envoyer"  VerticalAlignment="Center" Height="30" Width="100" Background="AquaMarine"  Click="boutonEnvoyer_Click" Margin="10"/>
             <Button x:Name="boutonClear"  Content="Clear"   VerticalAlignment="Center" Height="30" Width="100" Background="Chartreuse"  Click="boutonClear_Click" Margin="10"/>
             <Button x:Name="boutonTest"  Content="test"   VerticalAlignment="Center" Height="30" Width="100" Background="CornflowerBlue"  Click="boutonTest_Click" Margin="10"/>
@@ -47,6 +51,7 @@
             <TextBox x:Name="textboxRobotState" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="STATE ROBOT: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
             <TextBox x:Name="textboxRobotStateTimer" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="TIME: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
         </StackPanel>
+        <oscillo:WpfOscilloscope x:Name="oscilloSpeed" Grid.Row="2" Grid.ColumnSpan="2" Loaded="oscilloSpeed_Loaded"/>
 
 
 

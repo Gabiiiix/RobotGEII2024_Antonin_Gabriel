@@ -11,6 +11,7 @@
 unsigned long timestamp=0;
 unsigned long timestop=0;
 unsigned long time = 0;
+unsigned int tock = 0;
 
 //Initialisation d?un timer 16 bits
 
@@ -39,7 +40,12 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
     DetectionCapteur();
-    SendPositionData();
+    QEIUpdateData();
+    tock++;
+    if(tock == 25){
+        SendPositionData();
+        tock = 0;
+    }
 //    SendMessage((unsigned char*) "Bonjour", 7);
 }
 //Initialisation d?un timer 32 bits
