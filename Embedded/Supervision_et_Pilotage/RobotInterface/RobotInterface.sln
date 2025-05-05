@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RobotInterface", "RobotInterface.csproj", "{5B587514-DDBF-4267-9464-64170C63FEF7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{88BAA407-3FEA-4F4B-BB41-5309CE48884E} = {88BAA407-3FEA-4F4B-BB41-5309CE48884E}
+		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A} = {8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}
 		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F} = {F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}
 	EndProjectSection
 EndProject
@@ -13,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendedSerialPort", "..\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfOscilloscopeControl", "..\WpfOscilloscope\WpfOscilloscopeControl.csproj", "{88BAA407-3FEA-4F4B-BB41-5309CE48884E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAsservissementDisplay", "..\WpfAsservissementDisplay\WpfAsservissementDisplay.csproj", "{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "..\Utilities\Utilities.csproj", "{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAsservissementDisplay", "..\WpfAsservissementDisplay\WpfAsservissementDisplay.csproj", "{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +50,6 @@ Global
 		{88BAA407-3FEA-4F4B-BB41-5309CE48884E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88BAA407-3FEA-4F4B-BB41-5309CE48884E}.Release|x64.ActiveCfg = Release|x64
 		{88BAA407-3FEA-4F4B-BB41-5309CE48884E}.Release|x64.Build.0 = Release|x64
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|x64.ActiveCfg = Debug|x64
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|x64.Build.0 = Debug|x64
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.ActiveCfg = Release|x64
-		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.Build.0 = Release|x64
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Debug|x64.ActiveCfg = Debug|x64
@@ -65,6 +58,14 @@ Global
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Release|x64.ActiveCfg = Release|x64
 		{8E7D0DA4-9A13-4B18-A90E-0243BBCCE40A}.Release|x64.Build.0 = Release|x64
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|x64.ActiveCfg = Debug|x64
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Debug|x64.Build.0 = Debug|x64
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.ActiveCfg = Release|x64
+		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

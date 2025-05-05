@@ -1,4 +1,4 @@
-﻿using static MathNet.Numerics.Constants;
+﻿using Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -334,6 +334,7 @@ namespace Utilities
             Type = type;
             Id = id;
         }
+
         public LocationExtended(double x, double y, double theta, ObjectType type)
         {
             X = x;

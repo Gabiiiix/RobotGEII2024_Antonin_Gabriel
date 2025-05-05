@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Asservissement.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Filters.cs" />
     <Compile Include="FixedSizeQueue.cs" />
@@ -100,6 +101,26 @@
       <Project>{0540B497-B2CE-40A1-84B5-3109CE2F3146}</Project>
       <Name>Constants</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="BCDConstants">
+      <Guid>{DD6F48D7-D5B2-4901-BE88-D140D1C40A07}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="SwConst">
+      <Guid>{4687F359-55D0-4CD3-B6CF-2EB42C11F989}</Guid>
+      <VersionMajor>32</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

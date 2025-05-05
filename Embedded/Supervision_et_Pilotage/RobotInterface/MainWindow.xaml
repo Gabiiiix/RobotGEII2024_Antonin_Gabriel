@@ -5,55 +5,104 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotInterface"
         xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
+        xmlns:AsservDisplay="clr-namespace:WpfAsservissementDisplay;assembly=WpfAsservissementDisplay"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="MainWindow" Width="900" Height="600">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        <TabControl>
+            <!-- Onglet Général -->
+            <TabItem Header="Général">
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="10" VerticalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Emission / Reception -->
+                                <RowDefinition Height="Auto"/>
+                                <!-- Boutons -->
+                                <RowDefinition Height="*"/>
+                                <!-- Zone capteurs / LEDs / état / asservissement -->
+                            </Grid.RowDefinitions>
 
+                            <!-- Emission & Réception -->
+                            <Grid Grid.Row="0" Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-        <GroupBox x:Name="Emission" Header="Emission" BorderBrush="Black" Grid.Column="0" Grid.Row="0"  >
-            <TextBox x:Name="TextBoxEmission" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
-        </GroupBox>
-        <GroupBox x:Name="Reception" Header="Reception" Grid.Column="1" Grid.Row="0" BorderBrush="Black">
-            <TextBox x:Name="TextBoxReception" Grid.Column="1" Margin="0" Grid.Row="0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"  />
-        </GroupBox>
+                                <GroupBox x:Name="Emission" Header="Emission" Grid.Column="0" Margin="5">
+                                    <TextBox x:Name="TextBoxEmission" Height="60" TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxEmission_KeyUp"/>
+                                </GroupBox>
+                                <GroupBox x:Name="Reception" Header="Reception" Grid.Column="1" Margin="5">
+                                    <TextBox x:Name="TextBoxReception" Height="60" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
+                                </GroupBox>
+                            </Grid>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1">
-            <Button x:Name="boutonEnvoyer"  Content="Envoyer"  VerticalAlignment="Center" Height="30" Width="100" Background="AquaMarine"  Click="boutonEnvoyer_Click" Margin="10"/>
-            <Button x:Name="boutonClear"  Content="Clear"   VerticalAlignment="Center" Height="30" Width="100" Background="Chartreuse"  Click="boutonClear_Click" Margin="10"/>
-            <Button x:Name="boutonTest"  Content="test"   VerticalAlignment="Center" Height="30" Width="100" Background="CornflowerBlue"  Click="boutonTest_Click" Margin="10"/>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="150,0,0,0" Grid.Row="1">
-            <TextBox x:Name="textboxCapteurGaucheExtreme" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche Extreme: " Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurGauche" Grid.Column="1" HorizontalAlignment="Left"  Grid.Row="1" TextWrapping="Wrap" Text="IR Gauche: " VerticalAlignment="Top" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurMilieu" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Centre: " VerticalAlignment="Top" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurDroite" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite: " VerticalAlignment="Center" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
-            <TextBox x:Name="textboxCapteurDroiteExtreme" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="IR Droite Extreme: " VerticalAlignment="Center" Width="160" Margin="0,5,0,5" IsReadOnly="True"/>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="314,0,0,0" Grid.Row="1">
-            <CheckBox x:Name="checkBoxLEDVerte" Content="LEDVerte" Margin="0,5,0,5" Click="checkBoxLEDVerte_Checked"/>
-            <CheckBox x:Name="checkBoxLEDRouge" Content="LEDRouge" Margin="0,5,0,5" Click="checkBoxLEDRouge_Checked"/>
-            <CheckBox x:Name="checkBoxLEDOrange" Content="LEDOrange" Margin="0,5,0,5" Click="checkBoxLEDOrange_Checked"/>
-            <CheckBox x:Name="checkBoxLEDBleue" Content="LEDBleue" Margin="0,5,0,5" Click="checkBoxLEDBleue_Checked"/>
-            <CheckBox x:Name="checkBoxLEDBlanche" Content="LEDBlanche" Margin="0,5,0,5" Click="checkBoxLEDBlanche_Checked"/>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0,0,0,0" Grid.Row="1">
-            <TextBox x:Name="textboxRobotState" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="STATE ROBOT: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
-            <TextBox x:Name="textboxRobotStateTimer" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="TIME: " Width="130" Margin="0,5,0,5" IsReadOnly="True" Height="53"/>
-        </StackPanel>
-        <oscillo:WpfOscilloscope x:Name="oscilloSpeed" Grid.Row="2" Grid.ColumnSpan="2" Loaded="oscilloSpeed_Loaded"/>
+                            <!-- Boutons -->
+                            <WrapPanel Grid.Row="1" Margin="10,5" HorizontalAlignment="Left">
+                                <Button x:Name="boutonEnvoyer" Content="Envoyer" Height="30" Width="75" Margin="10" Click="boutonEnvoyer_Click" Background="AquaMarine"/>
+                                <Button x:Name="boutonClear" Content="Clear" Height="30" Width="75" Margin="10" Click="boutonClear_Click" Background="Chartreuse"/>
+                                <Button x:Name="boutonTest" Content="test" Height="30" Width="75" Margin="10" Click="boutonTest_Click" Background="CornflowerBlue"/>
+                            </WrapPanel>
 
+                            <!-- Zone capteurs / LEDs / état / asservissement -->
+                            <Grid Grid.Row="2" Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
 
+                                <!-- Colonne 0 : capteurs, LEDs, état -->
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                    <!-- Capteurs -->
+                                    <StackPanel Margin="0,0,20,0">
+                                        <TextBox x:Name="textboxCapteurGaucheExtreme" Text="IR Gauche Extreme: " Margin="0,5" IsReadOnly="True"/>
+                                        <TextBox x:Name="textboxCapteurGauche" Text="IR Gauche: " Margin="0,5" IsReadOnly="True"/>
+                                        <TextBox x:Name="textboxCapteurMilieu" Text="IR Centre: " Margin="0,5" IsReadOnly="True"/>
+                                        <TextBox x:Name="textboxCapteurDroite" Text="IR Droite: " Margin="0,5" IsReadOnly="True"/>
+                                        <TextBox x:Name="textboxCapteurDroiteExtreme" Text="IR Droite Extreme: " Margin="0,5" IsReadOnly="True"/>
+                                    </StackPanel>
 
+                                    <!-- LEDs -->
+                                    <StackPanel Margin="0,0,20,0">
+                                        <CheckBox x:Name="checkBoxLEDVerte" Content="LEDVerte" Margin="0,5" Click="checkBoxLEDVerte_Checked"/>
+                                        <CheckBox x:Name="checkBoxLEDRouge" Content="LEDRouge" Margin="0,5" Click="checkBoxLEDRouge_Checked"/>
+                                        <CheckBox x:Name="checkBoxLEDOrange" Content="LEDOrange" Margin="0,5" Click="checkBoxLEDOrange_Checked"/>
+                                        <CheckBox x:Name="checkBoxLEDBleue" Content="LEDBleue" Margin="0,5" Click="checkBoxLEDBleue_Checked"/>
+                                        <CheckBox x:Name="checkBoxLEDBlanche" Content="LEDBlanche" Margin="0,5" Click="checkBoxLEDBlanche_Checked"/>
+                                    </StackPanel>
+
+                                    <!-- État robot -->
+                                    <StackPanel>
+                                        <TextBox x:Name="textboxRobotState" Text="STATE ROBOT: " Height="53" Margin="0,5" IsReadOnly="True"/>
+                                        <TextBox x:Name="textboxRobotStateTimer" Text="TIME: " Height="53" Margin="0,5" IsReadOnly="True"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- Colonne 1 : asservissement -->
+                                <GroupBox Header="Asservissement" Grid.Column="1" Margin="10">
+                                    <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservSpeedDisplay"/>
+                                </GroupBox>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <!-- Onglet Oscilloscope -->
+            <TabItem Header="Oscilloscope">
+                <Grid>
+                    <oscillo:WpfOscilloscope x:Name="oscilloSpeed" Margin="10"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Map">
+                <Grid>
+                    <TextBox HorizontalAlignment="Center" IsReadOnly="True" Text="We are building it, we never gonna give up" VerticalAlignment="Center" Width="400" TextAlignment="Center"/>
+                </Grid>
+            </TabItem>
+            
+        </TabControl>
     </Grid>
 </Window>
