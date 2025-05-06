@@ -77,6 +77,7 @@ int main(void) {
         if (INTER1 == 1) {
             timerstarted = 1;
             timestop = 0;
+            LED_BLEUE_2 = 1;
         }
         static int f=0;
 
@@ -140,6 +141,7 @@ void OperatingSystemLoop(void) {
             case STATE_TOURNE_GAUCHE:
                 PWMSetSpeedConsigne(6, MOTEUR_DROIT);
                 PWMSetSpeedConsigne(20, MOTEUR_GAUCHE);
+                LED_ROUGE_2 = 1;
                 stateRobot = STATE_TOURNE_GAUCHE_EN_COURS;
                 break;
 
@@ -187,7 +189,7 @@ void OperatingSystemLoop(void) {
                 stateRobot = STATE_ATTENTE;
                 break;
         }
-    } else {
+    } if(timestop > 60000) {
         timerstarted = 0;
         PWMSetSpeedConsigne(0, MOTEUR_DROIT);
         PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);

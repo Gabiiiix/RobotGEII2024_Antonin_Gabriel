@@ -55,9 +55,9 @@ void InitIO() {
 
     //******************** QEI *****************
     _QEA2R = 97; //assign QEI A to pin RP97
-    _QEB2R = 96; //assign QEI B to pin RP96
-    _QEA1R = 124; //assign QEI A to pin RP70
-    _QEB1R = 126; //assign QEI B to pin RP69
+    _QEB2R = 113; //assign QEI B to pin RP96
+    _QEA1R = 126; //assign QEI A to pin RP70
+    _QEB1R = 124; //assign QEI B to pin RP69
 
     LockIO(); // On lock les registres d'entrées/sorties, ainsi que les registres des PPS
 }
