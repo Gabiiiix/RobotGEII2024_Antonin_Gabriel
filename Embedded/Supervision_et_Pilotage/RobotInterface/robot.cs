@@ -17,7 +17,10 @@ namespace RobotInterface
         public float positionYOdo;
         public float angleRadian;
         public float vitesseLineaire;
-        public float vitesseAngulaire; 
+        public float vitesseAngulaire;
+        public float vitesseGauche;
+        public float vitesseDroit;
+        public long time;
         public Robot()
         {
 

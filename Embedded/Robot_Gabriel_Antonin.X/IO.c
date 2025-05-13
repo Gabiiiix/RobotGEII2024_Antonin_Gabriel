@@ -17,6 +17,7 @@ void InitIO() {
     ANSELG = 0; //Desactivation de toutes entree analogique
 
     _TRISH1 = 1; //inter1
+    _TRISH2 = 1; //inter2
 
     // Configuration des sorties
 

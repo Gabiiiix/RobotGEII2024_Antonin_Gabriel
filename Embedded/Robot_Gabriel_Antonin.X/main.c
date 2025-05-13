@@ -79,6 +79,11 @@ int main(void) {
             timestop = 0;
             LED_BLEUE_2 = 1;
         }
+        
+        if (INTER2 == 1){
+            time = 0;
+            LED_VERTE_2 = 1;
+        }
         static int f=0;
 
         if (ADCIsConversionFinished() == 1) {

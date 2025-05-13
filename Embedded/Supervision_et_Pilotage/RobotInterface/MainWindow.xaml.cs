@@ -21,6 +21,7 @@ using static SciChart.Drawing.Utility.PointUtil;
 using SciChart.Charting.Visuals;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 using System.ComponentModel;
+using WpfOscilloscopeControl;
 namespace RobotInterface
 
 {
@@ -36,13 +37,14 @@ namespace RobotInterface
         DispatcherTimer timerAffichage;
 
         Robot robot = new Robot();
-
-
+        
         public MainWindow()
         {
             // Set this code once in App.xaml.cs or application startup
             SciChartSurface.SetRuntimeLicenseKey("VKOUDZGU6WndydcBQTqx4px2yWsaXqbn+hIKIxA5AE7Vii9ai5FosulEM8j2NYkBkJFZ6Ei2pFlUIV8aoE7bc3FfN3QRUwtvCaGqmrseTOeNsCz9p4t2CBk7TjcTPW7JTOYnIH/UjoRxi8b0BK6MDi8XJUS98gXSybDb/cn070Y5voaiKvusgmvvAOjcwuGcPQuyV7vJlzqh3LqLL3TqJnJMTdGmM00s8VFb7U+sxfbzT/h8SQuY13u/3i5sSz0VEI6YYJeiiX3oMajfHwA/SGyyDFTZmDAAfILtohF7ag+hnEpUDqhudgYjXqVwVtc0oUZNT8Ghtx0ek2bjkQukPtp8/44M1wiOdZORUOCAxeh3oTPZKjEGRjkpbN/UKprgi8/Xvf11BuXzTJLXklmSZLFRsgxcx3nvQVwae9oY5HABtwOk+q/bdsNBKyPmhjNLM1+y5qSlpIQlHzm/EdvN44AX5iR43d4dxfLx9QN7KHvaUbHpqNXVKLUsq0g1g6mEGntw5fXj");
             
+
+
             InitializeComponent();
 
             serialPort1 = new ExtendedSerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
@@ -54,6 +56,12 @@ namespace RobotInterface
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
 
+            oscilloSpeed.isDisplayActivated = true;
+            oscilloSpeed.AddOrUpdateLine(1, 100, "VGauche");
+            oscilloSpeed.AddOrUpdateLine(2, 100, "VDroit");
+            oscilloSpeed.ChangeLineColor(1, Colors.Chartreuse);
+            oscilloSpeed.ChangeLineColor(2, Colors.Aquamarine);
+
         }
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
@@ -62,6 +70,7 @@ namespace RobotInterface
             {
                 TextBoxReception.Text += robot.byteListReceived.Dequeue().ToString("X2") + " ";
             }
+
 
             textboxCapteurDroite.Text = "IRD: " + Convert.ToString(distanceIRDroite) + "cm";
             textboxCapteurGauche.Text = "IRG: " + Convert.ToString(distanceIRGauche) + "cm";
@@ -72,11 +81,18 @@ namespace RobotInterface
             textboxRobotState.Text = "Robot␣State :\n" + ((StateRobot)(robotState)).ToString();
             textboxRobotStateTimer.Text = "Time:\n" + instant.ToString() + " ms";
 
-            LabelPosX.Content = "Position X: " + Convert.ToString(robot.positionXOdo);
-            LabelPosY.Content = "Position Y: " + Convert.ToString(robot.positionYOdo);
-            LabelAngle.Content = "Angle: " + Convert.ToString(robot.angleRadian);
-            LabelVLineaire.Content = "Vitesse Linéaire: " + Convert.ToString(robot.vitesseLineaire);
-            LabelVAngulaire.Content = "Vitesse Angulaire: " + Convert.ToString(robot.vitesseAngulaire);
+            LabelPosX.Content = "Position X: " + robot.positionXOdo.ToString("F2");
+            LabelPosY.Content = "Position Y: " + robot.positionYOdo.ToString("F2");
+            LabelAngle.Content = "Angle: " + robot.angleRadian.ToString("F2");
+            LabelVLineaire.Content = "Vitesse Linéaire: " + robot.vitesseLineaire.ToString("F2");
+            LabelVAngulaire.Content = "Vitesse Angulaire: " + robot.vitesseAngulaire.ToString("F2");
+            LabelVGauche.Content = "Vitesse Gauche: " + robot.vitesseGauche.ToString("F2");
+            LabelVDroit.Content = "Vitesse Droit: " + robot.vitesseDroit.ToString("F2");
+
+            oscilloSpeed.AddPointToLine(1, robot.time, robot.vitesseGauche);
+            oscilloSpeed.AddPointToLine(2, robot.time, robot.vitesseDroit);
+
+
 
             //checkBoxLEDRouge.IsChecked = EtatLEDRouge;
             //checkBoxLEDVerte.IsChecked = EtatLEDVerte;
@@ -369,11 +385,16 @@ namespace RobotInterface
                     break;
 
                 case 0x0061:
-                    robot.positionXOdo += BitConverter.ToSingle(msgPayload, 4);
-                    robot.positionYOdo += BitConverter.ToSingle(msgPayload, 8);
+                    robot.positionXOdo = BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionYOdo = BitConverter.ToSingle(msgPayload, 8);
                     robot.angleRadian = BitConverter.ToSingle(msgPayload, 12);
                     robot.vitesseLineaire = BitConverter.ToSingle(msgPayload, 16);
                     robot.vitesseAngulaire = BitConverter.ToSingle(msgPayload, 20);
+                    robot.vitesseDroit = BitConverter.ToSingle(msgPayload, 24);
+                    robot.vitesseGauche = BitConverter.ToSingle(msgPayload, 28);
+                    robot.time = BitConverter.ToUInt32(msgPayload, 32) / 1000;
+
+
                     break;
 
 

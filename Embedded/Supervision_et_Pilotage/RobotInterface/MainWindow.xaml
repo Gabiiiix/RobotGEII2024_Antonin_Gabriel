@@ -13,7 +13,7 @@
             <!-- Emission / Reception / Boutons -->
             <RowDefinition Height="2*"/>
             <!-- Oscilloscope G/D + Asserv -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.1*"/>
             <!-- Map -->
         </Grid.RowDefinitions>
 
@@ -67,7 +67,8 @@
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Oscilloscope Gauche" Grid.Column="0" Margin="5">
-                <oscillo:WpfOscilloscope x:Name="oscilloLeft"/>
+                <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
+                
             </GroupBox>
 
              <GroupBox Header="Asservissement" Grid.Column="2" Margin="5">
@@ -88,12 +89,16 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelPosX" HorizontalAlignment="Stretch" Margin="0,0" Content="Position X: " VerticalAlignment="Top"/>
                 <Label x:Name="LabelPosY" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="1" Content="Position Y: " VerticalAlignment="Top"/>
                 <Label x:Name="LabelAngle" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="2" Content="Angle: " VerticalAlignment="Top"/>
                 <Label x:Name="LabelVLineaire" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="3" Content="Vitesse Linéaire: " VerticalAlignment="Top"/>
                 <Label x:Name="LabelVAngulaire" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="4" Content="Vitesse Angulaire: " VerticalAlignment="Top"/>
+                <Label x:Name="LabelVGauche" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="5" Content="Vitesse Gauche: " VerticalAlignment="Top"/>
+                <Label x:Name="LabelVDroit" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="6" Content="Vitesse Droite: " VerticalAlignment="Top"/>
             </Grid>
         </Grid>
 

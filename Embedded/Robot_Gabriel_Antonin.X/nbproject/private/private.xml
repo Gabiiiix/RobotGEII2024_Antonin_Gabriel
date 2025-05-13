@@ -6,19 +6,23 @@
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/UART.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.h</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ChipConfig.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/timer.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/asservissement.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/CB_RX2.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/CB_RX1.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/UART.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/IO.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/asservissement.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/main.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/PWM.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/main.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Robot.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ADC.c</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ADC.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/CB_TX2.c</file>
+            <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/CB_TX1.c</file>
             <file>file:/C:/Program%20Files/Microchip/MPLABX/v6.20/packs/Microchip/dsPIC33E-GM-GP-MC-GU-MU_DFP/1.5.258/xc16/support/dsPIC33E/h/p33EP512MU814.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/Utilities.h</file>
             <file>file:/C:/Github/RobotGEII2024_Antonin_Gabriel/Embedded/Robot_Gabriel_Antonin.X/ToolBox.h</file>
