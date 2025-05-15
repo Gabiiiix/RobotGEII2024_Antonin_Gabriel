@@ -8,9 +8,13 @@
 #include "CB_TX2.h"
 #include "CB_RX2.h"
 
+#define LINEAIRE 0
+#define ANGULAIRE 1
+
 unsigned long timestamp=0;
 unsigned long timestop=0;
 unsigned long time = 0;
+unsigned long timeoscillo=0;
 unsigned int tock = 0;
 
 //Initialisation d?un timer 16 bits
@@ -37,6 +41,7 @@ void InitTimer1(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     IFS0bits.T1IF = 0;
+    timeoscillo++;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
     DetectionCapteur();

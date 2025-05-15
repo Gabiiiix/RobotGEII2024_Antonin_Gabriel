@@ -76,9 +76,9 @@ void SendPositionData() {
     getBytesFromFloat(positionPayload, 20, (float) (robotState.vitesseAngulaireFromOdometry));
     getBytesFromFloat(positionPayload, 24, (float) (robotState.vitesseDroitFromOdometry));
     getBytesFromFloat(positionPayload, 28, (float) (robotState.vitesseGaucheFromOdometry));
-    positionPayload[35] = (char)(time >> 24);
-    positionPayload[34] = (char)((time >> 16) & 0x00FF);
-    positionPayload[33] = (char)((time >> 8) & 0x0000FF);
-    positionPayload[32] = (char)(time & 0x000000FF);
+    positionPayload[35] = (char)(timeoscillo >> 24);
+    positionPayload[34] = (char)((timeoscillo >> 16) & 0x00FF);
+    positionPayload[33] = (char)((timeoscillo >> 8) & 0x0000FF);
+    positionPayload[32] = (char)(timeoscillo & 0x000000FF);
     UartEncodeAndSendMessage(POSITION_DATA, 36, positionPayload);
 }

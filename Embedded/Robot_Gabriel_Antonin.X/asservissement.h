@@ -1,5 +1,6 @@
 #ifndef asservissement_H
 #define	asservissement_H
+#define SEND_PID_DATA 0x0070
 
 typedef struct _PidCorrector
 {
@@ -18,6 +19,10 @@ typedef struct _PidCorrector
     double corrD;
 }PidCorrector;
 
-void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
+extern double ConsigneLineaire, ConsigneAngulaire;
+extern short FlagConsigneR;
 
-#endif asservissement_H
+void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
+void SendPIDData(volatile PidCorrector* PidCorr, char c);
+
+#endif /* asservissement_H */

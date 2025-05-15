@@ -22,6 +22,10 @@ using SciChart.Charting.Visuals;
 using static System.Runtime.CompilerServices.RuntimeHelpers;
 using System.ComponentModel;
 using WpfOscilloscopeControl;
+using Constants;
+using Newtonsoft.Json.Linq;
+using SciChart.Core.Extensions;
+using SciChart.Data.Model;
 namespace RobotInterface
 
 {
@@ -37,6 +41,9 @@ namespace RobotInterface
         DispatcherTimer timerAffichage;
 
         Robot robot = new Robot();
+
+        PID PIDLineaire = new PID();
+        PID PIDAngulaire = new PID();
         
         public MainWindow()
         {
@@ -61,6 +68,8 @@ namespace RobotInterface
             oscilloSpeed.AddOrUpdateLine(2, 100, "VDroit");
             oscilloSpeed.ChangeLineColor(1, Colors.Chartreuse);
             oscilloSpeed.ChangeLineColor(2, Colors.Aquamarine);
+
+            asservDisplay.SetAsservissementMode(AsservissementMode.Polar2Wheels);
 
         }
 
@@ -91,14 +100,20 @@ namespace RobotInterface
 
             oscilloSpeed.AddPointToLine(1, robot.time, robot.vitesseGauche);
             oscilloSpeed.AddPointToLine(2, robot.time, robot.vitesseDroit);
+            oscilloSpeed.AddPointToLine(3, robot.time, robot.vitesseLineaire);
 
+            asservDisplay.UpdatePolarOdometrySpeed(robot.positionXOdo, robot.vitesseAngulaire);
+            asservDisplay.UpdateIndependantOdometrySpeed(robot.vitesseDroit, robot.vitesseGauche);
 
+            asservDisplay.UpdateDisplay();
+
+            // asservDisplay.UpdatePolarSpeedCommandValues()
 
             //checkBoxLEDRouge.IsChecked = EtatLEDRouge;
             //checkBoxLEDVerte.IsChecked = EtatLEDVerte;
             //checkBoxLEDBlanche.IsChecked = EtatLEDBlanche;
             //checkBoxLEDBleue.IsChecked = EtatLEDBleue;
-            //checkBoxLEDOrange.IsChecked = EtatLEDOrange;
+            //checkBoxLEDOrange.IsChecked = EtatLEDOrange;QW
         }
 
         private void boutonEnvoyer_Click(object sender, RoutedEventArgs e)
@@ -392,9 +407,32 @@ namespace RobotInterface
                     robot.vitesseAngulaire = BitConverter.ToSingle(msgPayload, 20);
                     robot.vitesseDroit = BitConverter.ToSingle(msgPayload, 24);
                     robot.vitesseGauche = BitConverter.ToSingle(msgPayload, 28);
-                    robot.time = BitConverter.ToUInt32(msgPayload, 32) / 1000;
+                    robot.time = BitConverter.ToUInt32(msgPayload, 32);
 
 
+                    break;
+
+                case 0x0070:
+
+                    if (msgPayload[48] == 0)
+                    {
+                        PIDLineaire.Kp = BitConverter.ToDouble(msgPayload, 0);
+                        PIDLineaire.ErreurPMax = BitConverter.ToDouble(msgPayload, 8);
+                        PIDLineaire.Ki = BitConverter.ToDouble(msgPayload, 16);
+                        PIDLineaire.ErreurIMax = BitConverter.ToDouble(msgPayload, 24);
+                        PIDLineaire.Kd = BitConverter.ToDouble(msgPayload, 32);
+                        PIDLineaire.ErreurDMax = BitConverter.ToDouble(msgPayload, 40);
+                    }
+                    else
+                    {
+                        PIDAngulaire.Kp = BitConverter.ToDouble(msgPayload, 0);
+                        PIDAngulaire.ErreurPMax = BitConverter.ToDouble(msgPayload, 8);
+                        PIDAngulaire.Ki = BitConverter.ToDouble(msgPayload, 16);
+                        PIDAngulaire.ErreurIMax = BitConverter.ToDouble(msgPayload, 24);
+                        PIDAngulaire.Kd = BitConverter.ToDouble(msgPayload, 32);
+                        PIDAngulaire.ErreurDMax = BitConverter.ToDouble(msgPayload, 40);
+                    }
+                    
                     break;
 
 
@@ -447,5 +485,17 @@ namespace RobotInterface
             UartEncodeAndSendMessage(0x0020, 2, array);
         }
 
+        private void ConsigneSendButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] Consigne = new byte[16];
+            Double consigneLineaire = TextBoxConsigneLineaire.Text.ToDouble();
+            Double consigneAngulaire = TextBoxConsigneLineaire.Text.ToDouble();
+            byte[] octetsLineaire = BitConverter.GetBytes(consigneLineaire);
+            byte[] octetsAngulaire = BitConverter.GetBytes(consigneAngulaire);
+
+            Array.Copy(octetsLineaire, 0, Consigne, 0, 8);
+            Array.Copy(octetsAngulaire, 0, Consigne, 8, 8);
+            UartEncodeAndSendMessage(0x0071, 16, Consigne);
+        }
     }
 }

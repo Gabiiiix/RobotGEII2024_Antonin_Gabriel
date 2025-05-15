@@ -5,6 +5,16 @@
 #include "IO.h"
 #include "CB_TX1.h"
 #include "CB_TX2.h"
+#include "asservissement.h"
+#include "Utilities.h"
+#include "Robot.h"
+
+#define LINEAIRE 0
+#define ANGULAIRE 1
+
+double ConsigneLineaire = 0;
+double ConsigneAngulaire = 0; 
+short FlagConsigneR = 0;
 
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
     //Fonction prenant entree la trame et sa longueur pour calculer le checksum
@@ -121,7 +131,11 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
                 LED_BLANCHE_2 = payload[1];
             }
             break;
-
+        case 0x0071:
+            ConsigneLineaire = getDouble(payload,0);
+            ConsigneAngulaire = getDouble(payload,8);
+            FlagConsigneR = 1;
+            break;
 //        case 0x0040:
 //
 //            break;

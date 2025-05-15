@@ -27,7 +27,7 @@ unsigned char CB_RX2_Get(void) {
     UartDecodeMessage(value);
      if (cbRx2Tail==CBRX2_BUFFER_SIZE){
             cbRx2Tail=0;
-            }
+     }
     return value;
 }
 

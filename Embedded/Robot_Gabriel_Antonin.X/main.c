@@ -15,6 +15,7 @@
 #include "CB_RX1.h"
 #include "UART_Protocol.h"
 #include "QEI.h"
+#include "asservissement.h"
 
 unsigned char stateRobot;
 unsigned int timerstarted = 0;
@@ -23,6 +24,9 @@ static unsigned int EtatGauche;
 static unsigned int EtatCentre;
 static unsigned int EtatDroite;
 static unsigned int EtatDroiteExtreme;
+
+volatile PidCorrector PidX;
+volatile PidCorrector PidTheta;
 
 int main(void) {
 
@@ -42,6 +46,9 @@ int main(void) {
     InitUART2();
     InitQEI1();
     InitQEI2();
+    
+    SetupPidAsservissement(&PidX,1,2,3,4,5,6);
+    SetupPidAsservissement(&PidTheta,7,8,9,10,11,12);
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -74,6 +81,13 @@ int main(void) {
         //            }
         //        __delay32(1000);
 
+        
+        if(FlagConsigneR){
+            FlagConsigneR = 0;
+            SendPIDData(&PidX,0);
+            SendPIDData(&PidTheta,1);
+        }
+        
         if (INTER1 == 1) {
             timerstarted = 1;
             timestop = 0;
