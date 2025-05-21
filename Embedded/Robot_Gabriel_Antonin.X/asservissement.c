@@ -15,13 +15,13 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
 
 void SendPIDData(volatile PidCorrector* PidData, char c){
     unsigned char PIDPayload[49];
-    getBytesFromDouble(PIDPayload, 0, PidData->Kp );
-    getBytesFromFloat(PIDPayload, 8,PidData->erreurProportionelleMax );
-    getBytesFromFloat(PIDPayload, 16, PidData->Ki );
-    getBytesFromFloat(PIDPayload, 24, PidData->erreurIntegraleMax );
-    getBytesFromFloat(PIDPayload, 32, PidData->Kd );
-    getBytesFromFloat(PIDPayload, 40, PidData->erreurDeriveeMax );
-    PIDPayload[49] = c;
-    
+    getBytesFromDouble(PIDPayload, 0, (double)PidData->Kp );
+    getBytesFromDouble(PIDPayload, 8,(double)PidData->erreurProportionelleMax );
+    getBytesFromDouble(PIDPayload, 16, (double)PidData->Ki );
+    getBytesFromDouble(PIDPayload, 24, (double)PidData->erreurIntegraleMax );
+    getBytesFromDouble(PIDPayload, 32, (double)PidData->Kd );
+    getBytesFromDouble(PIDPayload, 40, (double)PidData->erreurDeriveeMax );
+    PIDPayload[48] = c;
+
     UartEncodeAndSendMessage(SEND_PID_DATA, 49, PIDPayload);
 }

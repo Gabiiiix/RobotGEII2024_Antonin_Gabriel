@@ -104,6 +104,7 @@ namespace RobotInterface
 
             asservDisplay.UpdatePolarOdometrySpeed(robot.positionXOdo, robot.vitesseAngulaire);
             asservDisplay.UpdateIndependantOdometrySpeed(robot.vitesseDroit, robot.vitesseGauche);
+            asservDisplay.UpdatePolarSpeedCorrectionLimits(PIDLineaire.ErreurPMax, PIDAngulaire.ErreurPMax, PIDLineaire.ErreurIMax, PIDAngulaire.ErreurIMax, PIDLineaire.ErreurDMax, PIDAngulaire.ErreurDMax);
 
             asservDisplay.UpdateDisplay();
 
@@ -497,5 +498,30 @@ namespace RobotInterface
             Array.Copy(octetsAngulaire, 0, Consigne, 8, 8);
             UartEncodeAndSendMessage(0x0071, 16, Consigne);
         }
-    }
+
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] SetupAsserv = new byte[48];
+            Double coefKp = TextBoxKp.Text.ToDouble();
+            Double coefKi = TextBoxKi.Text.ToDouble();
+            Double coefKd = TextBoxKd.Text.ToDouble();
+            Double proportionnelleMax = TextBoxProportionnelleMax.Text.ToDouble();
+            Double integraleMax = TextBoxIntegraleMax.Text.ToDouble();
+            Double deriveeMax = TextBoxDeriveeMax.Text.ToDouble();
+            byte[] octetsKp = BitConverter.GetBytes(coefKp);
+            byte[] octetsKi = BitConverter.GetBytes(coefKi);
+            byte[] octetsKd = BitConverter.GetBytes(coefKd);
+            byte[] octetsPrMax = BitConverter.GetBytes(proportionnelleMax);
+            byte[] octetsItMax = BitConverter.GetBytes(integraleMax);
+            byte[] octetsDeMax = BitConverter.GetBytes(deriveeMax);
+
+            Array.Copy(octetsKp, 0, SetupAsserv, 0, 8);
+            Array.Copy(octetsKi, 0, SetupAsserv, 8, 8);
+            Array.Copy(octetsKd, 0, SetupAsserv, 16, 8);
+            Array.Copy(octetsPrMax, 0, SetupAsserv, 24, 8);
+            Array.Copy(octetsItMax, 0, SetupAsserv, 32, 8);
+            Array.Copy(octetsDeMax, 0, SetupAsserv, 40, 8);
+            UartEncodeAndSendMessage(0x0072, 48, SetupAsserv);
+        }
+    } 
 }

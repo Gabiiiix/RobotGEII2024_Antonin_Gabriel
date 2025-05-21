@@ -16,6 +16,8 @@ double ConsigneLineaire = 0;
 double ConsigneAngulaire = 0; 
 short FlagConsigneR = 0;
 
+volatile PidCorrector PidX;
+
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
     //Fonction prenant entree la trame et sa longueur pour calculer le checksum
     unsigned char checksum = 0xFE;
@@ -131,10 +133,15 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
                 LED_BLANCHE_2 = payload[1];
             }
             break;
+            
         case 0x0071:
             ConsigneLineaire = getDouble(payload,0);
             ConsigneAngulaire = getDouble(payload,8);
             FlagConsigneR = 1;
+            break;
+            
+        case 0x0072:
+            SetupPidAsservissement(&PidX, getDouble(payload,0),getDouble(payload,8),getDouble(payload,16),getDouble(payload,24),getDouble(payload,32),getDouble(payload,40));
             break;
 //        case 0x0040:
 //

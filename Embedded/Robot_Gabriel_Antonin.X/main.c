@@ -25,8 +25,10 @@ static unsigned int EtatCentre;
 static unsigned int EtatDroite;
 static unsigned int EtatDroiteExtreme;
 
-volatile PidCorrector PidX;
-volatile PidCorrector PidTheta;
+
+double test1,test2,test3,test4,test5,test6,test7,test8,test9,test10, test11,test12;
+
+
 
 int main(void) {
 
@@ -47,8 +49,21 @@ int main(void) {
     InitQEI1();
     InitQEI2();
     
-    SetupPidAsservissement(&PidX,1,2,3,4,5,6);
-    SetupPidAsservissement(&PidTheta,7,8,9,10,11,12);
+//    test1=1;
+//    test2=2;
+//    test3=3;
+//    test4=4;
+//    test5=5;
+//    test6=6;
+//    test7=7;
+//    test8=8;
+//    test9=9;
+//    test10=10;
+//    test11=11;
+//    test12=12;
+//    
+//    SetupPidAsservissement(&PidX,test1,test2,test3,test4,test5,test6);
+//    SetupPidAsservissement(&PidTheta,test7,test8,test9,test10,test11,test12);
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -82,11 +97,12 @@ int main(void) {
         //        __delay32(1000);
 
         
-        if(FlagConsigneR){
-            FlagConsigneR = 0;
-            SendPIDData(&PidX,0);
-            SendPIDData(&PidTheta,1);
-        }
+//        if(FlagConsigneR){
+//            FlagConsigneR = 0;
+//            SendPIDData(&PidX,0);
+//            SendPIDData(&PidTheta,1);
+//            
+//        }
         
         if (INTER1 == 1) {
             timerstarted = 1;
