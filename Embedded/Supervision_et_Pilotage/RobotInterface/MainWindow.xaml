@@ -3,18 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RobotInterface"
         xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
-        xmlns:AsservDisplay="clr-namespace:WpfAsservissementDisplay;assembly=WpfAsservissementDisplay"
-        Title="Robot Interface" Height="1060" Width="1000">
-        
-    <Grid Margin="10" >
- 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+        xmlns:AsservDisplay="clr-namespace:WpfAsservissementDisplay;assembly=WpfAsservissementDisplay" 
+        Title="Robot Interface" Height="1080" Width="1920">
+    <TabControl>
+        <TabItem Header="main">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="300"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
+
+                <StackPanel Grid.Row="1">
+                    <GroupBox Header="Positions">
+                        
+                        
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+            
+        </TabItem>
+        <TabItem Header="Debug">
+        <Grid>
+         <Grid.RowDefinitions>
+             <RowDefinition Height="*"/>
             <RowDefinition Height="0.2*"/>
             <!-- Emission / Reception / Boutons -->
             <RowDefinition Height="2*"/>
             <!-- Oscilloscope G/D + Asserv -->
-            <RowDefinition Height="1.1*"/>
+            <RowDefinition Height="1.5*"/>
             <!-- Map -->
         </Grid.RowDefinitions>
 
@@ -68,8 +91,7 @@
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Oscilloscope Gauche" Grid.Column="0" Margin="5">
-                <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
-                
+                <oscillo:WpfOscilloscope x:Name="oscilloSpeed2"/>
             </GroupBox>
 
              
@@ -81,10 +103,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <GroupBox Header="Asservissement" Grid.Column="2" Grid.RowSpan="2" Grid.Row="2" Margin="5" Background="#202020">
-                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservDisplay"/>
-            </GroupBox>
+            <!--<map:WorldMapDisplay x:Name="worldMapDisplay"/>-->
         </Grid>
 
         <Grid Grid.Row="3" Margin="0,0,0,10">
@@ -159,10 +178,14 @@
 
                 <Button Content="Appliquer" Height="20" Width="70" Grid.Column="1" Grid.Row="9" Margin="0,10" Click="ApplyButton_Click" />
             </Grid>
+
+
+            <GroupBox Header="Asservissement" Grid.Column="2" Grid.RowSpan="2" Grid.Row="2" Margin="5" Background="#202020">
+                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservDisplay" Height="266"/>
+            </GroupBox>
         </Grid>
 
-
-        <!-- Carte -->
-       
     </Grid>
+    </TabItem>
+    </TabControl>
 </Window>
