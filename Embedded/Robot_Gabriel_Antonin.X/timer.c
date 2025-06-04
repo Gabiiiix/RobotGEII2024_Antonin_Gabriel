@@ -7,6 +7,10 @@
 #include "CB_TX1.h"
 #include "CB_TX2.h"
 #include "CB_RX2.h"
+#include "UART_Protocol.h"
+#include "QEI.h"
+#include "UART.h"
+#include "asservissement.h"
 
 #define LINEAIRE 0
 #define ANGULAIRE 1
@@ -51,6 +55,9 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
         SendPositionData();
         tock = 0;
     }
+    
+
+        
 //    SendMessage((unsigned char*) "Bonjour", 7);
 }
 //Initialisation d?un timer 32 bits

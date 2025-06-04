@@ -8,15 +8,16 @@
 #include "asservissement.h"
 #include "Utilities.h"
 #include "Robot.h"
+#include "timer.h"
 
 #define LINEAIRE 0
 #define ANGULAIRE 1
 
 double ConsigneLineaire = 0;
 double ConsigneAngulaire = 0; 
+
 short FlagConsigneR = 0;
 
-volatile PidCorrector PidX;
 
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
     //Fonction prenant entree la trame et sa longueur pour calculer le checksum
@@ -142,6 +143,7 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
             
         case 0x0072:
             SetupPidAsservissement(&PidX, getDouble(payload,0),getDouble(payload,8),getDouble(payload,16),getDouble(payload,24),getDouble(payload,32),getDouble(payload,40));
+            FlagConsigneR = 1;
             break;
 //        case 0x0040:
 //

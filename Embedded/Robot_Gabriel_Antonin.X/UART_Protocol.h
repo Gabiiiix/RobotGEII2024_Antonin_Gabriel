@@ -10,7 +10,6 @@
 #define CheckSum 6
 
 
-
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload);
 void UartEncodeAndSendMessage(int msgFunction, int msgPayloadLength, unsigned char* msgPayload);
 void UartDecodeMessage(unsigned char c);

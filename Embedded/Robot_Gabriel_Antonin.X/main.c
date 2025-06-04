@@ -28,7 +28,8 @@ static unsigned int EtatDroiteExtreme;
 
 double test1,test2,test3,test4,test5,test6,test7,test8,test9,test10, test11,test12;
 
-
+volatile PidCorrector PidX;
+volatile PidCorrector PidTheta;
 
 int main(void) {
 
@@ -96,14 +97,13 @@ int main(void) {
         //            }
         //        __delay32(1000);
 
-        
-//        if(FlagConsigneR){
-//            FlagConsigneR = 0;
-//            SendPIDData(&PidX,0);
-//            SendPIDData(&PidTheta,1);
-//            
-//        }
-        
+        if(FlagConsigneR){
+            FlagConsigneR = 0;
+            SendPIDData(&PidX,0);
+            SendPIDData(&PidTheta,1);
+            
+        }
+            
         if (INTER1 == 1) {
             timerstarted = 1;
             timestop = 0;
