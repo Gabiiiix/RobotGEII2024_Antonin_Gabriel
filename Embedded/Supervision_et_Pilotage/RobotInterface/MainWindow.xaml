@@ -8,184 +8,72 @@
     <TabControl>
         <TabItem Header="main">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="200"/>
-                    <RowDefinition Height="300"/>
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <!-- Colonne Oscillo/Position/Btn -->
+                    <ColumnDefinition Width="1*"/>
+                    <!-- Colonne Map/Asserv -->
                 </Grid.ColumnDefinitions>
 
-                <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
+                <!-- Partie gauche -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <!-- Oscillo -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Position x/y -->
+                        <RowDefinition Height="1*"/>
+                        <!-- Boutons -->
+                    </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="1">
-                    <GroupBox Header="Positions">
-                        
+                    <!-- Oscilloscope -->
+                    <GroupBox Header="Oscillo" Margin="5">
+                        <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
+                    </GroupBox>
+
+                    <!-- Position x/y -->
+                    <GroupBox Grid.Row="1" Header="Position" Margin="5">
+                        <StackPanel>
+                            <TextBox Name="LabelX" Text="X = cm" FontSize="25" HorizontalAlignment="Center"/>
+                            <TextBox Name="LabelY" Text="Y = cm" FontSize="25" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Boutons -->
+                    <GroupBox Grid.Row="2" Header="Commandes" Margin="5">
+                        <UniformGrid Columns="3" Rows="2" Margin="10">
+                            <Button Content="btn1"/>
+                            <Button Content="btn2"/>
+                            <Button Content="btn3"/>
+                            <Button Content="btn4"/>
+                            <Button Content="btn5"/>
+                            <Button Content="btn6"/>
+                        </UniformGrid>
+                    </GroupBox>
+                </Grid>
+
+                <!-- Partie droite -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <!-- Map -->
+                        <RowDefinition Height="*"/>
+                        <!-- Table asserv -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Carte -->
+                    <GroupBox Header="Map" Margin="5" Grid.Row="0">
+                        <!-- Placeholder carte -->
                         
                     </GroupBox>
-                </StackPanel>
+
+                    <!-- Asservissement -->
+                    <GroupBox Grid.Row="1" Header="Asservissement table" Margin="5" Grid.RowSpan="2" Background="#202020">
+                        <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservDisplay"  Grid.RowSpan="2" Grid.Row="1"/>
+                    </GroupBox>
+                </Grid>
             </Grid>
-            
         </TabItem>
-        <TabItem Header="Debug">
-        <Grid>
-         <Grid.RowDefinitions>
-             <RowDefinition Height="*"/>
-            <RowDefinition Height="0.2*"/>
-            <!-- Emission / Reception / Boutons -->
-            <RowDefinition Height="2*"/>
-            <!-- Oscilloscope G/D + Asserv -->
-            <RowDefinition Height="1.5*"/>
-            <!-- Map -->
-        </Grid.RowDefinitions>
 
-        <!-- Emission/Réception et boutons -->
-        <Grid Grid.Row="0" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Emission -->
-            <GroupBox Header="Emission" Margin="5" Grid.Column="0">
-                <TextBox x:Name="TextBoxEmission" TextWrapping="Wrap" AcceptsReturn="True"/>
-            </GroupBox>
-
-            <!-- Réception -->
-            <GroupBox Header="Réception" Margin="5" Grid.Column="1">
-                <TextBox x:Name="TextBoxReception" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
-            </GroupBox>
-
-            <!-- Boutons à droite -->
-            <StackPanel Grid.Column="2" Margin="10,0" VerticalAlignment="Center">
-                <Button x:Name="boutonEnvoyer" Content="Envoyer" Click="boutonEnvoyer_Click" Margin="0,5"/>
-                <Button x:Name="boutonClear" Content="Clear" Click="boutonClear_Click" Margin="0,5"/>
-                <Button x:Name="boutonTest" Content="Test" Click="boutonTest_Click" Margin="0,5"/>
-            </StackPanel>
-
-
-        </Grid>
-        <!-- Etat -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <TextBox x:Name="textboxRobotState" Text="State Robot :" Width="250" Height="20" HorizontalAlignment="Center" Margin="0,5"/>
-            <TextBox x:Name="textboxRobotStateTimer" Text="Time" Width="150" Height="20" HorizontalAlignment="Right" Margin="0,5"/>
-        </StackPanel>
-
-        <!-- Capteurs IR -->
-        <StackPanel Grid.ColumnSpan="3" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0">
-            <TextBox x:Name="textboxCapteurGaucheExtreme" Text="IRGE: " Margin="8,8" IsReadOnly="True" Width="95"/>
-            <TextBox x:Name="textboxCapteurGauche" Text="IRG: " Margin="8,8" IsReadOnly="True" Width="95"/>
-            <TextBox x:Name="textboxCapteurMilieu" Text="IRC: " Margin="8,8" IsReadOnly="True" Width="95"/>
-            <TextBox x:Name="textboxCapteurDroite" Text="IRD: " Margin="8,8" IsReadOnly="True" Width="95"/>
-            <TextBox x:Name="textboxCapteurDroiteExtreme" Text="IRDE: " Margin="8,8" IsReadOnly="True" Width="95"/>
-        </StackPanel>
-
-        <!-- Zone Oscilloscopes & Asservissement -->
-        <Grid Grid.Row="2" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <GroupBox Header="Oscilloscope Gauche" Grid.Column="0" Margin="5">
-                <oscillo:WpfOscilloscope x:Name="oscilloSpeed2"/>
-            </GroupBox>
-
-             
-
-        </Grid>
-        
-        <Grid Grid.Row="2" Grid.RowSpan="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <!--<map:WorldMapDisplay x:Name="worldMapDisplay"/>-->
-        </Grid>
-
-        <Grid Grid.Row="3" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0" Margin="0,0,0,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Label x:Name="LabelPosX" HorizontalAlignment="Stretch" Margin="0,0" Content="Position X: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelPosY" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="1" Content="Position Y: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelAngle" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="2" Content="Angle: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelVLineaire" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="3" Content="Vitesse Linéaire: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelVAngulaire" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="4" Content="Vitesse Angulaire: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelVGauche" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="5" Content="Vitesse Gauche: " VerticalAlignment="Top"/>
-                <Label x:Name="LabelVDroit" HorizontalAlignment="Stretch" Margin="0,0" Grid.Row="6" Content="Vitesse Droite: " VerticalAlignment="Top"/>
-            </Grid>
-
-            <Grid Grid.Column="1" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Text="CLinéaire:" Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxConsigneLineaire" Height="20" Width="70"   Grid.Column="1" Grid.Row="0" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="CAngulaire:" Grid.Column="0" Grid.Row="1"   VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxConsigneAngulaire" Height="20" Width="70"   Grid.Column="1" Grid.Row="1" Text="0" TextAlignment="Center"/>
-
-                <Button Content="Envoie" Height="20" Width="70" Grid.Column="2" Grid.Row="2" Margin="0,10" Click="ConsigneSendButton_Click"/>
-
-                <TextBlock Text="Kp:" Grid.Column="0" Grid.Row="3"   VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxKp" Height="20" Width="70"   Grid.Column="1" Grid.Row="3" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="Ki:" Grid.Column="0" Grid.Row="4"   VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxKi" Height="20" Width="70"   Grid.Column="1" Grid.Row="4" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="Kd:" Grid.Column="0" Grid.Row="5"   VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxKd" Height="20" Width="70"   Grid.Column="1" Grid.Row="5" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="Erreur Proportionnelle:" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxProportionnelleMax" Height="20" Width="70" Grid.Column="1" Grid.Row="6" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="Erreur Intégrale:" Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxIntegraleMax" Height="20" Width="70" Grid.Column="1" Grid.Row="7" Text="0" TextAlignment="Center"/>
-
-                <TextBlock Text="Erreur Dérivée:" Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TextBoxDeriveeMax" Height="20" Width="70" Grid.Column="1" Grid.Row="8" Text="0" TextAlignment="Center"/>
-
-                <Button Content="Appliquer" Height="20" Width="70" Grid.Column="1" Grid.Row="9" Margin="0,10" Click="ApplyButton_Click" />
-            </Grid>
-
-
-            <GroupBox Header="Asservissement" Grid.Column="2" Grid.RowSpan="2" Grid.Row="2" Margin="5" Background="#202020">
-                <AsservDisplay:AsservissementRobot2RouesDisplayControl x:Name="asservDisplay" Height="266"/>
-            </GroupBox>
-        </Grid>
-
-    </Grid>
-    </TabItem>
     </TabControl>
 </Window>

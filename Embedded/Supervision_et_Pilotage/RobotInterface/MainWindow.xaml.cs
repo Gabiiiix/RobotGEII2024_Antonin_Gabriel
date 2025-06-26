@@ -75,28 +75,7 @@ namespace RobotInterface
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-            while (robot.byteListReceived.Count != 0)
-            {
-                TextBoxReception.Text += robot.byteListReceived.Dequeue().ToString("X2") + " ";
-            }
 
-
-            textboxCapteurDroite.Text = "IRD: " + Convert.ToString(distanceIRDroite) + "cm";
-            textboxCapteurGauche.Text = "IRG: " + Convert.ToString(distanceIRGauche) + "cm";
-            textboxCapteurMilieu.Text = "IRC: " + Convert.ToString(distanceIRMilieu) + "cm";
-            textboxCapteurDroiteExtreme.Text = "IRDE: " + Convert.ToString(distanceIRExtremeDroite) + "cm";
-            textboxCapteurGaucheExtreme.Text = "IRGE: " + Convert.ToString(distanceIRExtremeGauche) + "cm" ;
-
-            textboxRobotState.Text = "Robot␣State :\n" + ((StateRobot)(robotState)).ToString();
-            textboxRobotStateTimer.Text = "Time:\n" + instant.ToString() + " ms";
-
-            LabelPosX.Content = "Position X: " + robot.positionXOdo.ToString("F2");
-            LabelPosY.Content = "Position Y: " + robot.positionYOdo.ToString("F2");
-            LabelAngle.Content = "Angle: " + robot.angleRadian.ToString("F2");
-            LabelVLineaire.Content = "Vitesse Linéaire: " + robot.vitesseLineaire.ToString("F2");
-            LabelVAngulaire.Content = "Vitesse Angulaire: " + robot.vitesseAngulaire.ToString("F2");
-            LabelVGauche.Content = "Vitesse Gauche: " + robot.vitesseGauche.ToString("F2");
-            LabelVDroit.Content = "Vitesse Droit: " + robot.vitesseDroit.ToString("F2");
 
             oscilloSpeed.AddPointToLine(1, robot.time, robot.vitesseGauche);
             oscilloSpeed.AddPointToLine(2, robot.time, robot.vitesseDroit);
@@ -117,30 +96,7 @@ namespace RobotInterface
             //checkBoxLEDOrange.IsChecked = EtatLEDOrange;QW
         }
 
-        private void boutonEnvoyer_Click(object sender, RoutedEventArgs e)
-        {
-            SendMessage();
-        }
 
-        private void TextBoxEmission_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                SendMessage();
-            }
-        }
-
-        public void SendMessage()
-        {
-            serialPort1.WriteLine(TextBoxEmission.Text);
-            TextBoxEmission.Text = "";
-        }
-
-
-        private void boutonClear_Click(object sender, RoutedEventArgs e)
-        {
-            TextBoxReception.Text = "";
-        }
 
 
         public void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
@@ -489,38 +445,13 @@ namespace RobotInterface
         private void ConsigneSendButton_Click(object sender, RoutedEventArgs e)
         {
             byte[] Consigne = new byte[16];
-            Double consigneLineaire = TextBoxConsigneLineaire.Text.ToDouble();
-            Double consigneAngulaire = TextBoxConsigneLineaire.Text.ToDouble();
-            byte[] octetsLineaire = BitConverter.GetBytes(consigneLineaire);
-            byte[] octetsAngulaire = BitConverter.GetBytes(consigneAngulaire);
 
-            Array.Copy(octetsLineaire, 0, Consigne, 0, 8);
-            Array.Copy(octetsAngulaire, 0, Consigne, 8, 8);
             UartEncodeAndSendMessage(0x0071, 16, Consigne);
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             byte[] SetupAsserv = new byte[48];
-            Double coefKp = TextBoxKp.Text.ToDouble();
-            Double coefKi = TextBoxKi.Text.ToDouble();
-            Double coefKd = TextBoxKd.Text.ToDouble();
-            Double proportionnelleMax = TextBoxProportionnelleMax.Text.ToDouble();
-            Double integraleMax = TextBoxIntegraleMax.Text.ToDouble();
-            Double deriveeMax = TextBoxDeriveeMax.Text.ToDouble();
-            byte[] octetsKp = BitConverter.GetBytes(coefKp);
-            byte[] octetsKi = BitConverter.GetBytes(coefKi);
-            byte[] octetsKd = BitConverter.GetBytes(coefKd);
-            byte[] octetsPrMax = BitConverter.GetBytes(proportionnelleMax);
-            byte[] octetsItMax = BitConverter.GetBytes(integraleMax);
-            byte[] octetsDeMax = BitConverter.GetBytes(deriveeMax);
-
-            Array.Copy(octetsKp, 0, SetupAsserv, 0, 8);
-            Array.Copy(octetsKi, 0, SetupAsserv, 8, 8);
-            Array.Copy(octetsKd, 0, SetupAsserv, 16, 8);
-            Array.Copy(octetsPrMax, 0, SetupAsserv, 24, 8);
-            Array.Copy(octetsItMax, 0, SetupAsserv, 32, 8);
-            Array.Copy(octetsDeMax, 0, SetupAsserv, 40, 8);
             UartEncodeAndSendMessage(0x0072, 48, SetupAsserv);
         }
     } 
