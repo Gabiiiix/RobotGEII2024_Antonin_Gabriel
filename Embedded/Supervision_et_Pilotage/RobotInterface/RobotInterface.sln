@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "..\Utilities\U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAsservissementDisplay", "..\WpfAsservissementDisplay\WpfAsservissementDisplay.csproj", "{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfWorldMap", "..\..\..\..\..\Users\E306-PC2\Documents\WpfWorldMap\WpfWorldMap.csproj", "{CB663C12-CA92-4DA3-B2D4-A3C329007C86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,14 @@ Global
 		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.ActiveCfg = Release|x64
 		{F0A887E9-D0A2-47E3-994A-94A0DCAE8D4F}.Release|x64.Build.0 = Release|x64
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Debug|x64.Build.0 = Debug|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Release|x64.ActiveCfg = Release|Any CPU
+		{CB663C12-CA92-4DA3-B2D4-A3C329007C86}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:RobotInterface"
         xmlns:oscillo="clr-namespace:WpfOscilloscopeControl;assembly=WpfOscilloscopeControl"
         xmlns:AsservDisplay="clr-namespace:WpfAsservissementDisplay;assembly=WpfAsservissementDisplay" 
+        xmlns:map="clr-namespace:WpfWorldMap_NS;assembly=WpfWorldMap"
         Title="Robot Interface" Height="1080" Width="1920">
     <TabControl>
         <TabItem Header="main">
@@ -64,7 +65,8 @@
                     <!-- Carte -->
                     <GroupBox Header="Map" Margin="5" Grid.Row="0">
                         <!-- Placeholder carte -->
-                        
+                        <map:WpfWorldMap x:Name="worldMap" Grid.Row="0" Grid.Column="3"/>
+
                     </GroupBox>
 
                     <!-- Asservissement -->
