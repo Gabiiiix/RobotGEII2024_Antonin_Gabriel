@@ -1,5 +1,5 @@
 build/default/production/timer.o: timer.c timer.h IO.h PWM.h ADC.h main.h \
- CB_TX1.h CB_TX2.h CB_RX2.h
+ CB_TX1.h CB_TX2.h CB_RX2.h UART_Protocol.h QEI.h UART.h asservissement.h
 
 timer.h:
 
@@ -16,3 +16,11 @@ CB_TX1.h:
 CB_TX2.h:
 
 CB_RX2.h:
+
+UART_Protocol.h:
+
+QEI.h:
+
+UART.h:
+
+asservissement.h:

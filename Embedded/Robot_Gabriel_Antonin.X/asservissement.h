@@ -22,6 +22,10 @@ typedef struct _PidCorrector
 extern double ConsigneLineaire, ConsigneAngulaire;
 extern short FlagConsigneR;
 
+extern volatile PidCorrector PidX;
+extern volatile PidCorrector PidTheta;
+
+
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
 void SendPIDData(volatile PidCorrector* PidCorr, char c);
 

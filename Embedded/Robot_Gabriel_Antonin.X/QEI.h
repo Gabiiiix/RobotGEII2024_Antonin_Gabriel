@@ -4,6 +4,7 @@
 void InitQEI1();
 void InitQEI2();
 void QEIUpdateData();
+void SendPositionData();
 
 #define FREQ_ECH_QEI 250
 

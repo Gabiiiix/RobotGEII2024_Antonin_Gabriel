@@ -2,6 +2,8 @@
 #include "Utilities.h"
 #include "UART_Protocol.h"
 
+volatile PidCorrector PidX;
+volatile PidCorrector PidTheta;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax)
 {

@@ -54,7 +54,7 @@ namespace RobotInterface
 
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -71,6 +71,7 @@ namespace RobotInterface
 
             asservDisplay.SetAsservissementMode(AsservissementMode.Polar2Wheels);
 
+            
         }
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
@@ -87,12 +88,15 @@ namespace RobotInterface
 
             asservDisplay.UpdateDisplay();
 
+            LabelX.Text = "X: " + robot.positionXOdo.ToString() + " cm";
+            LabelY.Text = "Y: " + robot.positionYOdo.ToString() + " cm";
+            worldMap.UpdatePosRobot(robot.positionXOdo + 20, robot.positionYOdo + 50);
             // asservDisplay.UpdatePolarSpeedCommandValues()
 
             //checkBoxLEDRouge.IsChecked = EtatLEDRouge;
             //checkBoxLEDVerte.IsChecked = EtatLEDVerte;
             //checkBoxLEDBlanche.IsChecked = EtatLEDBlanche;
-            //checkBoxLEDBleue.IsChecked = EtatLEDBleue;
+            //checkBoxLEDBleue.IsChecked = EtatLEDBleue.
             //checkBoxLEDOrange.IsChecked = EtatLEDOrange;QW
         }
 
@@ -357,8 +361,8 @@ namespace RobotInterface
                     break;
 
                 case 0x0061:
-                    robot.positionXOdo = BitConverter.ToSingle(msgPayload, 4);
-                    robot.positionYOdo = BitConverter.ToSingle(msgPayload, 8);
+                    robot.positionXOdo += BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionYOdo += BitConverter.ToSingle(msgPayload, 8);
                     robot.angleRadian = BitConverter.ToSingle(msgPayload, 12);
                     robot.vitesseLineaire = BitConverter.ToSingle(msgPayload, 16);
                     robot.vitesseAngulaire = BitConverter.ToSingle(msgPayload, 20);

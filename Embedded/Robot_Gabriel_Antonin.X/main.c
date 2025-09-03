@@ -28,8 +28,7 @@ static unsigned int EtatDroiteExtreme;
 
 double test1,test2,test3,test4,test5,test6,test7,test8,test9,test10, test11,test12;
 
-volatile PidCorrector PidX;
-volatile PidCorrector PidTheta;
+
 
 int main(void) {
 
@@ -50,21 +49,22 @@ int main(void) {
     InitQEI1();
     InitQEI2();
     
-//    test1=1;
-//    test2=2;
-//    test3=3;
-//    test4=4;
-//    test5=5;
-//    test6=6;
-//    test7=7;
-//    test8=8;
-//    test9=9;
-//    test10=10;
-//    test11=11;
-//    test12=12;
-//    
-//    SetupPidAsservissement(&PidX,test1,test2,test3,test4,test5,test6);
-//    SetupPidAsservissement(&PidTheta,test7,test8,test9,test10,test11,test12);
+    test1=1;
+    test2=2;
+    test3=3;
+    test4=4;
+    test5=5;
+    test6=6;
+    test7=7;
+    test8=8;
+    test9=9;
+    test10=10;
+    test11=11;
+    test12=12;
+    
+    SetupPidAsservissement(&PidX,test1,test2,test3,test4,test5,test6);
+    SetupPidAsservissement(&PidTheta,test7,test8,test9,test10,test11,test12);
+    FlagConsigneR = 1;
 
     //PWMSetSpeedConsigne(-10, MOTEUR_GAUCHE);
     //PWMSetSpeedConsigne(-10, MOTEUR_DROIT);
@@ -114,7 +114,6 @@ int main(void) {
             time = 0;
             LED_VERTE_2 = 1;
         }
-        static int f=0;
 
         if (ADCIsConversionFinished() == 1) {
             ADCClearConversionFinishedFlag();
@@ -286,7 +285,7 @@ void SetNextRobotStateInAutomaticMode() {
         msg[2] = (char)((time >> 16) & 0x00FF);
         msg[3] = (char)((time >> 8) & 0x0000FF);
         msg[4] = (char)(time & 0x000000FF);
-        //UartEncodeAndSendMessage(0x0050, 5, msg);
+        UartEncodeAndSendMessage(0x0050, 5, msg);
     
     }
 

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Users\E306-PC2\Documents\WpfWorldMap\WpfWorldMap.csproj" />
     <ProjectReference Include="..\ExtendedSerialPort .NET6\ExtendedSerialPort .NET6\ExtendedSerialPort\ExtendedSerialPort\ExtendedSerialPort.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
     <ProjectReference Include="..\WpfAsservissementDisplay\WpfAsservissementDisplay.csproj" />
