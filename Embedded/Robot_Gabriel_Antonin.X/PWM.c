@@ -3,6 +3,7 @@
 #include "PWM.h"
 #include "Robot.h"
 #include "ToolBox.h"
+#include "asservissement.h"
 #define PWMPER 24.0
 
 void InitPWM(void) {
@@ -71,5 +72,20 @@ void PWMUpdateSpeed() {
         SDC2 = talon;
         PDC2 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
     }
+    
+ void UpdateAsservissement(){
+     PidX.erreur = ...;
+     PidTheta.erreur = ...;
+    
+     robotState.CorrectionVitesseLineaire =
+        Correcteur(&robotState.PidX, robotState.PidX.erreur);
+    robotState.CorrectionVitesseAngulaire = ...;
+    
+    PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+ }
+ 
+ PWMSetSpeedConsignePolaire(){
+     
+ }
 }
 

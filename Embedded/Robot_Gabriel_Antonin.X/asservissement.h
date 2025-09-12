@@ -28,5 +28,6 @@ extern volatile PidCorrector PidTheta;
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
 void SendPIDData(volatile PidCorrector* PidCorr, char c);
+double Correcteur(volatile PidCorrector* PidCorr, double erreur);
 
 #endif /* asservissement_H */

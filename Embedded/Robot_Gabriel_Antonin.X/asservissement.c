@@ -1,6 +1,7 @@
 #include "asservissement.h"
 #include "Utilities.h"
 #include "UART_Protocol.h"
+#include "QEI.h"
 
 volatile PidCorrector PidX;
 volatile PidCorrector PidTheta;
@@ -27,3 +28,19 @@ void SendPIDData(volatile PidCorrector* PidData, char c){
 
     UartEncodeAndSendMessage(SEND_PID_DATA, 49, PIDPayload);
 }
+double Correcteur(volatile PidCorrector* PidCorr, double erreur){
+    PidCorr->erreur = erreur;
+    double erreurProportionnelle = LimitToInterval(PidCorr->epsilon_1,-PidCorr->erreurProportionelleMax/PidCorr->Kp, PidCorr->erreurProportionelleMax/PidCorr->Kp);
+    PidCorr->corrP = PidCorr->Kd * erreurProportionnelle;
+    
+    PidCorr->erreurIntegrale += PidCorr->erreur;
+    PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale + PidCorr->epsilon_1/FREQ_ECH_QEI, -PidCorr->erreurIntegraleMax / PidCorr->Ki,PidCorr->erreurIntegraleMax / PidCorr->Ki);
+    PidCorr->corrI = PidCorr->Ki*PidCorr->erreurIntegrale;
+    
+    double erreurDerivee = (erreur - PidCorr->epsilon_1)*FREQ_ECH_QEI;
+    double deriveeBornee = LimitToInterval(erreurDerivee, -PidCorr->erreurDeriveeMax/PidCorr->Kd, PidCorr->erreurDeriveeMax/PidCorr->Kd);
+    PidCorr->epsilon_1 = erreur;
+    PidCorr->corrD = deriveeBornee * PidCorr->Kd;
+    
+    return PidCorr->corrP+PidCorr->corrI+PidCorr->corrD;
+    }
