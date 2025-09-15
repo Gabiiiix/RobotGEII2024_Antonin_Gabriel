@@ -20,6 +20,7 @@ unsigned long timestop=0;
 unsigned long time = 0;
 unsigned long timeoscillo=0;
 unsigned int tock = 0;
+unsigned int sendPIDUpdateDataFlag = 0;
 
 //Initialisation d?un timer 16 bits
 
@@ -50,10 +51,15 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     ADC1StartConversionSequence();
     DetectionCapteur();
     QEIUpdateData();
-    tock++;
-    if(tock == 25){
+    tock++; 
+    if(tock == 40){     // PERMET D'ENVOYER DES VALEURS DE VITESSES TOUTES LES 400ms
         SendPositionData();
         tock = 0;
+        if(sendPIDUpdateDataFlag){ // PERMET D'ENVOYER LES VALEURS CORRECTEUR/CONSIGNE PID TOUT LES 800 ms
+            SendPIDUpdateData();
+            sendPIDUpdateDataFlag = 0;
+        }
+        sendPIDUpdateDataFlag = 1;
     }
     
 

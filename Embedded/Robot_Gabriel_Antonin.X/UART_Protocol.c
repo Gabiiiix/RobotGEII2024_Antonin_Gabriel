@@ -13,10 +13,12 @@
 #define LINEAIRE 0
 #define ANGULAIRE 1
 
-double ConsigneLineaire = 0;
-double ConsigneAngulaire = 0; 
+double ConsigneLineaire;
+double ConsigneAngulaire;
 
 short FlagConsigneR = 0;
+
+double test = 0;
 
 
 unsigned char UartCalculateChecksum(int msgFunction, int msgPayloadLength, unsigned char* msgPayload) {
@@ -138,13 +140,15 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
         case 0x0071:
             ConsigneLineaire = getDouble(payload,0);
             ConsigneAngulaire = getDouble(payload,8);
-            FlagConsigneR = 1;
             break;
             
         case 0x0072:
+            test = getDouble(payload,32);
             SetupPidAsservissement(&PidX, getDouble(payload,0),getDouble(payload,8),getDouble(payload,16),getDouble(payload,24),getDouble(payload,32),getDouble(payload,40));
-            FlagConsigneR = 1;
+            SetupPidAsservissement(&PidTheta, getDouble(payload,48),getDouble(payload,56),getDouble(payload,64),getDouble(payload,72),getDouble(payload,80),getDouble(payload,88));
             break;
+            
+           
 //        case 0x0040:
 //
 //            break;

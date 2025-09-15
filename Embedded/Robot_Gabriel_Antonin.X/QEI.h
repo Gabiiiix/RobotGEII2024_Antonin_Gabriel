@@ -7,6 +7,7 @@ void QEIUpdateData();
 void SendPositionData();
 
 #define FREQ_ECH_QEI 250
+#define DISTROUES 0.2175
 
 static float QeiDroitPosition_T_1 = 0.0;
 static float QeiDroitPosition = 0.0;

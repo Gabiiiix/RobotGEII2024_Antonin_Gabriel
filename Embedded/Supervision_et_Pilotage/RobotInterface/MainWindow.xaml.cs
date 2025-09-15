@@ -44,6 +44,8 @@ namespace RobotInterface
 
         PID PIDLineaire = new PID();
         PID PIDAngulaire = new PID();
+
+        
         
         public MainWindow()
         {
@@ -71,7 +73,24 @@ namespace RobotInterface
 
             asservDisplay.SetAsservissementMode(AsservissementMode.Polar2Wheels);
 
-            
+            PIDLineaire.Kp = 0;
+            PIDLineaire.Ki = 0;
+            PIDLineaire.Kd = 0;
+            PIDLineaire.ErreurPMax = 1;
+            PIDLineaire.ErreurIMax = 2;
+            PIDLineaire.ErreurDMax = 3;
+
+            PIDAngulaire.Kp = 0;
+            PIDAngulaire.Ki = 0;
+            PIDAngulaire.Kd = 0;
+            PIDAngulaire.ErreurPMax = 3;
+            PIDAngulaire.ErreurIMax = 2;
+            PIDAngulaire.ErreurDMax = 1;
+
+
+
+
+
         }
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
@@ -85,6 +104,9 @@ namespace RobotInterface
             asservDisplay.UpdatePolarOdometrySpeed(robot.positionXOdo, robot.vitesseAngulaire);
             asservDisplay.UpdateIndependantOdometrySpeed(robot.vitesseDroit, robot.vitesseGauche);
             asservDisplay.UpdatePolarSpeedCorrectionLimits(PIDLineaire.ErreurPMax, PIDAngulaire.ErreurPMax, PIDLineaire.ErreurIMax, PIDAngulaire.ErreurIMax, PIDLineaire.ErreurDMax, PIDAngulaire.ErreurDMax);
+            asservDisplay.UpdatePolarSpeedConsigneValues(PIDLineaire.ConsigneDebug, PIDAngulaire.ConsigneDebug);
+            asservDisplay.UpdatePolarSpeedErrorValues(PIDLineaire.Erreur, PIDAngulaire.Erreur);
+            asservDisplay.UpdatePolarSpeedCorrectionValues(PIDLineaire.CorrP, PIDAngulaire.CorrP, PIDLineaire.CorrI, PIDAngulaire.CorrI, PIDLineaire.CorrD, PIDAngulaire.CorrD);
 
             asservDisplay.UpdateDisplay();
 
@@ -199,6 +221,7 @@ namespace RobotInterface
 
         int robotState = 0;
         long instant = 0 ;
+        long instant_1 = 0;
 
         int distanceIRExtremeDroite = 0;
         int distanceIRExtremeGauche = 0;
@@ -356,7 +379,12 @@ namespace RobotInterface
 
 
                 case 0x0050:
+                    instant_1 = instant;
                     instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16) + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
+                    if(instant_1 > instant)
+                    {
+                        oscilloSpeed.ResetGraph();
+                    }
                     robotState = (int)msgPayload[0];   
                     break;
 
@@ -394,6 +422,19 @@ namespace RobotInterface
                         PIDAngulaire.ErreurDMax = BitConverter.ToDouble(msgPayload, 40);
                     }
                     
+                    break;
+
+                case 0x0075:
+                    PIDLineaire.Erreur = BitConverter.ToDouble(msgPayload, 0);
+                    PIDAngulaire.Erreur = BitConverter.ToDouble(msgPayload, 8);
+                    PIDLineaire.ConsigneDebug = BitConverter.ToDouble(msgPayload, 16);
+                    PIDAngulaire.ConsigneDebug = BitConverter.ToDouble(msgPayload, 24);
+                    PIDLineaire.CorrP = BitConverter.ToDouble(msgPayload, 32);
+                    PIDAngulaire.CorrP = BitConverter.ToDouble(msgPayload, 40);
+                    PIDLineaire.CorrI = BitConverter.ToDouble(msgPayload, 48);
+                    PIDAngulaire.CorrI = BitConverter.ToDouble(msgPayload, 56);
+                    PIDLineaire.CorrD = BitConverter.ToDouble(msgPayload, 64);
+                    PIDAngulaire.CorrD = BitConverter.ToDouble(msgPayload, 72);
                     break;
 
 
@@ -446,17 +487,100 @@ namespace RobotInterface
             UartEncodeAndSendMessage(0x0020, 2, array);
         }
 
-        private void ConsigneSendButton_Click(object sender, RoutedEventArgs e)
-        {
-            byte[] Consigne = new byte[16];
-
-            UartEncodeAndSendMessage(0x0071, 16, Consigne);
-        }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             byte[] SetupAsserv = new byte[48];
             UartEncodeAndSendMessage(0x0072, 48, SetupAsserv);
+        }
+
+        private void ConsigneButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] Consigne = new byte[16];
+            PIDAngulaire.Consigne = 0;
+            PIDLineaire.Consigne = 0;
+
+            UartEncodeAndSendMessage(0x0071, 16, Consigne);
+        }
+
+        private void InitPID_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] message = new byte[96];
+
+            // ENVOIE DES COEFFICIENTS DU PID X
+            byte[] valeur = BitConverter.GetBytes(PIDLineaire.Kp);
+            Array.Copy(valeur, 0, message, 0, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDLineaire.Ki);
+            Array.Copy(valeur, 0, message, 8, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDLineaire.Kd);
+            Array.Copy(valeur, 0, message, 16, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDLineaire.ErreurPMax);
+            Array.Copy(valeur, 0, message, 24, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDLineaire.ErreurIMax);
+            Array.Copy(valeur, 0, message, 32, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDLineaire.ErreurDMax);
+            Array.Copy(valeur, 0, message, 40, valeur.Length);
+
+
+            //  ENVOIE DES COEFFICIENTS DU PID THETA
+            valeur = BitConverter.GetBytes(PIDAngulaire.Kp);
+            Array.Copy(valeur, 0, message, 48, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDAngulaire.Ki);
+            Array.Copy(valeur, 0, message, 56, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDAngulaire.Kd);
+            Array.Copy(valeur, 0, message, 64, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDAngulaire.ErreurPMax);
+            Array.Copy(valeur, 0, message, 72, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDAngulaire.ErreurIMax);
+            Array.Copy(valeur, 0, message, 80, valeur.Length);
+            valeur = BitConverter.GetBytes(PIDAngulaire.ErreurDMax);
+            Array.Copy(valeur, 0, message, 88, valeur.Length);
+
+            UartEncodeAndSendMessage(0x0072, 96, message);
+        }
+
+        private void Test1_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] message = new byte[16];
+
+            PIDLineaire.Consigne = 0;
+            PIDAngulaire.Consigne = 5.0;
+            byte[] bytesDouble = BitConverter.GetBytes(PIDAngulaire.Consigne);
+            Array.Copy(bytesDouble, 0, message, 8, bytesDouble.Length);
+
+            UartEncodeAndSendMessage(0x0071, 16, message);
+        }
+
+        private void Test2_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] message = new byte[16];
+
+            PIDLineaire.Consigne = 5.0;
+            PIDAngulaire.Consigne = 0;
+            byte[] bytesDouble = BitConverter.GetBytes(PIDLineaire.Consigne);
+            Array.Copy(bytesDouble, 0, message, 0, bytesDouble.Length);
+
+            UartEncodeAndSendMessage(0x0071, 16, message);
+        }
+
+        private void Test3_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] message = new byte[16];
+
+            PIDLineaire.Consigne = 5.0;
+            byte[] bytesDouble = BitConverter.GetBytes(PIDLineaire.Consigne);
+            Array.Copy(bytesDouble, 0, message, 0, bytesDouble.Length);
+
+            PIDAngulaire.Consigne = 5.0;
+            byte[] bytesDouble2 = BitConverter.GetBytes(PIDAngulaire.Consigne);
+            Array.Copy(bytesDouble2, 0, message, 8, bytesDouble2.Length);
+
+            UartEncodeAndSendMessage(0x0071, 16, message);
         }
     } 
 }

@@ -43,12 +43,14 @@
                     <!-- Boutons -->
                     <GroupBox Grid.Row="2" Header="Commandes" Margin="5">
                         <UniformGrid Columns="3" Rows="2" Margin="10">
-                            <Button Content="btn1"/>
-                            <Button Content="btn2"/>
-                            <Button Content="btn3"/>
-                            <Button Content="btn4"/>
-                            <Button Content="btn5"/>
-                            <Button Content="btn6"/>
+                            <Button x:Name="Consigne" Content="Consigne manuel (HS)" Click="ConsigneButton_Click"/>
+                            <Button x:Name="Reset" Content="Reset Consigne" Click="Reset_Click"/>
+                            <Button x:Name="InitPID"  Content="Initialisation PID" Click="InitPID_Click"/>
+                            <Button x:Name="Test1" Content="Test L=0 A=5" Click="Test1_Click"/>
+                            <Button x:Name="Test2" Content="Test L=5 A=0" Click="Test2_Click"/>
+                            <Button x:Name="Test3" Content="Test L=5 A=5" Click="Test3_Click"/>
+                            
+                            
                         </UniformGrid>
                     </GroupBox>
                 </Grid>

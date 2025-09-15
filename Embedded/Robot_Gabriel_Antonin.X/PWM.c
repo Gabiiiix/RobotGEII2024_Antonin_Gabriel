@@ -4,6 +4,7 @@
 #include "Robot.h"
 #include "ToolBox.h"
 #include "asservissement.h"
+#include"QEI.h"
 #define PWMPER 24.0
 
 void InitPWM(void) {
@@ -72,20 +73,26 @@ void PWMUpdateSpeed() {
         SDC2 = talon;
         PDC2 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
     }
+}
     
  void UpdateAsservissement(){
-     PidX.erreur = ...;
-     PidTheta.erreur = ...;
+     PidX.erreur = ConsigneLineaire - robotState.vitesseLineaireFromOdometry;
+     PidTheta.erreur = ConsigneAngulaire - robotState.vitesseAngulaireFromOdometry;
+     
     
-     robotState.CorrectionVitesseLineaire =
-        Correcteur(&robotState.PidX, robotState.PidX.erreur);
-    robotState.CorrectionVitesseAngulaire = ...;
+     robotState.CorrectionVitesseLineaire =  Correcteur(&PidX, PidX.erreur);   
+     robotState.CorrectionVitesseAngulaire = Correcteur(&PidTheta,PidTheta.erreur);
     
-    PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+    // PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
  }
  
- PWMSetSpeedConsignePolaire(){
+ PWMSetSpeedConsignePolaire(double vitesseLineaire, double vitesseAngulaire){
      
+     double vitesseDroit = LimitToInterval(vitesseLineaire + DISTROUES*vitesseAngulaire, -100, 100);
+     double vitesseGauche =  LimitToInterval(vitesseLineaire - DISTROUES*vitesseAngulaire,-100, 100);
+     
+      //PWMSetSpeedConsigne(vitesseDroit,MOTEUR_DROIT);
+      //PWMSetSpeedConsigne(vitesseGauche, MOTEUR_GAUCHE);
+
  }
-}
 

@@ -1,4 +1,4 @@
-#define DISTROUES 0.2175
+
 #define POSITION_DATA 0x0061
 
 #include <xc.h>
@@ -63,6 +63,8 @@ void QEIUpdateData() {
         robotState.angleRadianFromOdometry -= 2 * PI;
     if (robotState.angleRadianFromOdometry < -PI)
         robotState.angleRadianFromOdometry += 2 * PI;
+    
+    UpdateAsservissement();
 }
 
 

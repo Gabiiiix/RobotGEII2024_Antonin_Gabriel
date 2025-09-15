@@ -1,6 +1,7 @@
 #ifndef asservissement_H
 #define	asservissement_H
 #define SEND_PID_DATA 0x0070
+#define SEND_PID_ERROR_DATA 0x0075
 
 typedef struct _PidCorrector
 {
@@ -29,5 +30,6 @@ extern volatile PidCorrector PidTheta;
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
 void SendPIDData(volatile PidCorrector* PidCorr, char c);
 double Correcteur(volatile PidCorrector* PidCorr, double erreur);
+void SendPIDUpdateData();
 
 #endif /* asservissement_H */

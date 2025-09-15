@@ -17,6 +17,13 @@ namespace RobotInterface
         public double ErreurPMax;
         public double ErreurIMax;
         public double ErreurDMax;
+        public double Consigne;
+        public double ConsigneDebug;
+        public double Erreur;
+
+        public double CorrP;
+        public double CorrI;
+        public double CorrD;
 
         public PID() { 
         }
