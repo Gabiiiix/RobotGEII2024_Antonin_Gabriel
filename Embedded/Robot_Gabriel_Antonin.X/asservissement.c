@@ -2,6 +2,7 @@
 #include "Utilities.h"
 #include "UART_Protocol.h"
 #include "QEI.h"
+#include "ToolBox.h"
 
 volatile PidCorrector PidX;
 volatile PidCorrector PidTheta;
@@ -48,8 +49,9 @@ void SendPIDUpdateData(){
 
 double Correcteur(volatile PidCorrector* PidCorr, double erreur){
     PidCorr->erreur = erreur;
-    double erreurProportionnelle = LimitToInterval(PidCorr->erreur,-PidCorr->erreurProportionelleMax/PidCorr->Kp, PidCorr->erreurProportionelleMax/PidCorr->Kp);
-    PidCorr->corrP = PidCorr->Kd * erreurProportionnelle;
+    double erreurProportionnelle = LimitToInterval(erreur,-PidCorr->erreurProportionelleMax/PidCorr->Kp, PidCorr->erreurProportionelleMax/PidCorr->Kp);
+//    double erreurProportionnelle = LimitToInterval(erreur,-50.0, 50.0);
+    PidCorr->corrP = PidCorr->Kp * erreurProportionnelle;
     
     PidCorr->erreurIntegrale += PidCorr->erreur/FREQ_ECH_QEI;
     PidCorr->erreurIntegrale = LimitToInterval(PidCorr->erreurIntegrale + PidCorr->erreur/FREQ_ECH_QEI, -PidCorr->erreurIntegraleMax / PidCorr->Ki,PidCorr->erreurIntegraleMax / PidCorr->Ki);

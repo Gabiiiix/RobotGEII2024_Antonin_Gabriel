@@ -68,24 +68,24 @@ namespace RobotInterface
             oscilloSpeed.isDisplayActivated = true;
             oscilloSpeed.AddOrUpdateLine(1, 100, "VGauche");
             oscilloSpeed.AddOrUpdateLine(2, 100, "VDroit");
-            oscilloSpeed.ChangeLineColor(1, Colors.Chartreuse);
-            oscilloSpeed.ChangeLineColor(2, Colors.Aquamarine);
+            oscilloSpeed.ChangeLineColor(1, Colors.Red);
+            oscilloSpeed.ChangeLineColor(2, Colors.Blue);
 
             asservDisplay.SetAsservissementMode(AsservissementMode.Polar2Wheels);
 
-            PIDLineaire.Kp = 0;
-            PIDLineaire.Ki = 0;
+            PIDLineaire.Kp = 2.0f;
+            PIDLineaire.Ki = 20.0f;
             PIDLineaire.Kd = 0;
-            PIDLineaire.ErreurPMax = 1;
-            PIDLineaire.ErreurIMax = 2;
-            PIDLineaire.ErreurDMax = 3;
+            PIDLineaire.ErreurPMax = 100.0f;
+            PIDLineaire.ErreurIMax = 100.0f;
+            PIDLineaire.ErreurDMax = 100.0f;
 
-            PIDAngulaire.Kp = 0;
-            PIDAngulaire.Ki = 0;
+            PIDAngulaire.Kp = 0.75f;
+            PIDAngulaire.Ki = 10.0f;
             PIDAngulaire.Kd = 0;
-            PIDAngulaire.ErreurPMax = 3;
-            PIDAngulaire.ErreurIMax = 2;
-            PIDAngulaire.ErreurDMax = 1;
+            PIDAngulaire.ErreurPMax = 100.0f;
+            PIDAngulaire.ErreurIMax = 100.0f;
+            PIDAngulaire.ErreurDMax = 100.0f;
 
 
 
@@ -379,12 +379,7 @@ namespace RobotInterface
 
 
                 case 0x0050:
-                    instant_1 = instant;
                     instant = (((int)msgPayload[1]) << 24) + (((int)msgPayload[2]) << 16) + (((int)msgPayload[3]) << 8) + ((int)msgPayload[4]);
-                    if(instant_1 > instant)
-                    {
-                        oscilloSpeed.ResetGraph();
-                    }
                     robotState = (int)msgPayload[0];   
                     break;
 

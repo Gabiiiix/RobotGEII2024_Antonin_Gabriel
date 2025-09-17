@@ -4,7 +4,7 @@
 #include "Robot.h"
 #include "ToolBox.h"
 #include "asservissement.h"
-#include"QEI.h"
+#include "QEI.h"
 #define PWMPER 24.0
 
 void InitPWM(void) {
@@ -55,27 +55,30 @@ void PWMUpdateSpeed() {
     if (robotState.vitesseDroiteCommandeCourante > robotState.vitesseDroiteConsigne)
         robotState.vitesseDroiteCommandeCourante = Max(robotState.vitesseDroiteCommandeCourante - acceleration, robotState.vitesseDroiteConsigne);
     if (robotState.vitesseDroiteCommandeCourante >= 0) {
-        PDC1 = robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
-        SDC1 = talon;
+        SDC2 = robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
+        PDC2 = talon;
 
     } else {
-        PDC1 = talon;
-        SDC1 = -robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
+        SDC2 = talon;
+        PDC2 = -robotState.vitesseDroiteCommandeCourante * PWMPER + talon;
     }
+    
     if (robotState.vitesseGaucheCommandeCourante < robotState.vitesseGaucheConsigne)
         robotState.vitesseGaucheCommandeCourante = Min(robotState.vitesseGaucheCommandeCourante + acceleration, robotState.vitesseGaucheConsigne);
     if (robotState.vitesseGaucheCommandeCourante > robotState.vitesseGaucheConsigne)
         robotState.vitesseGaucheCommandeCourante = Max(robotState.vitesseGaucheCommandeCourante - acceleration, robotState.vitesseGaucheConsigne);
     if (robotState.vitesseGaucheCommandeCourante >= 0) {
-        SDC2 = robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
-        PDC2 = talon;
+        
+        PDC1 = robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
+        SDC1 = talon;
     } else {
-        SDC2 = talon;
-        PDC2 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
+        PDC1 = talon;
+        SDC1 = -robotState.vitesseGaucheCommandeCourante * PWMPER + talon;
     }
 }
     
  void UpdateAsservissement(){
+     
      PidX.erreur = ConsigneLineaire - robotState.vitesseLineaireFromOdometry;
      PidTheta.erreur = ConsigneAngulaire - robotState.vitesseAngulaireFromOdometry;
      
@@ -83,16 +86,17 @@ void PWMUpdateSpeed() {
      robotState.CorrectionVitesseLineaire =  Correcteur(&PidX, PidX.erreur);   
      robotState.CorrectionVitesseAngulaire = Correcteur(&PidTheta,PidTheta.erreur);
     
-    // PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+     PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+
  }
  
  PWMSetSpeedConsignePolaire(double vitesseLineaire, double vitesseAngulaire){
      
-     double vitesseDroit = LimitToInterval(vitesseLineaire + DISTROUES*vitesseAngulaire, -100, 100);
-     double vitesseGauche =  LimitToInterval(vitesseLineaire - DISTROUES*vitesseAngulaire,-100, 100);
+     double vitesseDroit = LimitToInterval(30.0*(vitesseLineaire + DISTROUES*vitesseAngulaire), -100, 100);
+     double vitesseGauche =  LimitToInterval(30.0*(vitesseLineaire - DISTROUES*vitesseAngulaire),-100, 100);
      
-      //PWMSetSpeedConsigne(vitesseDroit,MOTEUR_DROIT);
-      //PWMSetSpeedConsigne(vitesseGauche, MOTEUR_GAUCHE);
+     PWMSetSpeedConsigne(vitesseDroit,MOTEUR_DROIT);
+     PWMSetSpeedConsigne(vitesseGauche, MOTEUR_GAUCHE);
 
  }
 

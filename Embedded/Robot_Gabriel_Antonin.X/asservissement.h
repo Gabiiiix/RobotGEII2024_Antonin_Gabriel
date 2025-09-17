@@ -22,6 +22,7 @@ typedef struct _PidCorrector
 
 extern double ConsigneLineaire, ConsigneAngulaire;
 extern short FlagConsigneR;
+extern short FlagPIDCoeff;
 
 extern volatile PidCorrector PidX;
 extern volatile PidCorrector PidTheta;

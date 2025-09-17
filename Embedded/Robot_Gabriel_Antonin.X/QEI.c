@@ -9,6 +9,7 @@
 #include "Utilities.h"
 #include "UART_Protocol.h"
 #include "timer.h"
+#include "asservissement.h"
 
 void InitQEI1() {
     QEI1IOCbits.SWPAB = 1; //QEAx and QEBx are swapped
@@ -64,7 +65,11 @@ void QEIUpdateData() {
     if (robotState.angleRadianFromOdometry < -PI)
         robotState.angleRadianFromOdometry += 2 * PI;
     
-    UpdateAsservissement();
+    //L'asservissement et le PID S'active uniquement lorsqu'il a reçus les coefficients du C#
+    if(FlagPIDCoeff){ 
+        UpdateAsservissement();
+    }
+    
 }
 
 

@@ -17,6 +17,7 @@ double ConsigneLineaire;
 double ConsigneAngulaire;
 
 short FlagConsigneR = 0;
+short FlagPIDCoeff = 0;
 
 double test = 0;
 
@@ -146,6 +147,7 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
             test = getDouble(payload,32);
             SetupPidAsservissement(&PidX, getDouble(payload,0),getDouble(payload,8),getDouble(payload,16),getDouble(payload,24),getDouble(payload,32),getDouble(payload,40));
             SetupPidAsservissement(&PidTheta, getDouble(payload,48),getDouble(payload,56),getDouble(payload,64),getDouble(payload,72),getDouble(payload,80),getDouble(payload,88));
+            FlagPIDCoeff = 1;
             break;
             
            

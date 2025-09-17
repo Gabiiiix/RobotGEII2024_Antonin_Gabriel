@@ -68,22 +68,6 @@ int main(void) {
     LED_ROUGE_2 = 0;
     LED_VERTE_2 = 0;
     
-    test2 = 2;
-    test1 = 1;
-    test3 = 3;
-    test4 = 4;
-    test5 = 5;
-    test6 = 6;
-    test7 = 7;
-    test8 = 8;
-    test9 = 9;
-    test10 = 10;
-    test11 = 11;
-    test12 = 12;
-    
-    SetupPidAsservissement(&PidX, test1,test2,test3,test4,test5,test6);
-    SetupPidAsservissement(&PidTheta,test7,test8,test9,test10,test11,test12);
-    
     
 
     /***********************************************************************************************
@@ -228,8 +212,8 @@ void OperatingSystemLoop(void) {
         }
     } if(timestop > 60000) {
         timerstarted = 0;
-        PWMSetSpeedConsigne(0, MOTEUR_DROIT);
-        PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
+        //PWMSetSpeedConsigne(0, MOTEUR_DROIT);
+        //PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
 
     }
 }

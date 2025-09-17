@@ -55,7 +55,7 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     if(tock == 40){     // PERMET D'ENVOYER DES VALEURS DE VITESSES TOUTES LES 400ms
         SendPositionData();
         tock = 0;
-        if(sendPIDUpdateDataFlag){ // PERMET D'ENVOYER LES VALEURS CORRECTEUR/CONSIGNE PID TOUT LES 800 ms
+        if(sendPIDUpdateDataFlag && FlagPIDCoeff){ // PERMET D'ENVOYER LES VALEURS CORRECTEUR/CONSIGNE PID TOUT LES 800 ms
             SendPIDUpdateData();
             sendPIDUpdateDataFlag = 0;
         }
