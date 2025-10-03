@@ -46,9 +46,9 @@
                             <Button x:Name="Consigne" Content="Consigne manuel (HS)" Click="ConsigneButton_Click"/>
                             <Button x:Name="Reset" Content="Reset Consigne" Click="Reset_Click"/>
                             <Button x:Name="InitPID"  Content="Initialisation PID" Click="InitPID_Click"/>
-                            <Button x:Name="Test1" Content="Test L=0 A=5" Click="Test1_Click"/>
-                            <Button x:Name="Test2" Content="Test L=5 A=0" Click="Test2_Click"/>
-                            <Button x:Name="Test3" Content="Test L=5 A=5" Click="Test3_Click"/>
+                            <Button x:Name="Test1" Content="Test 1" Click="Test1_Click"/>
+                            <Button x:Name="Test2" Content="Test 2" Click="Test2_Click"/>
+                            <Button x:Name="Test3" Content="Test 3" Click="Test3_Click"/>
                             
                             
                         </UniformGrid>

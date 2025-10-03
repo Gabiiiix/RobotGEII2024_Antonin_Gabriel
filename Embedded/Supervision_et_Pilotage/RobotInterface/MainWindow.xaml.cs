@@ -56,7 +56,7 @@ namespace RobotInterface
 
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -83,6 +83,7 @@ namespace RobotInterface
             PIDAngulaire.Kp = 0.75f;
             PIDAngulaire.Ki = 10.0f;
             PIDAngulaire.Kd = 0;
+
             PIDAngulaire.ErreurPMax = 100.0f;
             PIDAngulaire.ErreurIMax = 100.0f;
             PIDAngulaire.ErreurDMax = 100.0f;
@@ -544,7 +545,7 @@ namespace RobotInterface
             byte[] message = new byte[16];
 
             PIDLineaire.Consigne = 0;
-            PIDAngulaire.Consigne = 5.0;
+            PIDAngulaire.Consigne = 0.0;
             byte[] bytesDouble = BitConverter.GetBytes(PIDAngulaire.Consigne);
             Array.Copy(bytesDouble, 0, message, 8, bytesDouble.Length);
 
@@ -555,7 +556,7 @@ namespace RobotInterface
         {
             byte[] message = new byte[16];
 
-            PIDLineaire.Consigne = 5.0;
+            PIDLineaire.Consigne = 0.0;
             PIDAngulaire.Consigne = 0;
             byte[] bytesDouble = BitConverter.GetBytes(PIDLineaire.Consigne);
             Array.Copy(bytesDouble, 0, message, 0, bytesDouble.Length);
@@ -567,11 +568,11 @@ namespace RobotInterface
         {
             byte[] message = new byte[16];
 
-            PIDLineaire.Consigne = 5.0;
+            PIDLineaire.Consigne = 0.0;
             byte[] bytesDouble = BitConverter.GetBytes(PIDLineaire.Consigne);
             Array.Copy(bytesDouble, 0, message, 0, bytesDouble.Length);
 
-            PIDAngulaire.Consigne = 5.0;
+            PIDAngulaire.Consigne = 0.0;
             byte[] bytesDouble2 = BitConverter.GetBytes(PIDAngulaire.Consigne);
             Array.Copy(bytesDouble2, 0, message, 8, bytesDouble2.Length);
 

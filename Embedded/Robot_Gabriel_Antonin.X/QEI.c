@@ -65,7 +65,7 @@ void QEIUpdateData() {
     if (robotState.angleRadianFromOdometry < -PI)
         robotState.angleRadianFromOdometry += 2 * PI;
     
-    //L'asservissement et le PID S'active uniquement lorsqu'il a reçus les coefficients du C#
+    //L'asservissement et le PID S'active uniquement lorsqu'il a reçus les coefficients de la supervision
     if(FlagPIDCoeff){ 
         UpdateAsservissement();
     }
