@@ -26,6 +26,8 @@ using Constants;
 using Newtonsoft.Json.Linq;
 using SciChart.Core.Extensions;
 using SciChart.Data.Model;
+using Microsoft.VisualBasic;
+using MathNet;
 namespace RobotInterface
 
 {
@@ -113,7 +115,8 @@ namespace RobotInterface
 
             LabelX.Text = "X: " + robot.positionXOdo.ToString() + " cm";
             LabelY.Text = "Y: " + robot.positionYOdo.ToString() + " cm";
-            worldMap.UpdatePosRobot(robot.positionXOdo + 20, robot.positionYOdo + 50);
+            worldMap.UpdatePosRobot(robot.positionXOdo+20, robot.positionYOdo+50);
+            worldMap.UpdatePosGhost(20, 50);
             // asservDisplay.UpdatePolarSpeedCommandValues()
 
             //checkBoxLEDRouge.IsChecked = EtatLEDRouge;
@@ -577,6 +580,18 @@ namespace RobotInterface
             Array.Copy(bytesDouble2, 0, message, 8, bytesDouble2.Length);
 
             UartEncodeAndSendMessage(0x0071, 16, message);
+        }
+
+
+        private void CalculateAngleRestant(float AngleActuelle, float X, float Y)
+        {
+            float RotationRestant;
+            RotationRestant = AngleActuelle;
+            Math.Atan(X * Y);
+        }
+
+        private void worldMap_MouseDown(object sender, MouseButtonEventArgs e)
+        {
         }
     } 
 }
