@@ -28,6 +28,7 @@ using SciChart.Core.Extensions;
 using SciChart.Data.Model;
 using Microsoft.VisualBasic;
 using MathNet;
+using MathNet.Numerics.Distributions;
 namespace RobotInterface
 
 {
@@ -41,6 +42,7 @@ namespace RobotInterface
 
         ExtendedSerialPort serialPort1;
         DispatcherTimer timerAffichage;
+        DispatcherTimer timerMap;
 
         Robot robot = new Robot();
 
@@ -66,6 +68,11 @@ namespace RobotInterface
             timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
+            
+            timerMap = new DispatcherTimer();
+            timerMap.Interval = new TimeSpan(0,0,0, 0, 10);
+            timerMap.Tick += TimerMap_Tick;
+            timerMap.Start(); 
 
             oscilloSpeed.isDisplayActivated = true;
             oscilloSpeed.AddOrUpdateLine(1, 100, "VGauche");
@@ -79,7 +86,7 @@ namespace RobotInterface
             PIDLineaire.Ki = 20.0f;
             PIDLineaire.Kd = 0;
             PIDLineaire.ErreurPMax = 100.0f;
-            PIDLineaire.ErreurIMax = 100.0f;
+            PIDLineaire.ErreurIMax = 40.0f;
             PIDLineaire.ErreurDMax = 100.0f;
 
             PIDAngulaire.Kp = 0.75f;
@@ -87,8 +94,18 @@ namespace RobotInterface
             PIDAngulaire.Kd = 0;
 
             PIDAngulaire.ErreurPMax = 100.0f;
-            PIDAngulaire.ErreurIMax = 100.0f;
+            PIDAngulaire.ErreurIMax = 20.0f;
             PIDAngulaire.ErreurDMax = 100.0f;
+
+            robot.angleActuelGhost = 90;
+            robot.angleCible = 90;
+            robot.positionXGhost = 20;
+            robot.positionYGhost = 50;
+            
+
+            robot.ghostSpeedDegree = 1;
+            robot.ghostSpeedLinaire = 1;
+            robot.ghostAccelerationLineaire = 0.5;
 
 
 
@@ -115,8 +132,9 @@ namespace RobotInterface
 
             LabelX.Text = "X: " + robot.positionXOdo.ToString() + " cm";
             LabelY.Text = "Y: " + robot.positionYOdo.ToString() + " cm";
-            worldMap.UpdatePosRobot(robot.positionXOdo+20, robot.positionYOdo+50);
-            worldMap.UpdatePosGhost(20, 50);
+
+
+            
             // asservDisplay.UpdatePolarSpeedCommandValues()
 
             //checkBoxLEDRouge.IsChecked = EtatLEDRouge;
@@ -124,6 +142,56 @@ namespace RobotInterface
             //checkBoxLEDBlanche.IsChecked = EtatLEDBlanche;
             //checkBoxLEDBleue.IsChecked = EtatLEDBleue.
             //checkBoxLEDOrange.IsChecked = EtatLEDOrange;QW
+        }
+
+        private void TimerMap_Tick(object sender, EventArgs e)
+        {
+
+            worldMap.UpdatePosRobot(robot.positionXOdo + 20, robot.positionYOdo + 50);
+            worldMap.UpdatePosGhost(robot.positionXGhost, robot.positionYGhost);
+
+            CalculateAngleRestant();
+
+            if (robot.angleActuelGhost >= robot.angleCible + 1 || robot.angleActuelGhost <= robot.angleCible - 1)
+            {
+
+
+                if (((robot.angleCible - robot.angleActuelGhost + 540) % 360) - 180 > 0)
+                {
+                    robot.angleActuelGhost += robot.ghostSpeedDegree;
+                }
+                else
+                {
+
+                    robot.angleActuelGhost -= robot.ghostSpeedDegree;
+                }
+
+                if (robot.angleActuelGhost <= -1)
+                {
+                    robot.angleActuelGhost = 360;
+                }
+
+                if (robot.angleActuelGhost >= 361)
+                {
+                    robot.angleActuelGhost = 0;
+                }
+
+
+                worldMap.RotateGhost(robot.angleActuelGhost);
+            }
+
+            else if(robot.positionXCible != 0 && robot.positionYCible != 0){
+
+                if (robot.positionXGhost - robot.positionXCible > 0.5 || robot.positionXGhost - robot.positionXCible < - 0.5)
+                {
+                    robot.positionXGhost = robot.positionXGhost + Math.Cos(robot.angleRadianCible) * robot.ghostSpeedLinaire;
+                }
+
+                if (robot.positionYGhost - robot.positionYCible > 0.1 || robot.positionYGhost - robot.positionYCible < -0.1)
+                {
+                    robot.positionYGhost = robot.positionYGhost + Math.Sin(robot.angleRadianCible) * robot.ghostSpeedLinaire;
+                }
+            }
         }
 
 
@@ -583,15 +651,19 @@ namespace RobotInterface
         }
 
 
-        private void CalculateAngleRestant(float AngleActuelle, float X, float Y)
+        public void CalculateAngleRestant()
         {
-            float RotationRestant;
-            RotationRestant = AngleActuelle;
-            Math.Atan(X * Y);
-        }
+            if(worldMap.xDataValue != 0 || worldMap.yDataValue != 0){ 
+                robot.positionXCible = worldMap.xDataValue - robot.positionXGhost;
+                robot.positionYCible = worldMap.yDataValue - robot.positionYGhost;
+                robot.angleRadianCible = Math.Atan2(robot.positionYCible, robot.positionXCible);
+                robot.angleCible = ((450 - (robot.angleRadianCible * 360.0 / (2 * Math.PI))) % 360);
+                worldMap.xDataValue = 0;
+                worldMap.yDataValue = 0;
 
-        private void worldMap_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-        }
+            }
+            }
+
+
     } 
 }

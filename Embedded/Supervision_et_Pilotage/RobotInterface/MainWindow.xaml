@@ -28,8 +28,10 @@
                     </Grid.RowDefinitions>
 
                     <!-- Oscilloscope -->
-                    <GroupBox Header="Oscillo" Margin="5">
-                        <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
+                    <GroupBox Header="Map" Margin="5" Grid.Row="0">
+                        <!-- Placeholder carte -->
+                        <map:WpfWorldMap x:Name="worldMap" Grid.Row="0" Grid.Column="3"/>
+
                     </GroupBox>
 
                     <!-- Position x/y -->
@@ -65,10 +67,9 @@
                     </Grid.RowDefinitions>
 
                     <!-- Carte -->
-                    <GroupBox Header="Map" Margin="5" Grid.Row="0">
-                        <!-- Placeholder carte -->
-                        <map:WpfWorldMap x:Name="worldMap" Grid.Row="0" Grid.Column="3" MouseDown="worldMap_MouseDown"/>
 
+                    <GroupBox Header="Oscillo" Margin="5">
+                        <oscillo:WpfOscilloscope x:Name="oscilloSpeed"/>
                     </GroupBox>
 
                     <!-- Asservissement -->

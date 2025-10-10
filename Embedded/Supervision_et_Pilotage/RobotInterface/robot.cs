@@ -16,16 +16,23 @@ namespace RobotInterface
         public float positionXOdo;
         public float positionYOdo;
         public float angleRadian;
-        public float angleRadianCible;
+        public double angleRadianCible;
         public float vitesseLineaire;
         public float vitesseAngulaire;
         public float vitesseGauche;
         public float vitesseDroit;
         public long time;
-        public long angleActuelGhost;
-        public long angleCible;
-        public float positionXCible;
-        public float positionYCible;
+
+        public double angleActuelGhost;
+        public double angleCible;
+        public double positionXGhost;
+        public double positionYGhost;
+        public double positionXCible;
+        public double positionYCible;
+
+        public double ghostSpeedDegree;
+        public double ghostSpeedLinaire;
+        public double ghostAccelerationLineaire;
         public Robot()
         {
 
