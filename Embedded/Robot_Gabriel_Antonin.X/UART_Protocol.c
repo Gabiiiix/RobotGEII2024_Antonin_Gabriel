@@ -150,6 +150,10 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
             FlagPIDCoeff = 1;
             break;
             
+        case 0x0100:
+            robotState.consigneLineaire = getFloat(payload, 0);
+            robotState.consigneTheta = getFloat(payload, 4);
+            break;
            
 //        case 0x0040:
 //

@@ -4,7 +4,7 @@
 #include "CB_RX2.h"
 #include "UART_Protocol.h"
 
-#define CBRX2_BUFFER_SIZE 128
+#define CBRX2_BUFFER_SIZE 1024
 
 static unsigned int cbRx2Head = 0;
 static unsigned int cbRx2Tail = 0;

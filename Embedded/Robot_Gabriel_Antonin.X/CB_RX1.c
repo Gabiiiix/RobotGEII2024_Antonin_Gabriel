@@ -5,7 +5,7 @@
 #include "UART_Protocol.h"
 #include "UART.h"
 
-#define CBRX1_BUFFER_SIZE 128
+#define CBRX1_BUFFER_SIZE 1024
 
 int cbRx1Head;
 int cbRx1Tail;

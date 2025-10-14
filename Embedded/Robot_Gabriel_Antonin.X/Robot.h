@@ -28,6 +28,19 @@ typedef struct robotStateBITS {
             float angleRadianFromOdometry_1;
             float angleRadianFromOdometry;
             
+            float vitesseAngulaireGhost;
+            float vitesseLineaireGhost;
+            float angleGhost;
+            float xPosGhost;
+            float yPosGhost;
+            float accelerationAngulaireGhost;
+            float accelerationLineaireGhost;
+            float vitesseAngulaireMax;
+            float vitesseLineaireMax;
+            
+            float consigneLineaire;
+            float consigneTheta;
+            
             double CorrectionVitesseLineaire;
             double CorrectionVitesseAngulaire;
 

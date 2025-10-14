@@ -7,4 +7,6 @@ float Min(float value, float value2);
 float LimitToInterval(float value, float lowLimit, float highLimit);
 float RadianToDegree(float value);
 float DegreeToRadian(float value);
+float ModuloByAngle(float from, float to);
+float PythagorTheorem(float x, float y);
 #endif /* TOOLBOX_H */

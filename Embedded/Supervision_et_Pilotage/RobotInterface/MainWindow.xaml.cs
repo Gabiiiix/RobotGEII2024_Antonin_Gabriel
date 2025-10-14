@@ -149,49 +149,8 @@ namespace RobotInterface
 
             worldMap.UpdatePosRobot(robot.positionXOdo + 20, robot.positionYOdo + 50);
             worldMap.UpdatePosGhost(robot.positionXGhost, robot.positionYGhost);
-
-            CalculateAngleRestant();
-
-            if (robot.angleActuelGhost >= robot.angleCible + 1 || robot.angleActuelGhost <= robot.angleCible - 1)
-            {
-
-
-                if (((robot.angleCible - robot.angleActuelGhost + 540) % 360) - 180 > 0)
-                {
-                    robot.angleActuelGhost += robot.ghostSpeedDegree;
-                }
-                else
-                {
-
-                    robot.angleActuelGhost -= robot.ghostSpeedDegree;
-                }
-
-                if (robot.angleActuelGhost <= -1)
-                {
-                    robot.angleActuelGhost = 360;
-                }
-
-                if (robot.angleActuelGhost >= 361)
-                {
-                    robot.angleActuelGhost = 0;
-                }
-
-
-                worldMap.RotateGhost(robot.angleActuelGhost);
-            }
-
-            else if(robot.positionXCible != 0 && robot.positionYCible != 0){
-
-                if (robot.positionXGhost - robot.positionXCible > 0.5 || robot.positionXGhost - robot.positionXCible < - 0.5)
-                {
-                    robot.positionXGhost = robot.positionXGhost + Math.Cos(robot.angleRadianCible) * robot.ghostSpeedLinaire;
-                }
-
-                if (robot.positionYGhost - robot.positionYCible > 0.1 || robot.positionYGhost - robot.positionYCible < -0.1)
-                {
-                    robot.positionYGhost = robot.positionYGhost + Math.Sin(robot.angleRadianCible) * robot.ghostSpeedLinaire;
-                }
-            }
+            worldMap.RotateGhost(robot.angleActuelGhost);
+            
         }
 
 
@@ -497,11 +456,22 @@ namespace RobotInterface
                     PIDLineaire.ConsigneDebug = BitConverter.ToDouble(msgPayload, 16);
                     PIDAngulaire.ConsigneDebug = BitConverter.ToDouble(msgPayload, 24);
                     PIDLineaire.CorrP = BitConverter.ToDouble(msgPayload, 32);
-                    PIDAngulaire.CorrP = BitConverter.ToDouble(msgPayload, 40);
-                    PIDLineaire.CorrI = BitConverter.ToDouble(msgPayload, 48);
-                    PIDAngulaire.CorrI = BitConverter.ToDouble(msgPayload, 56);
-                    PIDLineaire.CorrD = BitConverter.ToDouble(msgPayload, 64);
-                    PIDAngulaire.CorrD = BitConverter.ToDouble(msgPayload, 72);
+
+                    break;
+
+
+                case 0x0076:
+                    PIDAngulaire.CorrP = BitConverter.ToDouble(msgPayload, 0);
+                    PIDLineaire.CorrI = BitConverter.ToDouble(msgPayload, 8);
+                    PIDAngulaire.CorrI = BitConverter.ToDouble(msgPayload, 16);
+                    PIDLineaire.CorrD = BitConverter.ToDouble(msgPayload, 24);
+                    PIDAngulaire.CorrD = BitConverter.ToDouble(msgPayload, 32);
+
+                    break;
+
+                case 0x0101:
+                    robot.angleActuelGhost = BitConverter.ToDouble(msgPayload, 0);
+
                     break;
 
 
@@ -653,10 +623,23 @@ namespace RobotInterface
 
         public void CalculateAngleRestant()
         {
-            if(worldMap.xDataValue != 0 || worldMap.yDataValue != 0){ 
+            
+            if(worldMap.xDataValue != 0 || worldMap.yDataValue != 0)
+            {
+                byte[] message = new byte[8];
+
                 robot.positionXCible = worldMap.xDataValue - robot.positionXGhost;
                 robot.positionYCible = worldMap.yDataValue - robot.positionYGhost;
+                double distance = Math.Sqrt((robot.positionYCible * robot.positionYCible + robot.positionXCible * robot.positionXCible));
                 robot.angleRadianCible = Math.Atan2(robot.positionYCible, robot.positionXCible);
+
+                byte[] valeur = BitConverter.GetBytes((float)distance);
+                Array.Copy(valeur, 0, message, 0, valeur.Length);
+                valeur = BitConverter.GetBytes(((float)robot.angleRadianCible));
+                Array.Copy(valeur, 0, message, 4, valeur.Length);
+
+                UartEncodeAndSendMessage(0x0100, 8, message);
+
                 robot.angleCible = ((450 - (robot.angleRadianCible * 360.0 / (2 * Math.PI))) % 360);
                 worldMap.xDataValue = 0;
                 worldMap.yDataValue = 0;

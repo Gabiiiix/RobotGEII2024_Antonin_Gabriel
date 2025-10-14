@@ -1,4 +1,5 @@
 #include "Toolbox.h"
+#include <math.h>
 
 float Abs(float value) {
     if (value >= 0)
@@ -34,4 +35,18 @@ float RadianToDegree(float value) {
 
 float DegreeToRadian(float value) {
     return value * PI / 180.0;
+}
+
+float ModuloByAngle(float from, float to) {
+    float diff = to - from;
+    while (diff > PI) diff -= 2 * PI;
+    while (diff < -PI) diff += 2 * PI;
+    return diff;
+}
+
+float PythagorTheorem(float x, float y){
+    float x_square = x*x;
+    float y_square = y*y;
+    float result = sqrt(x_square+y_square);
+    return result;
 }
