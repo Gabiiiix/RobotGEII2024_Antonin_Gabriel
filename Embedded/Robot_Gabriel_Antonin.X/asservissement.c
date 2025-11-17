@@ -4,6 +4,7 @@
 #include "QEI.h"
 #include "ToolBox.h"
 #include "Robot.h"
+#include <math.h>
 
 volatile PidCorrector PidX;
 volatile PidCorrector PidTheta;
@@ -90,9 +91,8 @@ double Correcteur(volatile PidCorrector* PidCorr, double erreur){
 void Ghost(){
     switch(stateGhost){
         case (stateGhost.IDLE) :
-            if((consigneLineaire_1 != robotState.consigneLineaire || consigneTheta_1 != robotState.consigneTheta) && robotState.vitesseLineaireFromOdometry == 0){
+            if((consigneTheta_1 != robotState.consigneTheta) && robotState.vitesseLineaireFromOdometry == 0){
                 stateGhost = stateGhost.ROTATION;
-                consigneLineaire_1 = robotState.consigneLineaire;
                 consigneTheta_1 = robotState.consigneTheta;
             }
             break;
@@ -101,7 +101,7 @@ void Ghost(){
             
         case(stateGhost.ROTATION):
             thetaRestant = ModuloByAngle(robotState.angleGhost,robotState.consigneTheta) - robotState.angleGhost;
-            thetaArret = robotState.vitesseAngulaireGhost / 2.0 * robotState.accelerationAngulaireGhost;
+            thetaArret = (robotState.vitesseAngulaireGhost * robotState.vitesseAngulaireGhost) / 2.0 * robotState.accelerationAngulaireGhost;
             incrementTheta = robotState.vitesseAngulaireGhost * (1.0/FREQ_ECH_QEI);
             
             if (robotState.vitesseAngulaireGhost < 0){
@@ -140,7 +140,7 @@ void Ghost(){
             
         
         case(stateGhost.DEPLACEMENTLINEAIRE):
-            distanceRestant = PythagorTheorem(robotState.xPosGhost,robotState.yPosGhost) - robotState.consigneLineaire;
+            distanceRestant = distancePointToSegment(robotState.consigneLineaireX, robotState.consigneLineaireY,robotState.xPosGhost, robotState.yPosGhost, robotState.xPosGhost + cosf(robotState.angleRadianFromOdometry), robotState.yPosGhost + cosf(robotState.angleRadianFromOdometry));
             distanceArret = robotState.vitesseLineaireGhost / 2.0 * robotState.accelerationLineaireGhost;
             incrementDistance = robotState.vitesseLineaireGhost * (1.0/FREQ_ECH_QEI);
              
