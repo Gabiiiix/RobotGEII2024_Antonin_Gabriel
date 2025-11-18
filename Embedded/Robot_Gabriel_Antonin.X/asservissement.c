@@ -112,7 +112,7 @@ void Ghost(){
                 if(thetaRestant > 0){
                     robotState.vitesseAngulaireGhost = Min(robotState.vitesseAngulaireGhost + robotState.accelerationAngulaireGhost/FREQ_ECH_QEI, robotState.vitesseAngulaireMax);
                 }
-                else if(thetaRestant > 0){
+                else if(thetaRestant < 0){
                     robotState.vitesseAngulaireGhost = Max(robotState.vitesseAngulaireGhost - robotState.accelerationAngulaireGhost/FREQ_ECH_QEI, -robotState.vitesseAngulaireMax);
                 }
             }
@@ -140,16 +140,43 @@ void Ghost(){
             
         
         case(stateGhost.DEPLACEMENTLINEAIRE):
-            distanceRestant = distancePointToSegment(robotState.consigneLineaireX, robotState.consigneLineaireY,robotState.xPosGhost, robotState.yPosGhost, robotState.xPosGhost + cosf(robotState.angleRadianFromOdometry), robotState.yPosGhost + cosf(robotState.angleRadianFromOdometry));
-            distanceArret = robotState.vitesseLineaireGhost / 2.0 * robotState.accelerationLineaireGhost;
+            distanceArret = distancePointToSegment(robotState.consigneLineaireX, robotState.consigneLineaireY,robotState.xPosGhost, robotState.yPosGhost, robotState.xPosGhost + cosf(robotState.angleRadianFromOdometry), robotState.yPosGhost + cosf(robotState.angleRadianFromOdometry));
+            distanceRestant =  waypointDevant(robotState.xPosGhost, robotState.yPosGhost, robotState.angleRadianFromOdometry, robotState.consigneLineaireX, robotState.consigneLineaireY);
             incrementDistance = robotState.vitesseLineaireGhost * (1.0/FREQ_ECH_QEI);
-             
-            if((distanceRestant >= 0 && distanceArret >= 0) && (distanceRestant >= distanceArret)){
-                
+            if (robotState.vitesseLineaireGhost < 0){
+                distanceArret = -distanceArret;
             }
-            break;
-        
             
+            if(((distanceRestant >= 0 && distanceArret >= 0) || (distanceRestant >= distanceArret)) && abs(distanceRestant) >= abs(distanceArret)){
+                if(distanceRestant > 0){
+                    robotState.vitesseLineaireGhost = Min(robotState.vitesseLineaireGhost + robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
+                }
+                else if(distanceRestant < 0){
+                    robotState.vitesseLineaireGhost = Max(robotState.vitesseLineaireGhost - robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
+                }
+            }
+            else{
+                if(robotState.vitesseLineaireGhost > 0){
+                    robotState.vitesseLineaireGhost = Min(robotState.vitesseLineaireGhost + robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
+                }
+                else if(robotState.vitesseLineaireGhost < 0){
+                    robotState.vitesseLineaireGhost = Max(robotState.vitesseLineaireGhost - robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
+                }
+                
+                if(Abs(distanceRestant) < Abs(incrementDistance)){
+                    incrementDistance = distanceRestant;
+                }
+            }
+            
+            robotState.xPosGhost = robotState.xPosGhost + incrementDistance * cos(robotState.angleRadianFromOdometry);
+            robotState.yPosGhost = robotState.yPosGhost + incrementDistance * sin(robotState.angleRadianFromOdometry);
+            
+            if(robotState.vitesseLineaireGhost == 0 && abs(distanceRestant) < 0.01){
+                robotState.xPosGhost = robotState.consigneLineaireX;
+                robotState.yPosGhost = robotState.consigneLineaireY;
+                stateGhost = stateGhost.IDLE;
+            }
+            break;         
         }
 
             

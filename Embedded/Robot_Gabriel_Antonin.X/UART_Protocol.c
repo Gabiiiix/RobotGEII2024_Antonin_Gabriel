@@ -151,8 +151,9 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
             break;
             
         case 0x0100:
-            robotState.consigneLineaire = getFloat(payload, 0);
-            robotState.consigneTheta = getFloat(payload, 4);
+            robotState.consigneLineaireX = getFloat(payload, 0);
+            robotState.consigneLineaireY = getFloat(payload, 4);
+            robotState.consigneTheta = getFloat(payload,8);
             break;
            
 //        case 0x0040:

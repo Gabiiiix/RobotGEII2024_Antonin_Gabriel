@@ -628,17 +628,18 @@ namespace RobotInterface
             {
                 byte[] message = new byte[8];
 
-                robot.positionXCible = worldMap.xDataValue - robot.positionXGhost;
-                robot.positionYCible = worldMap.yDataValue - robot.positionYGhost;
-                double distance = Math.Sqrt((robot.positionYCible * robot.positionYCible + robot.positionXCible * robot.positionXCible));
+                robot.positionXCible = robot.positionXGhost - 20;
+                robot.positionYCible = robot.positionYGhost - 50;
                 robot.angleRadianCible = Math.Atan2(robot.positionYCible, robot.positionXCible);
 
-                byte[] valeur = BitConverter.GetBytes((float)distance);
+                byte[] valeur = BitConverter.GetBytes((float)robot.positionXCible);
                 Array.Copy(valeur, 0, message, 0, valeur.Length);
+                valeur = BitConverter.GetBytes((float)robot.positionYCible);
+                Array.Copy(valeur, 4, message, 4, valeur.Length);
                 valeur = BitConverter.GetBytes(((float)robot.angleRadianCible));
-                Array.Copy(valeur, 0, message, 4, valeur.Length);
+                Array.Copy(valeur, 8, message, 8, valeur.Length);
 
-                UartEncodeAndSendMessage(0x0100, 8, message);
+                UartEncodeAndSendMessage(0x0100, 12, message);
 
                 robot.angleCible = ((450 - (robot.angleRadianCible * 360.0 / (2 * Math.PI))) % 360);
                 worldMap.xDataValue = 0;
