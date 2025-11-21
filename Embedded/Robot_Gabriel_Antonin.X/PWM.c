@@ -6,6 +6,7 @@
 #include "asservissement.h"
 #include "QEI.h"
 #include <math.h>
+#include "UART_protocol.h"
 #define PWMPER 24.0
 
 void InitPWM(void) {
@@ -79,6 +80,8 @@ void PWMUpdateSpeed() {
 }
     
  void UpdateAsservissement(){
+     
+     UpdateGhostData();
 
      PidX.erreur = robotState.consigneVitesseLineaire - robotState.vitesseLineaireFromOdometry;
      PidTheta.erreur = robotState.consigneVitesseAngulaire - robotState.vitesseAngulaireFromOdometry;
@@ -110,7 +113,8 @@ void PWMUpdateSpeed() {
      }
      
      robotState.consigneVitesseLineaire = Correcteur(&PidXGhost,erreurLineaire);
-     robotState.consigneVitesseAngulaire = Correcteur(&PidThetaGhost,erreurLineaire);
+     robotState.consigneVitesseAngulaire = Correcteur(&PidThetaGhost,erreurTheta);
+     
  }
  
  PWMSetSpeedConsignePolaire(double vitesseLineaire, double vitesseAngulaire){

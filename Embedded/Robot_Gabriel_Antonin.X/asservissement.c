@@ -46,11 +46,11 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
     PidCorr->erreurDeriveeMax = deriveeMax;
     FlagConsigneR=1;
     
-    robotState.accelerationAngulaireGhost = 0.2;
-    robotState.accelerationLineaireGhost = 0.5;
+    robotState.accelerationAngulaireGhost = 1;
+    robotState.accelerationLineaireGhost = 1;
     
-    robotState.vitesseAngulaireMax = 0.1;
-    robotState.vitesseLineaireMax = 1;
+    robotState.vitesseAngulaireMax = 2;
+    robotState.vitesseLineaireMax = 2;
 }
 
 void SendPIDData(volatile PidCorrector* PidData, char c){
@@ -108,13 +108,13 @@ void Ghost(){
     switch(stateGhost){
         case (IDLE) :
             
-            if(robotState.xPosGhost != robotState.consigneLineaireX || robotState.yPosGhost != robotState.consigneLineaireY){
+            if( listeWaypoints[i].x != robotState.consigneLineaireX || listeWaypoints[i].y != robotState.consigneLineaireY){
                 robotState.consigneLineaireX = listeWaypoints[i].x;
                 robotState.consigneLineaireY = listeWaypoints[i].y;
                 robotState.consigneTheta = atan2(robotState.yPosGhost - robotState.consigneLineaireY, robotState.xPosGhost - robotState.consigneLineaireX);
             }
             
-            if((consigneTheta_1 != robotState.consigneTheta) && fabs(robotState.vitesseLineaireFromOdometry) < 0.1){
+            if (fabs(NormalizeAngle(consigneTheta_1 - robotState.consigneTheta)) > 0.01 && fabs(robotState.vitesseLineaireFromOdometry) < 0.1) {
                 stateGhost = ROTATION;
                 consigneTheta_1 = robotState.consigneTheta;
                 i++;
@@ -210,7 +210,7 @@ void Ghost(){
             robotState.xPosGhost += incrementDistance * dirX;
             robotState.yPosGhost += incrementDistance * dirY;
 
-            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.001f)
+            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f && fabs(robotState.vitesseLineaireFromOdometry) < 0.01f)
             {
                 robotState.xPosGhost = robotState.consigneLineaireX;
                 robotState.yPosGhost = robotState.consigneLineaireY;

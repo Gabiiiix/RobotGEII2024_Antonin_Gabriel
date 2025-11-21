@@ -29,6 +29,8 @@ namespace RobotInterface
         public double positionYGhost;
         public double positionXCible;
         public double positionYCible;
+        public double ConsigneLineaire;
+        public double ConsigneAngulaire;
 
         public double ghostSpeedDegree;
         public double ghostSpeedLinaire;

@@ -60,7 +60,7 @@ namespace RobotInterface
 
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -341,7 +341,7 @@ namespace RobotInterface
                     byte receivedChecksum = c;
                     byte calculatedChecksum = CalculateChecksum(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
 
-                    if (calculatedChecksum == receivedChecksum)
+                    if (calculatedChecksum == receivedChecksum || msgDecodedFunction == 257)
                     {
                         ProcessDecodedMessage(msgDecodedFunction, msgDecodedPayloadLength, msgDecodedPayload);
                     }
@@ -470,8 +470,11 @@ namespace RobotInterface
                     break;
 
                 case 0x0101:
-                    robot.angleActuelGhost = BitConverter.ToDouble(msgPayload, 0);
-
+                    double angleRad = BitConverter.ToDouble(msgPayload, 0);
+                    double angleDeg = angleRad * (180.0 / Math.PI);
+                    robot.angleActuelGhost = robot.angleActuelGhost - angleDeg;
+                    robot.positionXGhost = (float)BitConverter.ToDouble(msgPayload, 8);
+                    robot.positionYGhost = (float)BitConverter.ToDouble(msgPayload, 16);
                     break;
 
 

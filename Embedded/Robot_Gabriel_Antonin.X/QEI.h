@@ -5,6 +5,7 @@ void InitQEI1();
 void InitQEI2();
 void QEIUpdateData();
 void SendPositionData();
+void SendGhostData();
 
 #define FREQ_ECH_QEI 250
 #define DISTROUES 0.2175

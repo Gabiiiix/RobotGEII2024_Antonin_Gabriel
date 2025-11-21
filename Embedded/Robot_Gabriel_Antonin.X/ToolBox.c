@@ -101,8 +101,6 @@ float waypointDevant(float rx, float ry, float theta, float wx, float wy)
 }
 
 float NormalizeAngle(float angle){
-    while (angle > M_PI) angle -= 2.0 * M_PI;
-    while (angle < M_PI) angle += 2.0 * M_PI;
-    return angle;
+    return atan2(sin(angle), cos(angle));
 }
 

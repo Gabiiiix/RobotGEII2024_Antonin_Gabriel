@@ -86,3 +86,12 @@ void SendPositionData() {
     positionPayload[32] = (char)(timeoscillo & 0x000000FF);
     UartEncodeAndSendMessage(POSITION_DATA, 36, positionPayload);
 }
+
+void SendGhostData() {
+    unsigned char PIDPayload[24];
+    getBytesFromDouble(PIDPayload, 0, robotState.angleGhost);
+    getBytesFromDouble(PIDPayload,8,robotState.xPosGhost);
+    getBytesFromDouble(PIDPayload,16, robotState.yPosGhost);
+    
+    UartEncodeAndSendMessage(257, 24, PIDPayload);
+}
