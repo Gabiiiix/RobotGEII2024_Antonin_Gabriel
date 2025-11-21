@@ -8,6 +8,8 @@
 
 volatile PidCorrector PidX;
 volatile PidCorrector PidTheta;
+volatile PidCorrector PidXGhost;
+volatile PidCorrector PidThetaGhost;
 
 float thetaArret;
 float thetaRestant;
@@ -20,6 +22,20 @@ float incrementDistance;
 float consigneLineaire_1 = 0;
 float consigneTheta_1 = 0;
 
+int i = 0;
+
+enum stateGhost stateGhost = IDLE;
+
+Waypoint listeWaypoints[] = {
+    {0,1},
+    {0.5,1},
+    {0.5,2},
+    {-0.5,2},
+    {-0.5,1},
+    {0,1},
+    {0,1.5}
+};
+
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax)
 {
     PidCorr->Kp = Kp;
@@ -30,8 +46,8 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
     PidCorr->erreurDeriveeMax = deriveeMax;
     FlagConsigneR=1;
     
-    robotState.accelerationAngulaireGhost = 0.02;
-    robotState.accelerationLineaireGhost = 0.05;
+    robotState.accelerationAngulaireGhost = 0.2;
+    robotState.accelerationLineaireGhost = 0.5;
     
     robotState.vitesseAngulaireMax = 0.1;
     robotState.vitesseLineaireMax = 1;
@@ -90,16 +106,24 @@ double Correcteur(volatile PidCorrector* PidCorr, double erreur){
 
 void Ghost(){
     switch(stateGhost){
-        case (stateGhost.IDLE) :
-            if((consigneTheta_1 != robotState.consigneTheta) && robotState.vitesseLineaireFromOdometry == 0){
-                stateGhost = stateGhost.ROTATION;
+        case (IDLE) :
+            
+            if(robotState.xPosGhost != robotState.consigneLineaireX || robotState.yPosGhost != robotState.consigneLineaireY){
+                robotState.consigneLineaireX = listeWaypoints[i].x;
+                robotState.consigneLineaireY = listeWaypoints[i].y;
+                robotState.consigneTheta = atan2(robotState.yPosGhost - robotState.consigneLineaireY, robotState.xPosGhost - robotState.consigneLineaireX);
+            }
+            
+            if((consigneTheta_1 != robotState.consigneTheta) && fabs(robotState.vitesseLineaireFromOdometry) < 0.1){
+                stateGhost = ROTATION;
                 consigneTheta_1 = robotState.consigneTheta;
+                i++;
             }
             break;
             
         
             
-        case(stateGhost.ROTATION):
+        case(ROTATION):
             thetaRestant = ModuloByAngle(robotState.angleGhost,robotState.consigneTheta) - robotState.angleGhost;
             thetaArret = (robotState.vitesseAngulaireGhost * robotState.vitesseAngulaireGhost) / 2.0 * robotState.accelerationAngulaireGhost;
             incrementTheta = robotState.vitesseAngulaireGhost * (1.0/FREQ_ECH_QEI);
@@ -108,7 +132,7 @@ void Ghost(){
                 thetaArret = -thetaArret;
             }
             
-            if(((thetaArret >= 0 && thetaRestant >=0) || (thetaArret <= 0 && thetaRestant <= 0)) && Abs(thetaRestant) >= Abs(thetaArret)){
+            if(((thetaArret >= 0 && thetaRestant >=0) || (thetaArret <= 0 && thetaRestant <= 0)) && fabs(thetaRestant) >= fabs(thetaArret)){
                 if(thetaRestant > 0){
                     robotState.vitesseAngulaireGhost = Min(robotState.vitesseAngulaireGhost + robotState.accelerationAngulaireGhost/FREQ_ECH_QEI, robotState.vitesseAngulaireMax);
                 }
@@ -124,7 +148,7 @@ void Ghost(){
                     robotState.vitesseAngulaireGhost = Min(robotState.vitesseAngulaireGhost + robotState.accelerationAngulaireGhost/FREQ_ECH_QEI, 0);
                 }
                 
-                if(Abs(thetaRestant) < Abs(incrementTheta)){
+                if(fabs(thetaRestant) < fabs(incrementTheta)){
                     incrementTheta = thetaRestant;
                 }
             }
@@ -132,52 +156,71 @@ void Ghost(){
             robotState.angleGhost  = robotState.angleGhost + incrementTheta;
             
             
-            if (robotState.vitesseAngulaireGhost == 0 && Abs(thetaRestant) < 0.01){
+            if (robotState.vitesseAngulaireGhost == 0 && fabs(thetaRestant) < 0.01){
                 robotState.angleGhost = robotState.consigneTheta;
-                stateGhost = stateGhost.DEPLACEMENTLINEAIRE;
+                stateGhost = DEPLACEMENTLINEAIRE;
             }
             break;
             
         
-        case(stateGhost.DEPLACEMENTLINEAIRE):
-            distanceArret = distancePointToSegment(robotState.consigneLineaireX, robotState.consigneLineaireY,robotState.xPosGhost, robotState.yPosGhost, robotState.xPosGhost + cosf(robotState.angleRadianFromOdometry), robotState.yPosGhost + cosf(robotState.angleRadianFromOdometry));
-            distanceRestant =  waypointDevant(robotState.xPosGhost, robotState.yPosGhost, robotState.angleRadianFromOdometry, robotState.consigneLineaireX, robotState.consigneLineaireY);
-            incrementDistance = robotState.vitesseLineaireGhost * (1.0/FREQ_ECH_QEI);
-            if (robotState.vitesseLineaireGhost < 0){
-                distanceArret = -distanceArret;
-            }
+        case(DEPLACEMENTLINEAIRE):
+        {
+            float dirX = cosf(robotState.angleRadianFromOdometry);
+            float dirY = sinf(robotState.angleRadianFromOdometry);
+        
+
+            float dx = robotState.consigneLineaireX - robotState.xPosGhost;
+            float dy = robotState.consigneLineaireY - robotState.yPosGhost;
+
+
+            float distanceRestant = dx * dirX + dy * dirY;  
+
+            float incrementDistance = robotState.vitesseLineaireGhost * (1.0f / FREQ_ECH_QEI);
+
+
+            float accel = robotState.accelerationLineaireGhost / FREQ_ECH_QEI;
             
-            if(((distanceRestant >= 0 && distanceArret >= 0) || (distanceRestant >= distanceArret)) && abs(distanceRestant) >= abs(distanceArret)){
-                if(distanceRestant > 0){
-                    robotState.vitesseLineaireGhost = Min(robotState.vitesseLineaireGhost + robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
-                }
-                else if(distanceRestant < 0){
-                    robotState.vitesseLineaireGhost = Max(robotState.vitesseLineaireGhost - robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
-                }
+        
+            if (distanceRestant > 0)
+            {
+     
+                    robotState.vitesseLineaireGhost += accel;
+                if (robotState.vitesseLineaireGhost > robotState.vitesseLineaireMax)
+                    robotState.vitesseLineaireGhost = robotState.vitesseLineaireMax;
             }
-            else{
-                if(robotState.vitesseLineaireGhost > 0){
-                    robotState.vitesseLineaireGhost = Min(robotState.vitesseLineaireGhost + robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
-                }
-                else if(robotState.vitesseLineaireGhost < 0){
-                    robotState.vitesseLineaireGhost = Max(robotState.vitesseLineaireGhost - robotState.accelerationLineaireGhost/FREQ_ECH_QEI, robotState.vitesseLineaireMax);
-                }
-                
-                if(Abs(distanceRestant) < Abs(incrementDistance)){
-                    incrementDistance = distanceRestant;
-                }
+            else if (distanceRestant < 0)
+            {
+                // Aller vers l'arrière
+                robotState.vitesseLineaireGhost -= accel;
+                if (robotState.vitesseLineaireGhost < -robotState.vitesseLineaireMax)
+                    robotState.vitesseLineaireGhost = -robotState.vitesseLineaireMax;
             }
-            
-            robotState.xPosGhost = robotState.xPosGhost + incrementDistance * cos(robotState.angleRadianFromOdometry);
-            robotState.yPosGhost = robotState.yPosGhost + incrementDistance * sin(robotState.angleRadianFromOdometry);
-            
-            if(robotState.vitesseLineaireGhost == 0 && abs(distanceRestant) < 0.01){
+            else
+            {
+                robotState.vitesseLineaireGhost = 0;
+            }
+
+            incrementDistance = robotState.vitesseLineaireGhost * (1.0f / FREQ_ECH_QEI);
+
+
+            if (fabs(distanceRestant) < fabs(incrementDistance))
+                incrementDistance = distanceRestant;
+
+
+            robotState.xPosGhost += incrementDistance * dirX;
+            robotState.yPosGhost += incrementDistance * dirY;
+
+            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.001f)
+            {
                 robotState.xPosGhost = robotState.consigneLineaireX;
                 robotState.yPosGhost = robotState.consigneLineaireY;
-                stateGhost = stateGhost.IDLE;
+                robotState.vitesseLineaireGhost = 0;
+                stateGhost = IDLE;
             }
-            break;         
+
+            break;
         }
+    }
 
             
             

@@ -57,18 +57,15 @@ void QEIUpdateData() {
     robotState.angleRadianFromOdometry_1 = robotState.angleRadianFromOdometry;
 
     //Calcul des positions dans le referentiel du terrain
-    robotState.xPosFromOdometry = robotState.vitesseLineaireFromOdometry * cos(robotState.vitesseAngulaireFromOdometry);
-    robotState.yPosFromOdometry = robotState.vitesseLineaireFromOdometry * sin(robotState.vitesseAngulaireFromOdometry);
+    robotState.xPosFromOdometry = (robotState.xPosFromOdometry_1 + robotState.vitesseLineaireFromOdometry * cos(robotState.angleRadianFromOdometry_1) / FREQ_ECH_QEI);
+    robotState.yPosFromOdometry = (robotState.yPosFromOdometry_1 + robotState.vitesseLineaireFromOdometry * sin(robotState.angleRadianFromOdometry_1) / FREQ_ECH_QEI);
     robotState.angleRadianFromOdometry = robotState.vitesseAngulaireFromOdometry / FREQ_ECH_QEI;
     if (robotState.angleRadianFromOdometry > PI)
         robotState.angleRadianFromOdometry -= 2 * PI;
     if (robotState.angleRadianFromOdometry < -PI)
         robotState.angleRadianFromOdometry += 2 * PI;
     
-    //L'asservissement et le PID S'active uniquement lorsqu'il a reçus les coefficients de la supervision
-    if(FlagPIDCoeff){ 
-        UpdateAsservissement();
-    }
+    UpdateAsservissement();
     
 }
 

@@ -100,3 +100,9 @@ float waypointDevant(float rx, float ry, float theta, float wx, float wy)
     return (dot >= 0.0f);  // true = waypoint devant
 }
 
+float NormalizeAngle(float angle){
+    while (angle > M_PI) angle -= 2.0 * M_PI;
+    while (angle < M_PI) angle += 2.0 * M_PI;
+    return angle;
+}
+

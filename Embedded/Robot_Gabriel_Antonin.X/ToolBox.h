@@ -10,4 +10,5 @@ float DegreeToRadian(float value);
 float ModuloByAngle(float from, float to);
 float PythagorTheorem(float x, float y);
 float distancePointToSegment(float px, float py, float ax, float ay, float bx, float by);
+float NormalizeAngle(float angle);
 #endif /* TOOLBOX_H */

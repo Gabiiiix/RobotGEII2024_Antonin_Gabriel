@@ -5,6 +5,7 @@
 #include "ToolBox.h"
 #include "asservissement.h"
 #include "QEI.h"
+#include <math.h>
 #define PWMPER 24.0
 
 void InitPWM(void) {
@@ -78,9 +79,9 @@ void PWMUpdateSpeed() {
 }
     
  void UpdateAsservissement(){
-     
-     PidX.erreur = robotState.vitesseLineaireGhost - robotState.vitesseLineaireFromOdometry;
-     PidTheta.erreur = robotState.vitesseAngulaireGhost - robotState.vitesseAngulaireFromOdometry;
+
+     PidX.erreur = robotState.consigneVitesseLineaire - robotState.vitesseLineaireFromOdometry;
+     PidTheta.erreur = robotState.consigneVitesseAngulaire - robotState.vitesseAngulaireFromOdometry;
      
     
      robotState.CorrectionVitesseLineaire =  Correcteur(&PidX, PidX.erreur);   
@@ -88,6 +89,28 @@ void PWMUpdateSpeed() {
     
      //PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
 
+ }
+ 
+ void UpdateGhostData(){
+     
+     Ghost();
+     
+     float erreurTheta =  NormalizeAngle(robotState.angleGhost - robotState.angleRadianFromOdometry);
+     
+     double dx = robotState.xPosGhost - robotState.xPosFromOdometry;
+     double dy = robotState.yPosGhost - robotState.yPosFromOdometry;
+     
+     double erreurLineaire = sqrt(dx * dx + dy * dy);
+     
+     double angleToGhost = atan2(dy,dx);
+     double diffAngle = NormalizeAngle(angleToGhost - robotState.angleRadianFromOdometry);
+     
+     if( fabs(diffAngle) > M_PI / 2){
+         erreurLineaire = -erreurLineaire;
+     }
+     
+     robotState.consigneVitesseLineaire = Correcteur(&PidXGhost,erreurLineaire);
+     robotState.consigneVitesseAngulaire = Correcteur(&PidThetaGhost,erreurLineaire);
  }
  
  PWMSetSpeedConsignePolaire(double vitesseLineaire, double vitesseAngulaire){

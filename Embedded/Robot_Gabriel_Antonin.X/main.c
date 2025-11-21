@@ -40,7 +40,11 @@ int main(void) {
     InitTimer4();
     InitTimer1();
 
-
+    SetupPidAsservissement(&PidXGhost, 0, 0, 1, 20, 0, 10);
+    SetupPidAsservissement(&PidThetaGhost, 0, 0, 1, 20, 0, 10);
+    SetupPidAsservissement(&PidX, 2, 20, 0, 100, 40, 100);
+    SetupPidAsservissement(&PidTheta,0.75,10,0,100,20,100);
+        
     SetFreqTimer4(1000);
 
     InitPWM();

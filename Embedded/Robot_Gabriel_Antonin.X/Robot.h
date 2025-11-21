@@ -38,6 +38,8 @@ typedef struct robotStateBITS {
             float vitesseAngulaireMax;
             float vitesseLineaireMax;
             
+            float consigneVitesseLineaire;
+            float consigneVitesseAngulaire;
             float consigneLineaireX;
             float consigneLineaireY;
             float consigneTheta;

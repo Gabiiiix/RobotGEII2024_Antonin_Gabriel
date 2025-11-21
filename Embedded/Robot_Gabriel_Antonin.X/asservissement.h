@@ -34,10 +34,16 @@ enum stateGhost
     ROTATION,
     DEPLACEMENTLINEAIRE
 };
-short stateGhost;
+
+typedef struct {
+    float x;
+    float y;
+} Waypoint;
 
 extern volatile PidCorrector PidX;
 extern volatile PidCorrector PidTheta;
+extern volatile PidCorrector PidXGhost;
+extern volatile PidCorrector PidThetaGhost;
 
 
 void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki, double Kd, double proportionelleMax, double integralMax, double deriveeMax);
