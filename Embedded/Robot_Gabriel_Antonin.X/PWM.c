@@ -90,7 +90,7 @@ void PWMUpdateSpeed() {
      robotState.CorrectionVitesseLineaire =  Correcteur(&PidX, PidX.erreur);   
      robotState.CorrectionVitesseAngulaire = Correcteur(&PidTheta,PidTheta.erreur);
     
-     //PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+     PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
 
  }
  

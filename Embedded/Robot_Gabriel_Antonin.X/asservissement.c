@@ -19,7 +19,8 @@ float distanceRestant;
 float distanceArret;
 float incrementDistance;
 
-float consigneLineaire_1 = 0;
+float consigneLineaireX_1 = 0;
+float consigneLineaireY_1 = 0;
 float consigneTheta_1 = 0;
 
 int i = 0;
@@ -49,8 +50,8 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
     robotState.accelerationAngulaireGhost = 1;
     robotState.accelerationLineaireGhost = 1;
     
-    robotState.vitesseAngulaireMax = 2;
-    robotState.vitesseLineaireMax = 2;
+    robotState.vitesseAngulaireMax = 5;
+    robotState.vitesseLineaireMax = 5;
 }
 
 void SendPIDData(volatile PidCorrector* PidData, char c){
@@ -111,20 +112,24 @@ void Ghost(){
             if( listeWaypoints[i].x != robotState.consigneLineaireX || listeWaypoints[i].y != robotState.consigneLineaireY){
                 robotState.consigneLineaireX = listeWaypoints[i].x;
                 robotState.consigneLineaireY = listeWaypoints[i].y;
-                robotState.consigneTheta = atan2(robotState.yPosGhost - robotState.consigneLineaireY, robotState.xPosGhost - robotState.consigneLineaireX);
+                robotState.consigneTheta = atan2(robotState.consigneLineaireY - robotState.yPosGhost , robotState.consigneLineaireX - robotState.xPosGhost);
             }
             
-            if (fabs(NormalizeAngle(consigneTheta_1 - robotState.consigneTheta)) > 0.01 && fabs(robotState.vitesseLineaireFromOdometry) < 0.1) {
+            if ((fabs(NormalizeAngle(consigneTheta_1 - robotState.consigneTheta)) || robotState.consigneLineaireX != consigneLineaireX_1 || robotState.consigneLineaireY != consigneLineaireY_1) > 0.01 && fabs(robotState.vitesseLineaireFromOdometry) < 0.1) {
                 stateGhost = ROTATION;
                 consigneTheta_1 = robotState.consigneTheta;
+                consigneLineaireX_1 = robotState.consigneLineaireX;
+                consigneLineaireY_1 = robotState.consigneLineaireY;
+                if( i < 6){
                 i++;
+                }
             }
             break;
             
         
             
         case(ROTATION):
-            thetaRestant = ModuloByAngle(robotState.angleGhost,robotState.consigneTheta) - robotState.angleGhost;
+            thetaRestant = ModuloByAngle(robotState.angleGhost,robotState.consigneTheta);
             thetaArret = (robotState.vitesseAngulaireGhost * robotState.vitesseAngulaireGhost) / 2.0 * robotState.accelerationAngulaireGhost;
             incrementTheta = robotState.vitesseAngulaireGhost * (1.0/FREQ_ECH_QEI);
             
@@ -181,14 +186,14 @@ void Ghost(){
             float accel = robotState.accelerationLineaireGhost / FREQ_ECH_QEI;
             
         
-            if (distanceRestant > 0)
+            if (distanceRestant > 0.001f)
             {
      
                     robotState.vitesseLineaireGhost += accel;
                 if (robotState.vitesseLineaireGhost > robotState.vitesseLineaireMax)
                     robotState.vitesseLineaireGhost = robotState.vitesseLineaireMax;
             }
-            else if (distanceRestant < 0)
+            else if (distanceRestant < 0.001f)
             {
                 // Aller vers l'arrière
                 robotState.vitesseLineaireGhost -= accel;
@@ -210,7 +215,7 @@ void Ghost(){
             robotState.xPosGhost += incrementDistance * dirX;
             robotState.yPosGhost += incrementDistance * dirY;
 
-            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f && fabs(robotState.vitesseLineaireFromOdometry) < 0.01f)
+            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f)
             {
                 robotState.xPosGhost = robotState.consigneLineaireX;
                 robotState.yPosGhost = robotState.consigneLineaireY;

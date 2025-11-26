@@ -60,7 +60,7 @@ namespace RobotInterface
 
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM7", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -147,8 +147,8 @@ namespace RobotInterface
         private void TimerMap_Tick(object sender, EventArgs e)
         {
 
-            worldMap.UpdatePosRobot(robot.positionXOdo + 20, robot.positionYOdo + 50);
-            worldMap.UpdatePosGhost(robot.positionXGhost, robot.positionYGhost);
+            worldMap.UpdatePosRobot(robot.positionXOdo * 10 + 20, robot.positionYOdo * 10 + 50);
+            worldMap.UpdatePosGhost(robot.positionXGhost * 10 + 20, robot.positionYGhost * 10 + 50);
             worldMap.RotateGhost(robot.angleActuelGhost);
             
         }
@@ -415,8 +415,8 @@ namespace RobotInterface
                     break;
 
                 case 0x0061:
-                    robot.positionXOdo += BitConverter.ToSingle(msgPayload, 4);
-                    robot.positionYOdo += BitConverter.ToSingle(msgPayload, 8);
+                    robot.positionXOdo = BitConverter.ToSingle(msgPayload, 4);
+                    robot.positionYOdo = BitConverter.ToSingle(msgPayload, 8);
                     robot.angleRadian = BitConverter.ToSingle(msgPayload, 12);
                     robot.vitesseLineaire = BitConverter.ToSingle(msgPayload, 16);
                     robot.vitesseAngulaire = BitConverter.ToSingle(msgPayload, 20);
@@ -472,7 +472,7 @@ namespace RobotInterface
                 case 0x0101:
                     double angleRad = BitConverter.ToDouble(msgPayload, 0);
                     double angleDeg = angleRad * (180.0 / Math.PI);
-                    robot.angleActuelGhost = robot.angleActuelGhost - angleDeg;
+                    robot.angleActuelGhost = angleRad;
                     robot.positionXGhost = (float)BitConverter.ToDouble(msgPayload, 8);
                     robot.positionYGhost = (float)BitConverter.ToDouble(msgPayload, 16);
                     break;

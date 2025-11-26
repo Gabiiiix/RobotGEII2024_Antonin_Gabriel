@@ -36,8 +36,8 @@ enum stateGhost
 };
 
 typedef struct {
-    float x;
     float y;
+    float x;
 } Waypoint;
 
 extern volatile PidCorrector PidX;
