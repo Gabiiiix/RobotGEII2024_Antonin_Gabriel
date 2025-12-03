@@ -40,10 +40,10 @@ int main(void) {
     InitTimer4();
     InitTimer1();
 
-    SetupPidAsservissement(&PidXGhost, 0.05, 0, 15, 20, 0, 100);
-    SetupPidAsservissement(&PidThetaGhost, 0.1, 0, 10, 20, 0, 100);
-    SetupPidAsservissement(&PidX, 3, 20, 0.1, 100, 40, 100);
-    SetupPidAsservissement(&PidTheta,0.75,10,0.1,100,20,100);
+    SetupPidAsservissement(&PidXGhost, 1, 0, 0.05, 100, 0, 100);
+    SetupPidAsservissement(&PidThetaGhost, 2, 0, 0.01, 100, 0, 400);
+    SetupPidAsservissement(&PidX, 2, 20, 0, 100, 40, 100);
+    SetupPidAsservissement(&PidTheta,0.75,10,0,100,20,100);
         
     SetFreqTimer4(1000);
 

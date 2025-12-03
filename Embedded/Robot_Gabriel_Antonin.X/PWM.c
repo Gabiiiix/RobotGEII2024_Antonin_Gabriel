@@ -9,6 +9,8 @@
 #include "UART_protocol.h"
 #define PWMPER 24.0
 
+
+
 void InitPWM(void) {
     PTCON2bits.PCLKDIV = 0b000; //Divide by 1
     PTPER = 100 * PWMPER; //ÈPriode en pourcentage
@@ -82,7 +84,7 @@ void PWMUpdateSpeed() {
  void UpdateAsservissement(){
      
      UpdateGhostData();
-
+     
      PidX.erreur = robotState.consigneVitesseLineaire - robotState.vitesseLineaireFromOdometry;
      PidTheta.erreur = robotState.consigneVitesseAngulaire - robotState.vitesseAngulaireFromOdometry;
      
@@ -90,7 +92,7 @@ void PWMUpdateSpeed() {
      robotState.CorrectionVitesseLineaire =  Correcteur(&PidX, PidX.erreur);   
      robotState.CorrectionVitesseAngulaire = Correcteur(&PidTheta,PidTheta.erreur);
     
-     PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
+     //PWMSetSpeedConsignePolaire(robotState.CorrectionVitesseLineaire,robotState.CorrectionVitesseAngulaire);
 
  }
  

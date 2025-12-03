@@ -60,7 +60,7 @@ namespace RobotInterface
 
             InitializeComponent();
 
-            serialPort1 = new ExtendedSerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+            serialPort1 = new ExtendedSerialPort("COM11", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
 
@@ -130,7 +130,7 @@ namespace RobotInterface
 
             asservDisplay.UpdateDisplay();
 
-            LabelX.Text = "X: " + robot.positionXOdo.ToString() + " cm";
+            LabelX.Text = "X: " + robot.angleRadian.ToString() + " cm";
             LabelY.Text = "Y: " + robot.positionYOdo.ToString() + " cm";
 
 

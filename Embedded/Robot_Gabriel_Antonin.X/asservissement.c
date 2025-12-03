@@ -50,7 +50,7 @@ void SetupPidAsservissement(volatile PidCorrector* PidCorr, double Kp, double Ki
     robotState.accelerationAngulaireGhost = 1;
     robotState.accelerationLineaireGhost = 1;
     
-    robotState.vitesseAngulaireMax = 5;
+    robotState.vitesseAngulaireMax = 2;
     robotState.vitesseLineaireMax = 5;
 }
 
@@ -112,16 +112,25 @@ void Ghost(){
             if( listeWaypoints[i].x != robotState.consigneLineaireX || listeWaypoints[i].y != robotState.consigneLineaireY){
                 robotState.consigneLineaireX = listeWaypoints[i].x;
                 robotState.consigneLineaireY = listeWaypoints[i].y;
-                robotState.consigneTheta = atan2(robotState.consigneLineaireY - robotState.yPosGhost , robotState.consigneLineaireX - robotState.xPosGhost);
+                robotState.consigneTheta = atan2(
+                    robotState.consigneLineaireY - robotState.yPosGhost,
+                    robotState.consigneLineaireX - robotState.xPosGhost
+                   );
             }
             
             if ((fabs(NormalizeAngle(consigneTheta_1 - robotState.consigneTheta)) || robotState.consigneLineaireX != consigneLineaireX_1 || robotState.consigneLineaireY != consigneLineaireY_1) > 0.01 && fabs(robotState.vitesseLineaireFromOdometry) < 0.1) {
-                stateGhost = ROTATION;
+                stateGhost = DEPLACEMENTLINEAIRE;
                 consigneTheta_1 = robotState.consigneTheta;
                 consigneLineaireX_1 = robotState.consigneLineaireX;
                 consigneLineaireY_1 = robotState.consigneLineaireY;
-                if( i < 6){
+                if( i < 1){
                 i++;
+                }
+                if( i > 1){
+                    stateGhost = IDLE;
+                    robotState.consigneLineaireX = robotState.xPosFromOdometry;
+                    robotState.consigneLineaireY = robotState.yPosFromOdometry;
+                            
                 }
             }
             break;
@@ -168,61 +177,53 @@ void Ghost(){
             break;
             
         
-        case(DEPLACEMENTLINEAIRE):
-        {
-            float dirX = cosf(robotState.angleRadianFromOdometry);
-            float dirY = sinf(robotState.angleRadianFromOdometry);
-        
+        case DEPLACEMENTLINEAIRE:
+{
+        float dirX = cosf(robotState.angleGhost);
+        float dirY = sinf(robotState.angleGhost);
 
-            float dx = robotState.consigneLineaireX - robotState.xPosGhost;
-            float dy = robotState.consigneLineaireY - robotState.yPosGhost;
+        float dx = robotState.consigneLineaireX - robotState.xPosGhost;
+        float dy = robotState.consigneLineaireY - robotState.yPosGhost;
 
+        float distanceRestant = dx * dirX + dy * dirY;
 
-            float distanceRestant = dx * dirX + dy * dirY;  
+        // Définition d'une pente pour accélération/décélération
+        float accel = robotState.accelerationLineaireGhost / FREQ_ECH_QEI;
+        float vitesseCible = robotState.vitesseLineaireMax;
 
-            float incrementDistance = robotState.vitesseLineaireGhost * (1.0f / FREQ_ECH_QEI);
+        // Décélération progressive si proche de la cible
+        if(fabs(distanceRestant) < 0.2f) { // 20 cm ou 0.2 unité
+            vitesseCible *= fabs(distanceRestant) / 0.2f; // fraction de la vitesse max
+            if(vitesseCible < 0.05f) vitesseCible = 0.05f; // vitesse minimale pour mouvement
+        }
 
-
-            float accel = robotState.accelerationLineaireGhost / FREQ_ECH_QEI;
-            
-        
-            if (distanceRestant > 0.001f)
-            {
-     
-                    robotState.vitesseLineaireGhost += accel;
-                if (robotState.vitesseLineaireGhost > robotState.vitesseLineaireMax)
-                    robotState.vitesseLineaireGhost = robotState.vitesseLineaireMax;
-            }
-            else if (distanceRestant < 0.001f)
-            {
-                // Aller vers l'arrière
-                robotState.vitesseLineaireGhost -= accel;
-                if (robotState.vitesseLineaireGhost < -robotState.vitesseLineaireMax)
-                    robotState.vitesseLineaireGhost = -robotState.vitesseLineaireMax;
-            }
-            else
-            {
-                robotState.vitesseLineaireGhost = 0;
+        if(distanceRestant > 0) {
+            robotState.vitesseLineaireGhost += accel;
+            if(robotState.vitesseLineaireGhost > vitesseCible)
+                robotState.vitesseLineaireGhost = vitesseCible;
+        } else if(distanceRestant < 0) {
+            robotState.vitesseLineaireGhost -= accel;
+            if(robotState.vitesseLineaireGhost < -vitesseCible)
+              robotState.vitesseLineaireGhost = -vitesseCible;
+            } else {
+             robotState.vitesseLineaireGhost = 0;
             }
 
-            incrementDistance = robotState.vitesseLineaireGhost * (1.0f / FREQ_ECH_QEI);
-
-
-            if (fabs(distanceRestant) < fabs(incrementDistance))
+    // Calcul incrément de déplacement
+            float incrementDistance = robotState.vitesseLineaireGhost / FREQ_ECH_QEI;
+            if(fabs(distanceRestant) < fabs(incrementDistance))
                 incrementDistance = distanceRestant;
-
 
             robotState.xPosGhost += incrementDistance * dirX;
             robotState.yPosGhost += incrementDistance * dirY;
 
-            if (fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f)
-            {
-                robotState.xPosGhost = robotState.consigneLineaireX;
-                robotState.yPosGhost = robotState.consigneLineaireY;
-                robotState.vitesseLineaireGhost = 0;
-                stateGhost = IDLE;
+    // Arrêt si proche de la cible
+          if(fabs(distanceRestant) < 0.01f && fabs(robotState.vitesseLineaireGhost) < 0.01f) {
+             robotState.xPosGhost = robotState.consigneLineaireX;
+             robotState.yPosGhost = robotState.consigneLineaireY;
+             robotState.vitesseLineaireGhost = 0;
+             stateGhost = IDLE;
             }
-
             break;
         }
     }
