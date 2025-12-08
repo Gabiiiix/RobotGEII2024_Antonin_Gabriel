@@ -152,20 +152,22 @@ img_reformed = cv2.cvtColor(hsv_reformed, cv2.COLOR_HSV2BGR)
 
 #FILTRAGE LINEAIRE
 
-img_blur = cv2.GaussianBlur(img,(7,7),0)
+img_blur = cv2.GaussianBlur(img,(7,7),0)
+
 cv2.imshow('image flou', img_blur)
 
 sobelx = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=0, ksize=5) 
 sobely = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=5) 
 sobelxy = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
 
-# Display Sobel Edge Detection Images
-cv2.imshow('Sobel X', sobelx)
-cv2.waitKey(0)
-cv2.imshow('Sobel Y', sobely)
-cv2.waitKey(0)
-cv2.imshow('Sobel X Y using Sobel() function', sobelxy)
-cv2.waitKey(0)
+# Display SobelEdge Detection Images
+#cv2.imshow('Sobel X', sobelx)
+#cv2.waitKey(0)
+#cv2.imshow('Sobel Y', sobely)
+#cv2.waitKey(0)
+#cv2.imshow('Sobel X Y using Sobel() function', sobelxy)
+#cv2.waitKey(0)
+
 
 
 # Filtrage a l’aide de noyaux de convolution definis manuellement
@@ -174,3 +176,23 @@ kernel1 = np.array([[-1, -2, -1],
 [1, 2, 1]])
 imgSobelHSup = cv2.filter2D(src=img_blur, ddepth=-1, kernel=kernel1)
 cv2.imshow('Sobel a la main wesh',imgSobelHSup)
+
+medianblur_img = cv2.medianBlur(img,3)
+cv2.imshow('blur median', medianblur_img)
+
+bilateral_img = cv2.bilateralFilter(img, 9, 10, 10)
+cv2.imshow('filtre bilateral', bilateral_img)
+
+edges = cv2.Canny(image=img_blur, threshold1=100, threshold2=200)
+cv2.imshow('Canny Edge Detection', edges)
+cv2.waitKey(0)
+
+#EROSION - DILATION
+# Utilisation d’une matrice de 1 de taille 5x5 comme noyau
+kernel = np.ones((5, 5), np.uint8)
+img_erosion = cv2.erode(img, kernel, iterations=1)
+img_dilation = cv2.dilate(img, kernel, iterations=1)
+cv2.imshow('Input', img)
+cv2.imshow('Erosion', img_erosion)
+cv2.imshow('Dilation', img_dilation)
+cv2.waitKey(0)
