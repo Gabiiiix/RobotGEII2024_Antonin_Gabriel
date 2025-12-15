@@ -9,9 +9,12 @@
 #include "Utilities.h"
 #include "Robot.h"
 #include "timer.h"
+#include <stdlib.h>
 
 #define LINEAIRE 0
 #define ANGULAIRE 1
+
+volatile arUcoObject Cible;
 
 double ConsigneLineaire;
 double ConsigneAngulaire;
@@ -119,6 +122,85 @@ void UartDecodeMessage(unsigned char c) {
     }
 }
 
+void UartDecodeMessageJevois(unsigned char c){
+    static int rcvstate = 0;
+    int i = 0;
+    char str[6];
+    
+    switch(rcvstate) {
+        case Waiting:
+            if(c == 'U'){
+                rcvstate = Identification;
+            }
+            break;
+        case Identification:
+            if(c != ' '){
+                str[i] = c;
+                i++;
+                str[i] = '\0';
+            }
+            else{
+                i = 0;
+                Cible.Id = atoi(str);
+                str[0] = '\0';
+                rcvstate = CentreX; 
+            }
+            break;
+        case CentreX:
+            if(c != ' '){
+                str[i] = c;
+                i++;
+                str[i] = '\0';
+            }
+            else{
+                i = 0;
+                Cible.cx = atoi(str);
+                str[0] = '\0';
+                rcvstate = CentreY; 
+            }
+            break;
+        case CentreY:
+            if(c != ' '){
+                str[i] = c;
+                i++;
+                str[i] = '\0';
+            }
+            else{
+                i = 0;
+                Cible.cy = atoi(str);
+                str[0] = '\0';
+                rcvstate = Width; 
+            }
+            break;
+        case Width:
+            if(c != ' '){
+                str[i] = c;
+                i++;
+                str[i] = '\0';
+            }
+            else{
+                i = 0;
+                Cible.width = atoi(str);
+                str[0] = '\0';
+                rcvstate = Height; 
+            }
+            break; 
+        case Height:
+            if(c != ' '){
+                str[i] = c;
+                i++;
+                str[i] = '\0';
+            }
+            else{
+                i = 0;
+                Cible.height = atoi(str);
+                str[0] = '\0';
+                rcvstate = Waiting; 
+            }
+            break;
+    }
+}
+
 void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* payload) {
     int Numled;
     switch (function) {
@@ -161,6 +243,7 @@ void UartProcessDecodedMessage(int function, int payloadLength, unsigned char* p
 //            break;
     }
 }
+    
 //*************************************************************************/
 //Fonctions correspondant aux messages
 //*************************************************************************/

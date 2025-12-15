@@ -144,6 +144,9 @@ void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
     if(CB_RX2_IsDataAvailable()){
         CB_RX2_Get();
     }
+    if(CB_RX1_IsDataAvailable()){
+        CB_RX1_Get();
+    }
 }
 
 void SetFreqTimer4(float freq) {

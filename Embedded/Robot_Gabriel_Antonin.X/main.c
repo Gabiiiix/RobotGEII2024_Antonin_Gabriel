@@ -49,6 +49,7 @@ int main(void) {
 
     InitPWM();
     InitADC1();
+    InitUART1();
     InitUART2();
     InitQEI1();
     InitQEI2();
